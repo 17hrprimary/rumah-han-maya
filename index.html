@@ -274,7 +274,7 @@ function bed(x,z,w,l,blanket,ry=0){const g=grp(x,z,ry);box(w,.28,l,WOOD,0,0,0,g)
 // RUANG TAMU
 {const g=grp(-3.6,.6,0);const S='#6f8fb3',SL='#86a6c8';box(2.3,.28,.9,S,0,.06,0,g);[-0.73,0,0.73].forEach(x=>box(.7,.1,.54,SL,x,.34,.17,g));box(2.3,.6,.34,S,0,.34,-.28,g);[-1.08,1.08].forEach(x=>box(.16,.62,.9,S,x,.06,0,g));[[-1.1,-.4],[1.1,-.4],[-1.1,.4],[1.1,.4]].forEach(([x,z])=>cyl(.03,.03,.06,WOODD,x,0,z,g,8));}
 plane(2.6,1.8,new THREE.MeshStandardMaterial({map:T_RUG,roughness:1}),-3.6,.006,2.0);
-{const g=grp(-3.6,1.85,0);box(1.1,.05,.58,WOODL,0,.36,0,g);[[-.5,-.24],[.5,-.24],[-.5,.24],[.5,.24]].forEach(([x,z])=>box(.05,.36,.05,WOODD,x,0,z,g));cyl(.05,.04,.1,'#ffffff',.2,.41,0,g,10);cyl(.12,.12,.03,'#f0e0c0',-.25,.41,.05,g);}
+{const g=grp(-3.6,2.05,0);box(1.1,.05,.58,WOODL,0,.36,0,g);[[-.5,-.24],[.5,-.24],[-.5,.24],[.5,.24]].forEach(([x,z])=>box(.05,.36,.05,WOODD,x,0,z,g));cyl(.05,.04,.1,'#ffffff',.2,.41,0,g,10);cyl(.12,.12,.03,'#f0e0c0',-.25,.41,.05,g);}
 {const g=grp(-3.6,4.22,Math.PI);box(1.9,.5,.42,WOODD,0,0,0,g);box(1.4,.8,.05,'#151515',0,.62,.02,g);const scr=new THREE.Mesh(new THREE.PlaneGeometry(1.32,.72),glow('#3b6ea8'));scr.position.set(0,1.02,.05);g.add(scr);plant(.8,0,.6,g);}
 {const g=grp(-5.75,3.6,Math.PI/2);box(.95,1.9,.32,WOOD,0,0,0,g);for(let i=0;i<4;i++){box(.88,.03,.3,WOODD,0,.2+i*.43,.0,g);let x=-.4;while(x<.36){const w=.05+rnd()*.05,h=.24+rnd()*.12;box(w,h,.22,`hsl(${rnd()*360},45%,55%)`,x+w/2,.23+i*.43,0,g);x+=w+.01;}}}
 {const g=grp(-5.6,1.15,0);cyl(.15,.18,.04,'#555',0,0,0,g);cyl(.02,.02,1.5,'#555',0,0,0,g);cyl(.16,.24,.3,glow('#ffe2b0'),0,1.45,0,g);}
@@ -304,10 +304,10 @@ box(.4,.45,.4,WOODL,-.55,0,-4.15);cyl(.08,.12,.22,glow('#ffe2b0'),-.55,.45,-4.15
 {const m=box(.5,1.4,.03,'#d8c6a8',-1.95+.08,.35,-1.0);m.rotation.y=Math.PI/2;const mi=new THREE.Mesh(new THREE.PlaneGeometry(.42,1.3),new THREE.MeshStandardMaterial({color:0xdfeef7,roughness:.05,metalness:.6}));mi.position.set(-1.85,1.05,-1.0);mi.rotation.y=Math.PI/2;scene.add(mi);}
 plant(1.6,-4.1,.8);
 // KAMAR NAYLA & ALYA
-plane(2.2,2.2,new THREE.MeshStandardMaterial({map:T_KRUG,roughness:1,transparent:true}),4.0,.006,-1.9);
+plane(2.2,2.2,new THREE.MeshStandardMaterial({map:T_KRUG,roughness:1,transparent:true}),4.0,.006,-1.5);
 bed(3.0,-3.6,.9,1.6,'#f4a3c4');bed(5.0,-3.6,.9,1.6,'#9fdc9a');
-{const g=grp(4.0,-2.0,0);cyl(.38,.38,.04,'#fff4d6',0,.5,0,g,20);cyl(.05,.05,.5,'#f2c14e',0,0,0,g,8);}
-chair(scene,3.11,-2.0,Math.PI/2,'#ff9fc4',.72);chair(scene,4.89,-2.0,-Math.PI/2,'#8fd18a',.72);
+{const g=grp(4.0,-1.45,0);cyl(.38,.38,.04,'#fff4d6',0,.5,0,g,20);cyl(.05,.05,.5,'#f2c14e',0,0,0,g,8);}
+chair(scene,3.11,-1.45,Math.PI/2,'#ff9fc4',.72);chair(scene,4.89,-1.45,-Math.PI/2,'#8fd18a',.72);
 box(.7,.4,.4,'#7cc6f0',5.5,0,-.55);sph(.1,'#ff6b6b',5.3,.5,-.5);sph(.09,'#ffd93d',5.6,.49,-.6);
 {const g=grp(2.45,-.6,Math.PI/2);sph(.13,'#b07a4a',0,.13,0,g);sph(.09,'#b07a4a',0,.32,0,g);sph(.035,'#b07a4a',-.07,.4,0,g);sph(.035,'#b07a4a',.07,.4,0,g);}
 box(.36,.42,.36,'#fff',4.0,0,-4.2);cyl(.07,.1,.18,glow('#ffd7f0'),4.0,.42,-4.2);
@@ -329,48 +329,68 @@ sph(.12,'#ff7b54',-2.2,.12,9.3);
 function roomLabel(t,x,z){const d=document.createElement('div');d.className='room';d.textContent=t;const o=new CSS2DObject(d);o.position.set(x,.05,z);scene.add(o);return o;}
 const ROOMLABELS=[roomLabel('Ruang Tamu',-1.9,3.4),roomLabel('Dapur',4.6,.6),roomLabel('Kamar Han',-4.2,-1.0),roomLabel('Kamar Maya',0,-1.0),roomLabel('Kamar Nayla & Alya',4.0,-1.0),roomLabel('Teras',-2.3,6.0),roomLabel('Taman',2,9.6)];
 
-/* ---------- navigasi ---------- */
-const ROOMS={L:[-6,0,1,4.5],K:[1,0,6,4.5],H:[-6,-4.5,-2,0],M:[-2,-4.5,2,0],C:[2,-4.5,6,0],P:[-3.2,4.5,3.1,6.3]};
-const LOT=[-8.6,-6.1,8.6,10.6];
-const N={L1:[-1.0,3.95,'L'],L2:[-1.2,2.95,'L'],L3:[-5.25,2.95,'L'],L4:[-5.3,.65,'L'],L5:[-1.2,.65,'L'],L6:[.55,2.4,'L'],
- K1:[1.6,2.4,'K'],K2:[2.0,4.2,'K'],K3:[4.9,4.2,'K'],K4:[4.9,2.2,'K'],K5:[1.8,.7,'K'],K6:[3.0,.65,'K'],K7:[4.6,1.0,'K'],
- H1:[-5.3,-.65,'H'],H2:[-3.6,-1.9,'H'],M1:[-1.2,-.65,'M'],M2:[0,-1.7,'M'],C1:[3.0,-.65,'C'],C2:[4.0,-1.1,'C'],
- P1:[-1.0,5.2,'P'],P2:[1.5,5.95,'P'],Y1:[-1.0,7.0,'Y'],Y2:[3.2,7.2,'Y'],Y3:[-3.0,8.6,'Y'],Y4:[7.5,3.0,'Y'],Y5:[-7.5,3.0,'Y'],Y6:[7.5,-5.4,'Y'],Y7:[-7.5,-5.4,'Y'],Y8:[0,9.6,'Y']};
-const E=[['L1','L2'],['L2','L3'],['L3','L4'],['L2','L5'],['L2','L6'],['L4','H1'],['L5','M1'],['L6','K1'],['K1','K2'],['K2','K3'],['K3','K4'],['K1','K5'],['K5','K6'],['K6','C1'],['H1','H2'],['M1','M2'],['C1','C2'],['L1','P1'],['P1','P2'],['P1','Y1'],['Y1','Y2'],['Y1','Y3'],['Y1','Y8'],['Y2','Y8'],['Y3','Y8'],['Y2','Y4'],['Y3','Y5'],['Y4','Y6'],['Y5','Y7'],['Y6','Y7'],['K4','K7'],['K7','K6']];
-const ADJ={};for(const k in N)ADJ[k]=[];E.forEach(([a,b])=>{const d=Math.hypot(N[a][0]-N[b][0],N[a][1]-N[b][1]);ADJ[a].push([b,d]);ADJ[b].push([a,d]);});
-const inR=(r,x,z)=>x>=r[0]&&x<=r[2]&&z>=r[1]&&z<=r[3];
-function regionOf(x,z){for(const k in ROOMS)if(inR(ROOMS[k],x,z))return k;return 'Y';}
-function segRect(x1,z1,x2,z2,r){let t0=0,t1=1;const dx=x2-x1,dz=z2-z1;const p=[-dx,dx,-dz,dz],q=[x1-r[0],r[2]-x1,z1-r[1],r[3]-z1];for(let i=0;i<4;i++){if(p[i]===0){if(q[i]<0)return false;}else{const t=q[i]/p[i];if(p[i]<0){if(t>t1)return false;if(t>t0)t0=t;}else{if(t<t0)return false;if(t<t1)t1=t;}}}return true;}
-const BLOCK=[[-6.1,-4.6,6.1,4.6],[-3.2,4.5,3.1,6.3]];
-const clearY=(x1,z1,x2,z2)=>!BLOCK.some(r=>segRect(x1,z1,x2,z2,r));
-function nearNode(x,z,reg){let best=null,bd=1e9;for(const k in N){const n=N[k];if(n[2]!==reg)continue;if(reg==='Y'&&!clearY(x,z,n[0],n[1]))continue;const d=Math.hypot(n[0]-x,n[1]-z);if(d<bd){bd=d;best=k;}}return best;}
-function dijkstra(a,b){const dist={},prev={},Q=new Set(Object.keys(N));for(const k in N)dist[k]=1e9;dist[a]=0;while(Q.size){let u=null;for(const k of Q)if(u===null||dist[k]<dist[u])u=k;Q.delete(u);if(u===b)break;for(const [v,d] of ADJ[u]){if(dist[u]+d<dist[v]){dist[v]=dist[u]+d;prev[v]=u;}}}const p=[];let u=b;while(u){p.unshift(u);u=prev[u];}return p;}
-function clampGoal(x,z){const reg=regionOf(x,z);if(reg==='Y'){x=Math.min(LOT[2],Math.max(LOT[0],x));z=Math.min(LOT[3],Math.max(LOT[1],z));if(regionOf(x,z)!=='Y')return clampGoal(x,z);return [x,z,'Y'];}
- const r=ROOMS[reg];return [Math.min(r[2]-.3,Math.max(r[0]+.3,x)),Math.min(r[3]-.3,Math.max(r[1]+.3,z)),reg];}
-const OBS=[],INF=.2;const obs=(x0,z0,x1,z1)=>OBS.push([x0,z0,x1,z1]);
-obs(2.7,2.175,4.1,3.025);[3.0,3.8].forEach(x=>{obs(x-.22,1.33,x+.22,1.77);obs(x-.22,3.43,x+.22,3.87);});obs(5.36,.25,5.96,3.45);obs(5.24,3.69,5.96,4.41);
-obs(-4.76,.15,-2.44,1.05);obs(-4.15,1.56,-3.05,2.14);obs(-4.55,4.01,-2.65,4.43);obs(-5.91,3.125,-5.59,4.075);
-obs(-4.95,-4.5,-3.45,-2.45);obs(-5.83,-1.8,-5.27,-.6);obs(-2.71,-3.1,-2.39,-2.1);obs(-3.85,-1.61,-2.75,-1.29);
-obs(-1.9,-4.5,-.9,-2.45);obs(1.345,-3.1,1.895,-1.9);obs(.505,-2.72,.945,-2.28);
-obs(2.55,-4.4,3.45,-2.8);obs(4.55,-4.4,5.45,-2.8);obs(3.62,-2.38,4.38,-1.62);obs(2.952,-2.158,3.268,-1.842);obs(4.732,-2.158,5.048,-1.842);obs(5.15,-.75,5.85,-.35);
-[.9,2.1].forEach(x=>obs(x-.22,5.13,x+.22,5.57));obs(1.28,5.13,1.72,5.57);
-const inObs=(x,z,i,m=INF)=>{const o=OBS[i];return x>o[0]-m&&x<o[2]+m&&z>o[1]-m&&z<o[3]+m;};
-function blockedBy(x0,z0,x1,z1,inf){for(let i=0;i<OBS.length;i++){const m=inf[i];if(m<0)continue;const o=OBS[i];if(segRect(x0,z0,x1,z1,[o[0]-m,o[1]-m,o[2]+m,o[3]+m]))return true;}return false;}
-// rintangan yang dekat titik awal/tujuan (misal kursi yang mau diduduki) cuma dikasih jarak tipis, bukan diabaikan
-function detour(x0,z0,x1,z1){const inf=OBS.map((o,i)=>(inObs(x0,z0,i)||inObs(x1,z1,i))?((inObs(x0,z0,i,.06)||inObs(x1,z1,i,.06))?-1:.06):INF);
- if(!blockedBy(x0,z0,x1,z1,inf))return [[x1,z1]];
- const R0=ROOMS[regionOf(x0,z0)],P=[[x0,z0],[x1,z1]];
- OBS.forEach((o,i)=>{if(inf[i]<0)return;const e=inf[i]+.03;[[o[0]-e,o[1]-e],[o[2]+e,o[1]-e],[o[0]-e,o[3]+e],[o[2]+e,o[3]+e]].forEach(([x,z])=>{if(R0&&!(x>R0[0]+.18&&x<R0[2]-.18&&z>R0[1]+.18&&z<R0[3]-.18))return;if(OBS.some((q,j)=>inf[j]>=0&&inObs(x,z,j,inf[j])))return;P.push([x,z]);});});
- const n=P.length,dist=Array(n).fill(1e9),prev=Array(n).fill(-1),done=Array(n).fill(false);dist[0]=0;
- for(let it=0;it<n;it++){let u=-1;for(let i=0;i<n;i++)if(!done[i]&&(u<0||dist[i]<dist[u]))u=i;if(u<0||dist[u]>=1e9)break;done[u]=true;if(u===1)break;
-  for(let v=0;v<n;v++){if(done[v])continue;const d=Math.hypot(P[v][0]-P[u][0],P[v][1]-P[u][1]);if(dist[u]+d<dist[v]&&!blockedBy(P[u][0],P[u][1],P[v][0],P[v][1],inf)){dist[v]=dist[u]+d;prev[v]=u;}}}
- if(prev[1]<0)return [[x1,z1]];const out=[];for(let u=1;u!==0;u=prev[u])out.unshift(P[u]);return out;}
-// titik tap yang jatuh di furnitur digeser ke pinggirnya
-function pushOut(x,z){for(let i=0;i<OBS.length;i++){if(!inObs(x,z,i))continue;const o=OBS[i],m=INF+.03;const c=[[o[0]-m,z],[o[2]+m,z],[x,o[1]-m],[x,o[3]+m]];c.sort((a,b)=>Math.hypot(a[0]-x,a[1]-z)-Math.hypot(b[0]-x,b[1]-z));x=c[0][0];z=c[0][1];}return [x,z];}
-function findPath(x0,z0,x1,z1){const r0=regionOf(x0,z0),g=clampGoal(x1,z1),r1=g[2];let p;
- if(r0===r1&&(r0!=='Y'||clearY(x0,z0,g[0],g[1])))p=[[g[0],g[1]]];
- else{const a=nearNode(x0,z0,r0)||nearNode(x0,z0,'Y'),b=nearNode(g[0],g[1],r1)||'Y1';p=dijkstra(a,b).map(k=>[N[k][0],N[k][1]]);p.push([g[0],g[1]]);}
- const out=[];let cx=x0,cz=z0;for(const q of p){const ra=regionOf(cx,cz);if(ra!=='Y'&&ra===regionOf(q[0],q[1]))out.push(...detour(cx,cz,q[0],q[1]));else out.push(q);cx=q[0];cz=q[1];}return out;}
+/* ---------- navigasi: grid 10 cm + peta jarak bebas (clearance) + A* ---------- */
+// rintangan diambil otomatis dari semua benda di scene (dinding, furnitur, pagar, pohon, semak), jadi nggak ada yang kelewat
+const NAV={x0:-11.6,z0:-20.4,x1:11.6,z1:11.6,res:.1,cap:.7};NAV.nx=Math.round((NAV.x1-NAV.x0)/NAV.res);NAV.nz=Math.round((NAV.z1-NAV.z0)/NAV.res);
+NAV.clr=new Float32Array(NAV.nx*NAV.nz).fill(NAV.cap);NAV.rects=[];
+// area main: halaman dalam pagar + pantai di belakang (sampai bibir air)
+const LOTR=[-9,-6.5,9,11],BEACHR=[-11.2,-19.75,11.2,-6.5];
+const inPlay=(x,z)=>inR(LOTR,x,z)||inR(BEACHR,x,z);
+function inR(r,x,z){return x>r[0]&&x<r[2]&&z>r[1]&&z<r[3];}
+function buildNav(){const bb=new THREE.Box3(),R=NAV.rects;R.length=0;NAV.clr.fill(NAV.cap);scene.updateMatrixWorld(true);
+ scene.traverse(o=>{if(!o.isMesh||o.userData.noNav)return;let p=o;while(p){if(p.userData.noNav)return;p=p.parent;}
+  if(o.material&&o.material.visible===false)return;bb.setFromObject(o);if(bb.isEmpty()||bb.min.y>1.15||bb.max.y<.06)return;if(bb.max.x-bb.min.x>40||bb.max.z-bb.min.z>40)return;
+  R.push([bb.min.x,bb.min.z,bb.max.x,bb.max.z]);});
+ // di luar area main = rintangan (luar pagar, ujung pantai, laut)
+ R.push([9,-6.5,14,14],[-14,-6.5,-9,14],[-14,11,14,14],[11.2,-24,14,-6.5],[-14,-24,-11.2,-6.5],[-14,-24,14,-19.75]);
+ const {nx,nz,res,x0,z0,cap,clr}=NAV;
+ for(const [a,b,c,d] of R){const i0=Math.max(0,Math.floor((a-cap-x0)/res)),i1=Math.min(nx-1,Math.ceil((c+cap-x0)/res)),j0=Math.max(0,Math.floor((b-cap-z0)/res)),j1=Math.min(nz-1,Math.ceil((d+cap-z0)/res));
+  for(let j=j0;j<=j1;j++){const z=z0+(j+.5)*res,dz=z<b?b-z:z>d?z-d:0;for(let i=i0;i<=i1;i++){const x=x0+(i+.5)*res,dx=x<a?a-x:x>c?x-c:0,dd=Math.sqrt(dx*dx+dz*dz),k=j*nx+i;if(dd<clr[k])clr[k]=dd;}}}}
+const cellI=x=>Math.floor((x-NAV.x0)/NAV.res),cellJ=z=>Math.floor((z-NAV.z0)/NAV.res),cellX=i=>NAV.x0+(i+.5)*NAV.res,cellZ=j=>NAV.z0+(j+.5)*NAV.res;
+// jarak bebas di titik (x,z), diinterpolasi biar halus
+function clrAt(x,z){const {nx,nz,res,x0,z0,clr}=NAV;const fx=(x-x0)/res-.5,fz=(z-z0)/res-.5,i=Math.floor(fx),j=Math.floor(fz);if(i<0||j<0||i>=nx-1||j>=nz-1)return 0;
+ const u=fx-i,v=fz-j,k=j*nx+i;return (clr[k]*(1-u)+clr[k+1]*u)*(1-v)+(clr[k+nx]*(1-u)+clr[k+nx+1]*u)*v;}
+// rintangan bergerak (karakter lain / kucing) berupa lingkaran
+function dynHit(x,z,dyn){if(dyn)for(const q of dyn){const dx=x-q[0],dz=z-q[1];if(dx*dx+dz*dz<q[2]*q[2])return true;}return false;}
+function walkable(x,z,r,dyn){return clrAt(x,z)>=r&&!dynHit(x,z,dyn);}
+// cari titik bebas terdekat
+function nearFree(x,z,r,dyn,maxD=2){let best=null,bd=1e9;const n=Math.ceil(maxD/NAV.res),ci=cellI(x),cj=cellJ(z);
+ for(let j=cj-n;j<=cj+n;j++)for(let i=ci-n;i<=ci+n;i++){if(i<0||j<0||i>=NAV.nx||j>=NAV.nz)continue;const cx=cellX(i),cz=cellZ(j),d=(cx-x)**2+(cz-z)**2;if(d>=bd||d>maxD*maxD)continue;if(NAV.clr[j*NAV.nx+i]>=r&&!dynHit(cx,cz,dyn)){bd=d;best=[cx,cz];}}return best;}
+let AG=null;
+function astar(si,sj,gi,gj,r,dyn){const {nx,nz,clr}=NAV,N=nx*nz;if(!AG)AG={g:new Float32Array(N),par:new Int32Array(N),st:new Uint32Array(N),cl:new Uint8Array(N),h:new Int32Array(N),hf:new Float32Array(N),stamp:0};
+ const A=AG;A.stamp++;const S=A.stamp,start=sj*nx+si,goal=gj*nx+gi;let hn=0;
+ const H=(i,j)=>{const dx=Math.abs(i-gi),dz=Math.abs(j-gj);return (dx+dz+(Math.SQRT2-2)*Math.min(dx,dz))*NAV.res;};
+ const push=(k,f)=>{let n=hn++;while(n>0){const pp=(n-1)>>1;if(A.hf[pp]<=f)break;A.h[n]=A.h[pp];A.hf[n]=A.hf[pp];n=pp;}A.h[n]=k;A.hf[n]=f;};
+ const pop=()=>{const top=A.h[0],lk=A.h[--hn],lf=A.hf[hn];let n=0;for(;;){let c=2*n+1;if(c>=hn)break;if(c+1<hn&&A.hf[c+1]<A.hf[c])c++;if(A.hf[c]>=lf)break;A.h[n]=A.h[c];A.hf[n]=A.hf[c];n=c;}A.h[n]=lk;A.hf[n]=lf;return top;};
+ A.st[start]=S;A.g[start]=0;A.par[start]=-1;A.cl[start]=0;push(start,H(si,sj));let it=0;
+ while(hn>0&&it++<200000){const k=pop();if(A.cl[k]&&A.st[k]===S)continue;A.cl[k]=1;if(k===goal)break;const i=k%nx,j=(k-i)/nx;
+  for(let d=0;d<8;d++){const di=d<4?[1,-1,0,0][d]:[1,1,-1,-1][d-4],dj=d<4?[0,0,1,-1][d]:[1,-1,1,-1][d-4],ii=i+di,jj=j+dj;if(ii<0||jj<0||ii>=nx||jj>=nz)continue;const kk=jj*nx+ii;
+   if(A.st[kk]===S&&A.cl[kk])continue;const c0=clr[kk];if(c0<r)continue;if(d>=4&&(clr[j*nx+ii]<r||clr[jj*nx+i]<r))continue;if(dyn&&dynHit(cellX(ii),cellZ(jj),dyn))continue;
+   const step=(d<4?1:Math.SQRT2)*NAV.res*(1+1.2*Math.max(0,(.55-c0)/.55)),ng=A.g[k]+step;
+   if(A.st[kk]!==S||ng<A.g[kk]){A.st[kk]=S;A.cl[kk]=0;A.g[kk]=ng;A.par[kk]=k;push(kk,ng+H(ii,jj));}}}
+ if(A.st[goal]!==S||!A.cl[goal])return null;const out=[];for(let k=goal;k!==-1;k=A.par[k])out.push(k);return out.reverse();}
+// garis lurus aman? (sampel tiap 4 cm). Di dekat titik ujung yang mepet furnitur (kursi, kasur), batasnya dilonggarkan sesuai jarak bebas titik itu
+function los(ax,az,bx,bz,r,dyn,ea,eb){const L=Math.hypot(bx-ax,bz-az),n=Math.max(1,Math.ceil(L/.04));
+ for(let s=0;s<=n;s++){const t=s/n,x=ax+(bx-ax)*t,z=az+(bz-az)*t,da=L*t,db=L*(1-t);let th=r;if(ea!=null&&da<.5)th=Math.min(th,ea);if(eb!=null&&db<.5)th=Math.min(th,eb);if(clrAt(x,z)<th)return false;
+  if(dyn&&dynHit(x,z,dyn)&&!(ea!=null&&da<.35)&&!(eb!=null&&db<.35))return false;}return true;}
+// cari jalan dari (x0,z0) ke (x1,z1); r = radius badan. Hasil: daftar titik (tanpa titik awal)
+function findPath(x0,z0,x1,z1,r=.25,dyn=null){
+ let gx=x1,gz=z1;const gc=clrAt(gx,gz);if(gc<.04){const f=nearFree(gx,gz,r,null,2.5);if(!f)return [];gx=f[0];gz=f[1];}
+ const sc=clrAt(x0,z0),gcc=clrAt(gx,gz);
+ // titik awal / tujuan yang mepet: masuk ke grid lewat titik bebas terdekat
+ let s=[x0,z0],g=[gx,gz];const sLow=!walkable(x0,z0,r,dyn),gLow=!walkable(gx,gz,r,dyn);
+ if(sLow){s=nearFree(x0,z0,r,dyn,1.6)||nearFree(x0,z0,r,null,1.6)||[x0,z0];}
+ if(gLow){g=nearFree(gx,gz,r,dyn,2.5)||nearFree(gx,gz,r,null,2.5)||[gx,gz];}
+ const ea=sLow?Math.max(.02,sc-.01):null,eb=gLow?Math.max(.02,gcc-.01):null;
+ if(los(x0,z0,gx,gz,r,dyn,ea,eb))return [[gx,gz]];
+ let cells=astar(cellI(s[0]),cellJ(s[1]),cellI(g[0]),cellJ(g[1]),r,dyn);
+ if(!cells&&dyn)cells=astar(cellI(s[0]),cellJ(s[1]),cellI(g[0]),cellJ(g[1]),r,null);
+ if(!cells)return [];
+ const pts=[[x0,z0]];if(sLow)pts.push(s);for(let q=1;q<cells.length-1;q++){const k=cells[q],i=k%NAV.nx;pts.push([cellX(i),cellZ((k-i)/NAV.nx)]);}if(gLow)pts.push(g);pts.push([gx,gz]);
+ // tarik tali: buang titik yang nggak perlu selama garisnya aman
+ const out=[];let a=0;while(a<pts.length-1){let b=pts.length-1;for(;b>a+1;b--){if(los(pts[a][0],pts[a][1],pts[b][0],pts[b][1],r,dyn,a===0?ea:null,b===pts.length-1?eb:null))break;}out.push(pts[b]);a=b;}
+ return out;}
+buildNav();
 
 /* ---------- tempat (spot) ---------- */
 const HP=Math.PI/2;
@@ -382,13 +402,13 @@ function seat(id,x,z,face,top,front,back,who,room,via){return spot({id,type:'sit
 [[3.0,1.55,0,[[2.35,1.87]]],[3.8,1.55,0,[[4.45,1.87]]],[3.0,3.65,Math.PI,[[2.35,3.33]]],[3.8,3.65,Math.PI,[[4.45,3.33]]]].forEach(([x,z,f,via],i)=>seat('makan'+i,x,z,f,.445,.22,-.18,'all','dapur',via));
 [.9,2.1].forEach((x,i)=>seat('teras'+i,x,5.35,0,.445,.22,-.18,'all','teras'));
 seat('meja-maya',.725,-2.5,HP,.445,.22,-.18,['maya','han'],'kamar',[[1.1,-1.75]]);
-seat('kursi-nayla',3.11,-2.0,HP,.352,.158,-.124,['nayla','alya'],'kamar',[[3.37,-1.45]]);
-seat('kursi-alya',4.89,-2.0,-HP,.352,.158,-.124,['nayla','alya'],'kamar',[[4.63,-1.45]]);
+seat('kursi-nayla',3.11,-1.45,HP,.352,.158,-.124,['nayla','alya'],'kamar',[[3.37,-.9]]);
+seat('kursi-alya',4.89,-1.45,-HP,.352,.158,-.124,['nayla','alya'],'kamar',[[4.63,-.9]]);
 const st=(id,x,z,face,who,room)=>spot({id,type:'stand',x,z,face,ax:x,az:z,who,room});
 st('masak',4.95,2.0,HP,['maya','han'],'dapur');st('kulkas',4.95,3.95,HP,'all','dapur');st('buku',-5.2,3.3,-HP,['maya','han','nayla'],'tamu');
 st('gym',-3.3,-2.4,-HP,['han'],'kamar');st('samsak',-2.95,-.95,HP,['han'],'kamar');st('cermin',-1.35,-1.0,-HP,['maya','alya'],'kamar');
-st('siram',3.7,7.4,0,['maya','han'],'taman');st('ayunan',-3.7,8.6,0,['nayla','alya'],'taman');st('main1',-1.8,9.0,HP,['nayla','alya'],'taman');st('main2',.6,8.9,-HP,['nayla','alya','han'],'taman');
-st('mainan',5.1,-1.05,HP,['nayla','alya'],'kamar');st('jendela-teras',-2.4,5.9,0,'all','teras');st('kucing',-3.1,2.75,-.4,['nayla','alya','maya'],'tamu');
+st('siram',3.7,7.1,0,['maya','han'],'taman');st('ayunan',-3.7,8.6,0,['nayla','alya'],'taman');st('main1',-1.8,9.0,HP,['nayla','alya'],'taman');st('main2',.6,8.9,-HP,['nayla','alya','han'],'taman');
+st('mainan',5.35,-.98,0,['nayla','alya'],'kamar');st('jendela-teras',-2.4,5.9,0,'all','teras');st('kucing',-3.1,2.75,-.4,['nayla','alya','maya'],'tamu');
 const SEATPICK=[[...SP.filter(s=>s.id.startsWith('sofa'))].map(s=>[s,.7,.75,.6,s.x,.75])].flat();
 SEATPICK.forEach(a=>seatPick(...a));
 SP.filter(s=>s.type==='sit'&&!s.id.startsWith('sofa')).forEach(s=>seatPick(s,s.front*2+.06,s.front*2+.06,.9,s.x,s.z));
@@ -403,10 +423,10 @@ function lineFor(id,sp){const L=LINES[id]||{};const key=sp?(L[sp.id]?sp.id:(sp.i
 
 /* ---------- karakter ---------- */
 const DEFS=[
- {id:'han',name:'Han',file:'models/han.glb',anim:'models/anim-han.glb',color:'#2f6fd6',speed:1.2,nat:1.36,kid:false,start:[-2.0,2.9]},
- {id:'maya',name:'Maya',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#e2468a',speed:1.1,nat:1.1,kid:false,start:[3.2,1.0]},
- {id:'nayla',name:'Nayla',file:'models/nayla.glb',anim:'models/anim-kid.glb',color:'#9b4fe0',speed:.95,nat:1.0,kid:true,start:[-2.2,8.4]},
- {id:'alya',name:'Alya',file:'models/alya.glb',anim:'models/anim-kid.glb',color:'#1f9e55',speed:.95,nat:1.0,kid:true,start:[-.6,8.8]}];
+ {id:'han',name:'Han',file:'models/han.glb',anim:'models/anim-han.glb',color:'#2f6fd6',speed:1.2,nat:1.36,rad:.25,kid:false,start:[-2.0,2.9]},
+ {id:'maya',name:'Maya',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#e2468a',speed:1.1,nat:1.1,rad:.23,kid:false,start:[3.2,1.0]},
+ {id:'nayla',name:'Nayla',file:'models/nayla.glb',anim:'models/anim-kid.glb',color:'#9b4fe0',speed:.95,nat:1.0,rad:.19,kid:true,start:[-2.2,8.4]},
+ {id:'alya',name:'Alya',file:'models/alya.glb',anim:'models/anim-kid.glb',color:'#1f9e55',speed:.95,nat:1.0,rad:.19,kid:true,start:[-.6,8.8]}];
 const EM0=.12,EM1=.48; // sama persis kayak web kantor: emissive dari tekstur warna, naik pas malam
 const CH={};const CHL=[];
 let NIGHT=0;
@@ -459,48 +479,85 @@ function rotL(c,lx,ly,lz,out){const ry=c.root.rotation.y,cs=Math.cos(ry),sn=Math
 function plantedFeet(c,P){return ['L','R'].map(s=>{const f=c['foot'+s];const a=rotL(c,f[0],f[1],f[2],new THREE.Vector3()).add(P);a.y=c.ankleH;return a;});}
 function arrive(c){c.state='idle';c.v=0;play(c,'Idle',.35);const f=c.onArrive;c.onArrive=null;f&&f();}
 function turnTo(c,f,cb){const da=Math.abs(wrapA(f-c.yaw));c.state='turn';c.turnTo=f;c.afterTurn=cb||null;if(da>.5){play(c,'Walk',.3);if(c.act.Walk)c.act.Walk.timeScale=.55;}}
-// berdiri: pinggul maju ke atas kaki dulu, baru tegak; kaki tetap napak (IK) sampai berdiri
+// berdiri: pinggul maju ke atas kaki dulu, baru tegak; kaki tetap napak (IK) sampai berdiri. Kalau depan kursi lagi ada orang, tunggu dulu
 function standUp(c,then){c.gestEnd=0;const sp=c.seat;if(!sp||(c.state!=='sit'&&c.state!=='down')){then&&then();return;}
- const P=new THREE.Vector3(sp.ax,0,sp.az);if(c.ik){c.ik.B=[c.ik.T[0].clone(),c.ik.T[1].clone()];c.ik.A=plantedFeet(c,P);}
+ if(c.state==='sit'){const blk=agentsFor(c).some(o=>Math.hypot(o.x-sp.ax,o.z-sp.az)<c.rad+o.rad+.05);if(blk){c.waitUp=then||(()=>{});return;}}
+ c.waitUp=null;const P=new THREE.Vector3(sp.ax,0,sp.az);if(c.ik){c.ik.B=[c.ik.T[0].clone(),c.ik.T[1].clone()];c.ik.A=plantedFeet(c,P);}
  c.tr={from:c.root.position.clone(),to:P,t:0,dur:1.0,dir:-1};c.state='up';c.next=then||null;c.exitVia=sp.via?sp.via.slice().reverse():null;c.seat=null;play(c,'Idle',.9);}
+// karakter & kucing lain di sekitar (buat saling menghindar)
+const PRI={han:0,maya:1,nayla:2,alya:3};
+function agentsFor(c){const out=[];for(const o of CHL){if(o===c||!o.root.visible&&o.state!=='pov')continue;const p=o.root.position;const st=o.state;
+  const moving=(st==='walk'&&o.v>.15)||(st==='pov'&&o.v>.1);out.push({x:p.x,z:p.z,rad:o.rad,moving,pri:PRI[o.id],sit:st==='sit'||st==='down'||st==='up',yaw:o.yaw,ref:o});}
+ if(c!==CAT){const p=CAT.g.position;out.push({x:p.x,z:p.z,rad:.13,moving:CAT.state==='walk'&&CAT.v>.08,pri:9,sit:false,yaw:CAT.yaw,ref:CAT});}return out;}
+// lingkaran rintangan buat perencanaan jalan (yang lagi jalan cepat dilewatin, nanti diatur pas ketemu)
+function dynFor(c,all){const d=[],r=c.rad;for(const o of agentsFor(c)){if(o.moving&&!all)continue;d.push([o.x,o.z,r+o.rad-.02]);
+  if(o.sit)d.push([o.x+Math.sin(o.yaw)*.36,o.z+Math.cos(o.yaw)*.36,r+.12]);}return d;}
+// rencana jalan beberapa ruas (keluar kursi -> tujuan -> jalur masuk kursi); titik ujung ruas ditandai biar bisa direncana ulang
+function planLegs(c,legs){const p=c.root.position;let sx=p.x,sz=p.z,out=[];legs.forEach((L,i)=>{const seg=findPath(sx,sz,L[0],L[1],c.rad,i===0?dynFor(c):null);if(!seg.length)return;
+  seg[seg.length-1]=[seg[seg.length-1][0],seg[seg.length-1][1],1];out=out.concat(seg);sx=out[out.length-1][0];sz=out[out.length-1][1];});return out;}
+function replan(c,all){const p=c.root.position;const k=c.path.findIndex(q=>q[2]);if(k<0)return false;const T=c.path[k];
+ const seg=findPath(p.x,p.z,T[0],T[1],c.rad,dynFor(c,all));if(!seg.length)return false;seg[seg.length-1]=[seg[seg.length-1][0],seg[seg.length-1][1],1];c.path=seg.concat(c.path.slice(k+1));return true;}
 function goTo(c,x,z,onArrive,tail){c.gestEnd=0;
- const go=()=>{const p=c.root.position;let path=[],sx=p.x,sz=p.z;c.afterTurn=null;
-  if(c.exitVia){path=c.exitVia.map(q=>[q[0],q[1]]);const l=path[path.length-1];sx=l[0];sz=l[1];c.exitVia=null;}
-  path=path.concat(findPath(sx,sz,x,z));if(tail)path=path.concat(tail.map(q=>[q[0],q[1]]));
-  c.path=path;c.onArrive=onArrive||null;c.state='walk';play(c,'Walk',.3);if(c.act.Walk)c.act.Walk.timeScale=Math.max(.25,c.v/c.nat);};
- if(c.state==='sit'||c.state==='down')standUp(c,go);else if(c.state==='up')c.next=go;else go();}
+ const go=()=>{c.afterTurn=null;let legs=[];if(c.exitVia){legs=c.exitVia.map(q=>[q[0],q[1]]);c.exitVia=null;}legs.push([x,z]);if(tail)legs=legs.concat(tail.map(q=>[q[0],q[1]]));
+  c.path=planLegs(c,legs);c.goal=[x,z];c.waitT=0;c.replanT=0;c.onArrive=onArrive||null;if(!c.path.length){arrive(c);return;}c.state='walk';play(c,'Walk',.3);if(c.act.Walk)c.act.Walk.timeScale=Math.max(.25,c.v/c.nat);};
+ if(c.state==='sit'||c.state==='down')standUp(c,go);else if(c.state==='up')c.next=go;else if(c.state==='bed'||c.state==='lie'||c.state==='rise')getUp(c,go);else go();}
 // duduk: berdiri membelakangi kursi, pinggul turun & mundur pelan ke tengah dudukan, kaki tetap napak lalu geser ke posisi duduk
 function sitDown(c,sp){const f=sp.face,fx=Math.sin(f),fz=Math.cos(f);c.yaw=f;c.root.rotation.y=f-c.faceOff;c.root.updateMatrixWorld(true);
  const hipD=Math.max(sp.back+(c.kid?.11:.13),sp.front-c.Lt+(c.kid?.12:.10)),hy=sp.top+(c.sitClear||(c.kid?.11:.13));
  // paha boleh miring turun sejauh nggak nyentuh tepi depan dudukan
  const tmax=Math.min(.45,Math.atan(Math.max(0,(hy-sp.top)*.4-.005)/Math.max(.05,sp.front-hipD)));
  const o=rotL(c,c.sitOff[0],0,c.sitOff[1],new THREE.Vector3());const S=new THREE.Vector3(sp.x+fx*hipD-o.x,hy-c.hipSit,sp.z+fz*hipD-o.z);
- const P=c.root.position.clone();P.y=0;const A=plantedFeet(c,P),B=[];
+ const P=c.root.position.clone();P.y=0;const A=plantedFeet(c,P),B=[],Lc=c.Lc*.995,ah=c.ankleH-.002;
  for(const s of ['L','R']){const th=c['sitThigh'+s];const H=rotL(c,th[0],th[1],th[2],new THREE.Vector3()).add(S);
-  let sn=(H.y-c.ankleH-c.Lc*.97)/c.Lt;sn=Math.max(0,Math.min(Math.sin(tmax),sn));const cs=Math.sqrt(1-sn*sn),ay=H.y-c.Lt*sn-c.Lc*.97,fw=c.Lt*cs+(ay>c.ankleH+.01?.1:.04);
-  B.push(new THREE.Vector3(H.x+fx*fw,Math.max(c.ankleH,ay),H.z+fz*fw));}
+  // orang dewasa: paha boleh miring sedikit lagi biar telapak beneran napak
+  let sn=(H.y-ah-Lc)/c.Lt;sn=Math.max(0,Math.min(Math.sin(tmax)+(c.kid?0:.07),sn));const cs=Math.sqrt(1-sn*sn),ky=H.y-c.Lt*sn,dy=ky-ah;
+  // betis turun dari lutut sampai telapak napak di lantai (kalau kakinya sampai); anak kecil di kursi tinggi kakinya boleh ngegantung
+  let fw,ay;if(dy<=Lc){fw=c.Lt*cs+Math.sqrt(Math.max(0,Lc*Lc-dy*dy));ay=ah;}else{fw=c.Lt*cs+.04;ay=ky-Lc;}
+  B.push(new THREE.Vector3(H.x+fx*fw,ay,H.z+fz*fw));}
  c.ik={A,B,T:[A[0].clone(),A[1].clone()]};c.ikW=1;c.tr={from:P,to:S,t:0,dur:1.15,dir:1};c.state='down';c.seat=sp;play(c,c.act.Sit?'Sit':'Idle',1.0);}
 function goSpot(c,sp,dur){freeSpot(c);c.spot=sp;sp.occ=c.id;const via=sp.via||[];const first=via.length?via[0]:[sp.ax,sp.az];const tail=via.length?via.slice(1).concat([[sp.ax,sp.az]]):null;
  goTo(c,first[0],first[1],()=>{const after=()=>{c.busyUntil=performance.now()+(dur||R(14000,30000));if(Math.random()<.7&&c.id!=='han')setTimeout(()=>say(c,lineFor(c.id,sp)),600);};
   turnTo(c,sp.face,()=>{if(sp.type==='sit'&&c.spot===sp)sitDown(c,sp);after();});},tail);}
+function bedThink(){return false;}
+function getUp(c,then){then&&then();}
 function allowed(sp,id){return sp.who==='all'||sp.who.includes(id);}
-function think(c,now){if((c.state!=='idle'&&c.state!=='sit')||now<c.busyUntil)return;if(c.id==='han'&&now<c.userUntil)return;
- let opts=SP.filter(s=>!s.occ&&allowed(s,c.id)&&s!==c.spot);if(NIGHT>.5)opts=opts.filter(s=>s.room!=='taman');if(!opts.length)return;
+function think(c,now){if(c.state==='pov')return;if(bedThink(c,now))return;if((c.state!=='idle'&&c.state!=='sit')||now<c.busyUntil)return;if(c.id==='han'&&now<c.userUntil)return;
+ let opts=SP.filter(s=>!s.occ&&allowed(s,c.id)&&s!==c.spot);if(NIGHT>.5)opts=opts.filter(s=>s.room!=='taman'&&s.room!=='pantai');if(!opts.length)return;
  if(c.kid){const other=CHL.find(o=>o.kid&&o!==c&&o.spot);if(other&&Math.random()<.5){const same=opts.filter(s=>s.room===other.spot.room);if(same.length)opts=same;}}
  goSpot(c,pick(opts));}
-// jalan: percepatan & perlambatan halus, belok dengan kecepatan putar terbatas (pelan dulu kalau beloknya tajam), animasi kaki ikut kecepatan
-function stepWalk(c,dt){const p=c.root.position;let t=c.path[0];
- while(t&&c.path.length>1&&Math.hypot(t[0]-p.x,t[1]-p.z)<.25){c.path.shift();t=c.path[0];}
+// apakah jalan di depan (sampai ~1,4 m) lewat dekat titik (x,z)?
+function aheadNear(c,x,z,R){const p=c.root.position;let ax=p.x,az=p.z,left=1.4;for(const q of c.path){const L=Math.hypot(q[0]-ax,q[1]-az),n=Math.max(1,Math.ceil(L/.1));
+  for(let s=1;s<=n;s++){const t=s/n;if(L*t>left)return false;const px=ax+(q[0]-ax)*t,pz=az+(q[1]-az)*t;if(Math.hypot(px-x,pz-z)<R)return true;}left-=L;if(left<=0)return false;ax=q[0];az=q[1];}return false;}
+// jalan: percepatan & perlambatan halus, belok dengan kecepatan putar terbatas, animasi kaki ikut kecepatan, ngalah/muter kalau ada orang di depan
+function stepWalk(c,dt,now){const p=c.root.position;let t=c.path[0];
+ // potong tikungan cuma kalau garis ke titik berikutnya tetap aman (nggak nyerempet furnitur/kusen)
+ while(t&&c.path.length>1&&Math.hypot(t[0]-p.x,t[1]-p.z)<.25){const n=c.path[1];if(Math.hypot(t[0]-p.x,t[1]-p.z)>.03&&!los(p.x,p.z,n[0],n[1],Math.min(c.rad-.03,clrAt(n[0],n[1])-.01,clrAt(p.x,p.z)-.01)))break;c.path.shift();t=c.path[0];}
  if(!t){arrive(c);return;}
- const dx=t[0]-p.x,dz=t[1]-p.z,d=Math.hypot(dx,dz),last=c.path.length===1;
+ let dx=t[0]-p.x,dz=t[1]-p.z,d=Math.hypot(dx,dz);const last=c.path.length===1;
  if(last&&d<.02){p.x=t[0];p.z=t[1];c.path.shift();arrive(c);return;}
+ // saling menghindar
+ let hold=false;const fx=Math.sin(c.yaw),fz=Math.cos(c.yaw),gl=c.path[c.path.length-1],toGoal=Math.hypot(gl[0]-p.x,gl[1]-p.z);
+ for(const o of agentsFor(c)){const ox=o.x-p.x,oz=o.z-p.z,od=Math.hypot(ox,oz),minD=c.rad+o.rad;if(od>minD+.8)continue;const cs=(ox*fx+oz*fz)/(od||1);
+  if(!o.moving){if(aheadNear(c,o.x,o.z,minD-.01)){if(now>c.replanT){c.replanT=now+600;replan(c);t=c.path[0];dx=t[0]-p.x;dz=t[1]-p.z;d=Math.hypot(dx,dz);}if(od<minD+.1&&cs>.2&&aheadNear(c,o.x,o.z,minD-.01))hold=true;}}
+  else if(cs>.3&&od<minD+.45&&o.pri<c.pri&&aheadNear(c,o.x,o.z,minD))hold=true;
+  if(hold&&o.ref===CAT&&CAT.state!=='walk')CAT.until=Math.min(CAT.until,now+700);}
+ // habis kedorong / melenceng: kalau garis ke titik berikutnya nggak aman lagi, rencana ulang
+ c.chk=(c.chk||0)+1;if((c.pushed||c.chk%8===0)&&d>.05&&!los(p.x,p.z,t[0],t[1],Math.min(c.rad-.03,clrAt(p.x,p.z)-.01,clrAt(t[0],t[1])-.01))){if(!replan(c)){const k=c.path.findIndex(q=>q[2]);const T=c.path[k>=0?k:c.path.length-1];const seg=findPath(p.x,p.z,T[0],T[1],c.rad,null);if(seg.length){seg[seg.length-1]=[seg[seg.length-1][0],seg[seg.length-1][1],1];c.path=seg.concat(c.path.slice((k>=0?k:c.path.length-1)+1));}}t=c.path[0];dx=t[0]-p.x;dz=t[1]-p.z;d=Math.hypot(dx,dz);}
+ c.pushed=false;
+ if(hold&&toGoal<c.rad+.45&&!(c.spot&&c.spot.type==='sit')){c.path.length=0;arrive(c);return;}
+ if(hold){c.waitT=(c.waitT||0)+dt;c.waitTot=(c.waitTot||0)+dt;if(c.waitT>1.4&&now>c.replanT){c.replanT=now+1500;c.waitT=0;replan(c,true);}
+  if(c.waitTot>4){c.waitTot=0;c.path.length=0;freeSpot(c);c.onArrive=null;arrive(c);c.busyUntil=now+R(800,2500);return;}}else{c.waitT=0;c.waitTot=Math.max(0,(c.waitTot||0)-dt*.5);}
  const da=wrapA(Math.atan2(dx,dz)-c.yaw),tr=6*dt;c.yaw+=Math.max(-tr,Math.min(tr,da));
- const ad=Math.abs(da);let vt=c.speed*(ad>1.4?0:Math.cos(ad)**2);
- if(last)vt=Math.min(vt,Math.sqrt(3*d)+.03);
- else{const n=c.path[1],ex=n[0]-t[0],ez=n[1]-t[1],el=Math.hypot(ex,ez)||1,th=Math.acos(Math.max(-1,Math.min(1,(dx*ex+dz*ez)/(d*el))));const vc=c.speed*Math.max(.2,Math.cos(th*.8));vt=Math.min(vt,Math.sqrt(vc*vc+5*Math.max(0,d-.25)));}
- c.v=Math.max(0,c.v+Math.max(-3*dt,Math.min(2.4*dt,vt-c.v)));const s=Math.min(d,c.v*dt);
- p.x+=dx/d*s;p.z+=dz/d*s;
+ const ad=Math.abs(da);let vt=hold?0:c.speed*(ad>1.4?0:Math.cos(ad)**2);
+ if(c.path.length<2)vt=Math.min(vt,Math.sqrt(3*d)+.03);
+ else{const n=c.path[1],ex=n[0]-t[0],ez=n[1]-t[1],el=Math.hypot(ex,ez)||1,th=Math.acos(Math.max(-1,Math.min(1,(dx*ex+dz*ez)/((d||1)*el))));const vc=c.speed*Math.max(.2,Math.cos(th*.8));vt=Math.min(vt,Math.sqrt(vc*vc+5*Math.max(0,d-.25)));}
+ c.v=Math.max(0,c.v+Math.max(-(hold?5:3)*dt,Math.min(2.4*dt,vt-c.v)));const s=Math.min(d,c.v*dt);
+ if(d>1e-6){p.x+=dx/d*s;p.z+=dz/d*s;}
+ separate(c,p);
  if(c.act.Walk&&c.cur==='Walk')c.act.Walk.timeScale=Math.max(.25,c.v/c.nat);}
+// jaga jarak minimal antar badan (pengaman terakhir, jarang kepakai)
+function separate(c,p){for(const o of agentsFor(c)){const dx=p.x-o.x,dz=p.z-o.z,d=Math.hypot(dx,dz),minD=c.rad+o.rad-.03;if(d>=minD||d<1e-5)continue;
+  const nx=p.x+dx/d*(minD-d),nz=p.z+dz/d*(minD-d);if(clrAt(nx,nz)>=Math.min(c.rad*.7,clrAt(p.x,p.z))){p.x=nx;p.z=nz;c.pushed=true;}}}
 // transisi duduk/berdiri
 function stepTr(c,dt){const tr=c.tr;tr.t+=dt;const k=Math.min(1,tr.t/tr.dur);c.root.position.lerpVectors(tr.from,tr.to,smk(k));
  const ik=c.ik;if(ik){const kk=tr.dir>0?smk(Math.min(1,Math.max(0,(k-.35)/.65))):smk(Math.min(1,k/.6));
@@ -518,7 +575,8 @@ function legIK(c){const w=c.ikW,b=c.bones,ik=c.ik;if(!ik||!(w>0))return;c.root.u
   if(to){const tv=c['toe'+s];rotL(c,tv[0],tv[1],tv[2],_K);_K.add(_Tc);aimB(fo,to,_K,w);}});}
 function updChar(c,dt,now){
  if(c.gestEnd&&now>c.gestEnd){c.gestEnd=0;if(c.state==='idle'&&c.cur!=='Idle')play(c,'Idle',.45);}
- if(c.state==='walk')stepWalk(c,dt);
+ if(c.waitUp&&c.state==='sit'&&now>(c.waitUpT||0)){c.waitUpT=now+500;const f=c.waitUp;c.waitUp=null;standUp(c,f);}
+ if(c.state==='walk')stepWalk(c,dt,now);
  else if(c.state==='turn'){const da=wrapA(c.turnTo-c.yaw),st=3.2*dt;if(Math.abs(da)<=st){c.yaw=c.turnTo;c.state='idle';play(c,'Idle',.35);const f=c.afterTurn;c.afterTurn=null;f&&f();}else c.yaw+=Math.sign(da)*st;}
  else if(c.state==='down'||c.state==='up')stepTr(c,dt);
  c.root.rotation.y=c.yaw-c.faceOff;c.mixer.update(dt);if(c.ikW>0)legIK(c);else if(c.state==='sit'&&!c.act.Sit)procSit(c);}
@@ -540,20 +598,28 @@ const CATP=new GLTFLoader().loadAsync('models/mochi.glb').then(gl=>{const m=gl.s
  CAT.g.add(m);CAT.body.visible=false;CAT.model=m;CAT.mixer=new THREE.AnimationMixer(m);gl.animations.forEach(cl=>{CAT.act[cl.name]=CAT.mixer.clipAction(cl);});
  const first=CAT.act[CAT.state==='walk'?'Walk':'Idle'];if(first){first.reset().setEffectiveWeight(1).play();CAT.cur=CAT.state==='walk'?'Walk':'Idle';}
  if(CAT.act.Walk)CAT.act.Walk.timeScale=Math.max(.45,CAT.v/CAT_WALK_NAT);return true;}).catch(e=>{console.warn('gagal muat mochi.glb',e);(window.__R||{errors:[]}).errors.push('mochi: '+e);return false;});
-const CATSPOTS=[[-3.2,2.4],[.2,5.7],[4.3,-1.3],[2.2,4.0],[2.4,7.9],[-.4,-2.0]];
+const CATSPOTS=[[-3.2,2.4],[.2,5.7],[4.3,-1.0],[2.2,4.0],[2.4,7.9],[-.4,-2.0],[-6.2,1.0],[7.4,-1.5]];
+const CAT_R=.13;
+function catDyn(){return CHL.map(o=>{const p=o.root.position;return [p.x,p.z,CAT_R+o.rad];});}
 function updCat(dt,now){const g=CAT.g,p=g.position,M=!!CAT.model;if(CAT.state==='walk'){let t=CAT.path[0];
-  while(t&&CAT.path.length>1&&Math.hypot(t[0]-p.x,t[1]-p.z)<.15){CAT.path.shift();t=CAT.path[0];}
+  while(t&&CAT.path.length>1&&Math.hypot(t[0]-p.x,t[1]-p.z)<.15){const n=CAT.path[1];if(Math.hypot(t[0]-p.x,t[1]-p.z)>.02&&!los(p.x,p.z,n[0],n[1],Math.min(CAT_R-.02,clrAt(n[0],n[1])-.01,clrAt(p.x,p.z)-.01)))break;CAT.path.shift();t=CAT.path[0];}
   const stop=()=>{CAT.state='idle';CAT.v=0;CAT.until=now+R(15000,35000);CAT.lookT=now+R(3000,8000);catPlay('Idle',.45);};
   if(!t)stop();else{const dx=t[0]-p.x,dz=t[1]-p.z,d=Math.hypot(dx,dz),last=CAT.path.length===1;
+   // Mochi ngalah: berhenti kalau ada orang di depan, lalu cari jalan lain
+   let hold=false;const fx=Math.sin(CAT.yaw),fz=Math.cos(CAT.yaw);
+   for(const o of CHL){const op=o.root.position,ox=op.x-p.x,oz=op.z-p.z,od=Math.hypot(ox,oz);if(od<CAT_R+o.rad+.3&&(ox*fx+oz*fz)/(od||1)>.2)hold=true;}
+   if(hold){CAT.waitT=(CAT.waitT||0)+dt;if(CAT.waitT>1.0){CAT.waitT=0;const L=CAT.path[CAT.path.length-1];const np=findPath(p.x,p.z,L[0],L[1],CAT_R,catDyn());if(np.length)CAT.path=np;else{stop();return;}}}else CAT.waitT=0;
    if(last&&d<.015){p.x=t[0];p.z=t[1];CAT.path.shift();stop();}
    else{const da=wrapA(Math.atan2(dx,dz)-CAT.yaw),tr=3.2*dt;CAT.yaw+=Math.max(-tr,Math.min(tr,da));const ad=Math.abs(da);
-    let vt=CAT.spd*(ad>1.3?0:Math.cos(ad)**2);if(last)vt=Math.min(vt,Math.sqrt(1.2*d)+.02);CAT.v=Math.max(0,CAT.v+Math.max(-1*dt,Math.min(.8*dt,vt-CAT.v)));const s=Math.min(d,CAT.v*dt);
-    if(d>.25){p.x+=Math.sin(CAT.yaw)*s;p.z+=Math.cos(CAT.yaw)*s;}else{p.x+=dx/d*s;p.z+=dz/d*s;}
+    let vt=hold?0:CAT.spd*(ad>1.3?0:Math.cos(ad)**2);if(last)vt=Math.min(vt,Math.sqrt(1.2*d)+.02);CAT.v=Math.max(0,CAT.v+Math.max(-(hold?2:1)*dt,Math.min(.8*dt,vt-CAT.v)));const s=Math.min(d,CAT.v*dt);
+    // gerak lurus ke titik berikutnya (jalurnya udah aman dari rintangan), badan berputar halus
+    p.x+=dx/d*s;p.z+=dz/d*s;
+    for(const o of CHL){const op=o.root.position,ex=p.x-op.x,ez=p.z-op.z,ed=Math.hypot(ex,ez),mn=CAT_R+o.rad-.03;if(ed<mn&&ed>1e-5){const nx=p.x+ex/ed*(mn-ed),nz=p.z+ez/ed*(mn-ed);if(clrAt(nx,nz)>=CAT_R*.7){p.x=nx;p.z=nz;const q=CAT.path[0];if(q&&!los(p.x,p.z,q[0],q[1],Math.min(CAT_R-.02,clrAt(p.x,p.z)-.01))){const L=CAT.path[CAT.path.length-1];const np=findPath(p.x,p.z,L[0],L[1],CAT_R,null);if(np.length)CAT.path=np;}}}}
     g.rotation.y=CAT.yaw;if(CAT.act.Walk)CAT.act.Walk.timeScale=Math.max(.45,CAT.v/CAT_WALK_NAT);}}
   if(!M){CAT.body.position.y=Math.abs(Math.sin(now*.012))*.02;CAT.body.scale.y=1;}}
  else{if(!M){CAT.body.position.y=0;CAT.body.scale.y=1-.03*Math.sin(now*.003);}
   else if(CAT.act.Look){if(CAT.cur==='Idle'&&now>CAT.lookT){catPlay('Look',.4);CAT.lookEnd=now+CAT.act.Look.getClip().duration*1000*(1+Math.floor(Math.random()*2));}else if(CAT.cur==='Look'&&now>CAT.lookEnd){catPlay('Idle',.5);CAT.lookT=now+R(6000,14000);}}
-  if(now>CAT.until){const t=pick(CATSPOTS);CAT.path=findPath(p.x,p.z,t[0]+R(-.3,.3),t[1]+R(-.3,.3));CAT.state='walk';catPlay('Walk',.3);}}
+  if(now>CAT.until&&!CAT.petUntil){const t=pick(CATSPOTS.filter(q=>NIGHT<.5||inR([-6,-4.5,6,4.5],q[0],q[1])));let gx=t[0]+R(-.3,.3),gz=t[1]+R(-.3,.3);if(!walkable(gx,gz,CAT_R)){const f=nearFree(gx,gz,CAT_R,null,1);if(f){gx=f[0];gz=f[1];}}const np=findPath(p.x,p.z,gx,gz,CAT_R,catDyn());if(np.length){CAT.path=np;CAT.state='walk';catPlay('Walk',.3);}else CAT.until=now+3000;}}
  if(CAT.mixer)CAT.mixer.update(dt);}
 
 /* ---------- kamera, tampilan ---------- */
@@ -606,8 +672,9 @@ function tap(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCame
  const now=performance.now();const se=ray.intersectObjects(SEATS,false);
  if(se.length){const sp=se[0].object.userData.spot;if(han.seat===sp){status('🪑 Han udah duduk di situ');return;}if(sp.occ&&sp.occ!=='han'){status(`🪑 Kursinya lagi dipakai ${CH[sp.occ]?CH[sp.occ].name:''}`);return;}han.userUntil=now+90000;goSpot(han,sp,90000);status('🪑 Han jalan ke kursi, terus duduk');return;}
  const hit=new THREE.Vector3();if(!ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),hit))return;
- if(hit.x<LOT[0]-1||hit.x>LOT[2]+1||hit.z<LOT[1]-1||hit.z>LOT[3]+1){status('Di luar pagar, babe 😄');return;}
- han.userUntil=now+90000;freeSpot(han);const g=clampGoal(hit.x,hit.z);[g[0],g[1]]=pushOut(g[0],g[1]);goTo(han,g[0],g[1],()=>{han.busyUntil=performance.now()+60000;});MARK.position.set(g[0],.02,g[1]);MARK.material.opacity=1;}
+ if(!inPlay(hit.x,hit.z)){status(hit.z<-19.7&&Math.abs(hit.x)<11.2?'Itu laut, babe 🌊 Han nggak berenang dulu ya':'Di luar pagar, babe 😄');return;}
+ let g=[hit.x,hit.z];if(!walkable(g[0],g[1],han.rad)){const f=nearFree(g[0],g[1],han.rad,null,2);if(!f){status('Nggak bisa ke situ, babe');return;}g=f;}
+ han.userUntil=now+90000;freeSpot(han);goTo(han,g[0],g[1],()=>{han.busyUntil=performance.now()+60000;});MARK.position.set(g[0],.02,g[1]);MARK.material.opacity=1;}
 
 /* ---------- loop ---------- */
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);labelR.setSize(innerWidth,innerHeight);});
@@ -626,7 +693,7 @@ updEnv(0,true);updClock();
 view('all',true);
 loop();
 setTimeout(()=>{$('load').style.opacity=0;setTimeout(()=>$('load').remove(),500);},150);
-window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,ready:false,errors:[],OBS,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,pause:v=>{SIMPAUSE=v;}};
+window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;}};
 CATP.then(()=>{window.__R.catReady=true;});
 let done=0;
 Promise.all(DEFS.map(d=>loadChar(d).then(c=>{done++;status(`Memuat penghuni rumah ${done}/4…`,1500);return c;}).catch(e=>{console.warn('gagal muat',d.file,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.ready=true;status('🏡 Selamat datang di rumah!',2500);

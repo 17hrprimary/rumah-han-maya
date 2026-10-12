@@ -8,6 +8,9 @@ Rumah 3D (three.js) dengan teras, ruang tamu, dapur, tiga kamar (Han, Maya, Nayl
 - Langit realtime: warna langit, matahari, bulan, bintang, cahaya, dan lampu rumah ikut jam WITA (UTC+8, Maros) dengan transisi halus. Pagi/siang/sore/malam. Ada awan yang pelan-pelan bergerak.
 - Animasi: Idle/Walk/Sit/Wave tambahan dari Rocketbox (`models/anim-*.glb`), crossfade halus; Maya pakai animasi napas, jalan, dan duduk kursi asli.
 
+- **Furnitur solid + A\***: semua benda (dinding, kusen, furnitur, pagar, pohon, semak) otomatis jadi rintangan di grid 10 cm dengan peta jarak bebas. Karakter dan Mochi cari jalan pakai A* (8 arah, lebih suka lewat tengah lorong), lalu jalurnya dirapikan (tarik tali) selama garisnya tetap aman. Tikungan cuma dipotong kalau nggak nyerempet apa pun.
+- **Antar karakter nggak saling tembus**: tiap orang punya radius badan. Yang lagi diam/duduk dianggap rintangan dan dijalani memutar; kalau papasan di pintu, yang prioritasnya lebih rendah (Han > Maya > Nayla > Alya > Mochi) nunggu dulu. Mochi minggir kalau ngalangin jalan. Orang dewasa yang duduk telapak kakinya napak lantai.
+
 Karakter (Maya, Han, Nayla, Alya) memakai label nama CSS2D. Maya memakai perbaikan emissive yang sama dengan web kantor (emissiveMap = tekstur warna, intensitas 0.12 siang, naik 0.48 waktu malam).
 
 ## Kredit
