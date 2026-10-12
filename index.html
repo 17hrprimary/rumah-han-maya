@@ -117,11 +117,7 @@ body.pov #status{top:auto;bottom:34%}
 #thToast.on{opacity:1}
 #mobPlay{position:fixed;right:10px;bottom:132px;z-index:9;font:inherit;font-size:14px;font-weight:900;border-radius:14px;border:2px solid #fff;background:linear-gradient(180deg,#f2559a,#b3122e);color:#fff;padding:9px 14px;box-shadow:0 3px 10px rgba(0,0,0,.25);cursor:pointer}
 #mobPlay[hidden]{display:none}
-#ageGate{display:none;position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);align-items:center;justify-content:center}
-#ageGate.on{display:flex}
-.agebox{background:#1b1226;color:#fff;border:2px solid #b3122e;border-radius:16px;padding:16px;width:min(320px,calc(100% - 32px));text-align:center}
-.agebox .small{color:#e8d6e8;font-size:13px}
-.agetitle{font-weight:900;font-size:18px;color:#ffd2e4;margin-bottom:6px}
+#thUrl{flex:1;min-width:0;font:inherit;font-size:13px;padding:7px 9px;border-radius:10px;border:1.5px solid #5a3a5e;background:#2a1a30;color:#fff}
 #bar #bBios{background:linear-gradient(180deg,#f2559a,#b3122e);color:#fff}
 </style>
 </head>
@@ -171,13 +167,13 @@ body.pov #status{top:auto;bottom:34%}
       <input type="range" id="thSeek" min="0" max="1000" value="0"><div class="small thtime"><span id="thT">0:00 / 0:00</span><span><button class="thb" id="thMute" title="Mute / unmute video">🔊</button> <input type="range" id="thVol" min="0" max="100" value="90"></span></div>
       <div class="sec">🎞️ Folder theater/ <span id="thCount"></span></div><div class="thlist" id="thList"><div class="small">Memuat daftar…</div></div>
       <div class="throw"><label class="thb thpick">📂 Putar dari folder komputer<input type="file" id="thPick" accept="video/*" webkitdirectory multiple hidden></label><button class="thb" id="thLockBtn" title="Kunci lagi">🔒 Kunci</button></div>
+      <div class="throw"><input id="thUrl" type="url" inputmode="url" autocomplete="off" placeholder="🔗 Tempel link video (.mp4 / .webm)"><button class="thb" id="thUrlGo">▶️ Putar link</button></div>
       <div class="sec">💞 Interaksi Maya / Ophelia / Keira</div><div class="thctl" id="thAct"></div><div class="small" id="thActSt"></div>
       <div class="small">Tips: lorong ke bioskop ada di ujung kanan teras. Pakai <b>🎮 POV Han</b> buat jalan sendiri. Di POV tekan <b>T</b> (PC) atau tombol <b>🎬</b> (HP) buat buka panel. <b>Spasi</b> = putar/jeda, <b>Esc</b> = tutup panel.</div></div>
     </div>
 <video id="thVideo" playsinline preload="metadata"></video>
     <button type="button" id="mobPlay" hidden title="Buka panel bioskop">🎬</button>
     <div id="thToast"></div>
-    <div id="ageGate"><div class="agebox"><div class="agetitle">🔞 Konten Dewasa 18+</div><div class="small">Bioskop ini khusus pengguna 18 tahun ke atas. Kamu yakin udah 18+?</div><div class="thctl" style="justify-content:center;margin-top:10px"><button class="thb on" id="ageYes">Ya, saya 18+</button><button class="thb" id="ageNo">Bukan</button></div></div></div>
 <div id="credit">
  <h3>Kredit</h3>
  <p><b>Maya</b> — modifikasi warna/tekstur dari avatar "Female_Adult_03", <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox Avatar Library</a> (model yang sama dengan web kantor).</p>
@@ -715,7 +711,7 @@ async function loadChar(def){const [gl,extra]=await Promise.all([new GLTFLoader(
  const c={...def,root,model,mats:[],bones:{},act:{},cur:'',state:'idle',path:[],spot:null,seat:null,busyUntil:0,userUntil:0,yaw:0,v:0,ikW:0,ik:null,tr:null,next:null,exitVia:null,onArrive:null};
  model.traverse(o=>{const k=o.name.replace(/^Bip0\d/,'').replace(/[ _]/g,'');if(o.isBone||o.type==='Bone'||/^Bip0\d/.test(o.name))c.bones[k]=c.bones[k]||o;
   if(o.isMesh){o.castShadow=true;o.receiveShadow=false;o.frustumCulled=false;const mt=o.material;if(mt){mt.metalness=0;if(mt.map){mt.map.anisotropy=4;mt.emissiveMap=mt.map;mt.emissive.setRGB(1,1,1);mt.emissiveIntensity=EM0;c.mats.push(mt);}}}});
- const clips={};gl.animations.forEach(cl=>clips[cl.name]=cl);extra.forEach(cl=>{if(cl.name!=='Walk'||def.id==='maya')clips[cl.name]=cl;});
+ const clips={};gl.animations.forEach(cl=>clips[cl.name]=cl);extra.forEach(cl=>{if(cl.name!=='Walk'||def.id==='maya'||def.guest)clips[cl.name]=cl;});
  c.mixer=new THREE.AnimationMixer(model);Object.values(clips).forEach(cl=>{const a=c.mixer.clipAction(cl);if(cl.name==='Wave'){a.setLoop(THREE.LoopOnce,1);a.clampWhenFinished=true;}else a.setLoop(THREE.LoopRepeat);c.act[cl.name]=a;});
  // ukur: tinggi pinggul, arah hadap, posisi pinggul pas duduk
  c.act.Idle.reset().play();c.mixer.update(0);const hs=measure(c);c.hipStand=hs.y;
@@ -750,7 +746,7 @@ function standUp(c,then){c.gestEnd=0;const sp=c.seat;if(!sp||(c.state!=='sit'&&c
  c.waitUp=null;const P=new THREE.Vector3(sp.ax,0,sp.az);if(c.ik){c.ik.B=[c.ik.T[0].clone(),c.ik.T[1].clone()];c.ik.A=plantedFeet(c,P);}
  c.tr={from:c.root.position.clone(),to:P,t:0,dur:1.0,dir:-1};c.state='up';c.next=then||null;c.exitVia=sp.via?sp.via.slice().reverse():null;c.seat=null;play(c,'Idle',.9);}
 // karakter & kucing lain di sekitar (buat saling menghindar)
-const PRI={han:0,maya:1,nayla:2,alya:3};
+const PRI={han:0,maya:1,nayla:2,alya:3,ophelia:4,keira:5};
 function agentsFor(c){const out=[];for(const o of CHL){if(o===c||!o.root.visible&&o.state!=='pov')continue;const p=o.root.position;const st=o.state;
   const moving=(st==='walk'&&o.v>.15)||(st==='pov'&&o.v>.1);out.push({x:p.x,z:p.z,rad:o.rad,moving,pri:PRI[o.id],sit:st==='sit'||st==='down'||st==='up',yaw:o.yaw,ref:o});}
  if(c!==CAT){const p=CAT.g.position;out.push({x:p.x,z:p.z,rad:.13,moving:CAT.state==='walk'&&CAT.v>.08,pri:9,sit:false,yaw:CAT.yaw,ref:CAT});}return out;}
@@ -786,7 +782,7 @@ function goSpot(c,sp,dur){freeSpot(c);c.spot=sp;sp.occ=c.id;const via=sp.via||[]
 function bedThink(){return false;}
 function getUp(c,then){then&&then();}
 function allowed(sp,id){return sp.who==='all'||sp.who.includes(id);}
-function think(c,now){if(c.state==='pov')return;if(bedThink(c,now))return;if((c.state!=='idle'&&c.state!=='sit')||now<c.busyUntil)return;if(c.id==='han'&&now<c.userUntil)return;
+function think(c,now){if(c.state==='pov'||c.guest)return;if(bedThink(c,now))return;if((c.state!=='idle'&&c.state!=='sit')||now<c.busyUntil)return;if(c.id==='han'&&now<c.userUntil)return;
  let opts=SP.filter(s=>!s.occ&&allowed(s,c.id)&&s!==c.spot&&s.room!=='bioskop');if(NIGHT>.5)opts=opts.filter(s=>s.room!=='taman'&&s.room!=='pantai');if(!opts.length)return;
  if(c.kid){const other=CHL.find(o=>o.kid&&o!==c&&o.spot);if(other&&Math.random()<.5){const same=opts.filter(s=>s.room===other.spot.room);if(same.length)opts=same;}}
  goSpot(c,pick(opts));}
@@ -1021,10 +1017,10 @@ $('bPov').onclick=enterPov;
 
 /* ---------- loop ---------- */
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);labelR.setSize(innerWidth,innerHeight);});
-/* ---------- 🎬 BIOSKOP: pemutar film, kunci pass code 🔐, gerbang 18+, nonton bareng (Maya/Ophelia/Keira) — diambil dari web kantor ---------- */
+/* ---------- 🎬 BIOSKOP: pemutar film, kunci pass code 🔐, nonton bareng (Maya/Ophelia/Keira) — diambil dari web kantor ---------- */
 const TH_SALT='kantor-ai-bioskop:',TH_HASH='33fd05f2730af5a504f44819feb9f2f790eefd15f4fea0cfc5a4d398dbaa13e7';
 const TH_DIR='theater/',TH_EXT=/\.(mp4|webm|m4v|mov|ogv|ogg)$/i,TH_REPO='17hrprimary/rumah-han-maya';
-const TH={unlocked:false,open:false,list:[],cur:-1,playing:false,autoNext:true,scrLock:false,scrSave:null,pendingEnter:false,vtex:null,idle:null,date:[],bed:false,coupleCam:false,kiss:0,openOnArrive:false,wasIn:false,ageOk:false};
+const TH={unlocked:false,open:false,list:[],cur:-1,playing:false,autoNext:true,scrLock:false,scrSave:null,pendingEnter:false,vtex:null,idle:null,date:[],bed:false,coupleCam:false,kiss:0,openOnArrive:false,wasIn:false,ageOk:true,priv:false,slow:false,pose:null,poseK:-1};
 const thLog=m=>{console.log(m);thToast(m);};
 function thToast(m,ms=2600){const t=$('thToast');if(!t)return;t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),ms);}
 function povKeysClear(){POV.keys.clear();POV.run=false;}
@@ -1040,7 +1036,7 @@ function thSha256Fallback(str){const K=[],H=[];let n=2,c=0;const isP=v=>{for(let
   [a,bb,cc,d,e,f,g,hh].forEach((v,i)=>h[i]=(h[i]+v)|0);}
  return h.map(v=>(v>>>0).toString(16).padStart(8,'0')).join('');}
 async function thSha256(str){try{if(crypto&&crypto.subtle){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(_){}return thSha256Fallback(str);}
-const thV=$('thVideo');TH.video=thV;thV.volume=.9;
+const thV=$('thVideo');TH.video=thV;thV.volume=.9;thV.crossOrigin='anonymous';
 function thInCinema(){const h=CH.han;return !!(h&&inCin(h.root.position.x,h.root.position.z));}
 const thFmt=s=>{s=Math.max(0,Math.floor(s||0));const h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=String(s%60).padStart(2,'0');return h?h+':'+String(m).padStart(2,'0')+':'+x:m+':'+x;};
 const thName=f=>decodeURIComponent(String(f).split('/').pop()).replace(TH_EXT,'').replace(/[_]+/g,' ');
@@ -1050,7 +1046,7 @@ function thUI(){$('thLock').hidden=TH.unlocked;$('thMain').hidden=!TH.unlocked;
  const mp=$('mobPlay');if(mp){const show=!!(thInCinema()&&TH.unlocked);mp.hidden=!show;if(show)mp.textContent=(!TH.list.length||TH.cur<0||thV.paused)?'▶️ Putar':'⏸ Jeda';}}
 function thRenderList(){const L=$('thList');L.innerHTML='';$('thCount').textContent=TH.list.length?'('+TH.list.length+' film)':'';
  if(!TH.list.length){L.innerHTML='<div class="small">Belum ada video di folder <b>theater/</b>. Pakai <b>📂 Putar dari folder komputer</b> buat langsung dari PC.</div>';return;}
- TH.list.forEach((it,i)=>{const b=document.createElement('button');b.textContent=(it.local?'💻 ':'🎞️ ')+it.title;b.onclick=()=>thPlayIdx(i);L.appendChild(b);});thUI();}
+ TH.list.forEach((it,i)=>{const b=document.createElement('button');b.textContent=(it.local?'💻 ':it.link?'🔗 ':'🎞️ ')+it.title;b.onclick=()=>thPlayIdx(i);L.appendChild(b);});thUI();}
 async function thLoadList(){if(TH.loaded)return;TH.loaded=true;let files=[];
  try{const r=await fetch(TH_DIR+'/videos.json?'+Date.now(),{cache:'no-store'});if(r.ok){const j=await r.json();files=(Array.isArray(j)?j:(j.videos||[])).map(x=>typeof x==='string'?{file:x}:x).filter(x=>x&&x.file);}}catch(_){}
  if(!files.length)try{const r=await fetch('https://api.github.com/repos/'+TH_REPO+'/contents/'+TH_DIR);if(r.ok)files=(await r.json()).filter(x=>x.type==='file'&&TH_EXT.test(x.name)).map(x=>({file:x.name}));}catch(_){}
@@ -1058,7 +1054,7 @@ async function thLoadList(){if(TH.loaded)return;TH.loaded=true;let files=[];
  thRenderList();}
 function thEnsureTex(){if(!TH.vtex){TH.vtex=new THREE.VideoTexture(thV);TH.vtex.colorSpace=THREE.SRGBColorSpace;}BIOS.screen.material.map=TH.vtex;BIOS.screen.material.needsUpdate=true;TH.playing=true;BIOS.beam.visible=true;BIOS.beam.material.opacity=.07;BIOS.slight.intensity=.5;}
 function thIdle(){TH.playing=false;BIOS.screen.material.map=TH.idle;BIOS.screen.material.needsUpdate=true;BIOS.beam.visible=false;BIOS.slight.intensity=2.2;}
-function thPlayIdx(i){if(!TH.unlocked||!TH.list[i])return;TH.cur=i;const it=TH.list[i];thV.src=it.src;thV.load();thEnsureTex();
+function thPlayIdx(i){if(!TH.unlocked||!TH.list[i])return;TH.cur=i;const it=TH.list[i];thV.defaultPlaybackRate=TH.slow?.5:1;thV.src=it.src;thV.load();thEnsureTex();
  thV.play().catch(e=>{$('thNow').textContent='⚠️ Gagal putar: '+it.title+' ('+(e.name||e)+')';});thLog('🎬 Bioskop: Han nonton '+it.title);thUI();}
 thV.addEventListener('play',thUI);thV.addEventListener('pause',thUI);
 function thAutoUI(){const b=$('thAutoNext');if(!b)return;b.classList.toggle('on',!!TH.autoNext);b.textContent=TH.autoNext?'⏭ Auto ON':'⏭ Auto OFF';b.title=TH.autoNext?'Auto play next ON — film berikutnya otomatis. Klik buat mati.':'Auto play next OFF — berhenti di akhir film. Klik buat nyala.';}
@@ -1067,7 +1063,12 @@ function applyAutoNext(on,announce){TH.autoNext=!!on;try{localStorage.setItem('r
 thV.addEventListener('ended',()=>{if(TH.autoNext&&TH.cur<TH.list.length-1)thPlayIdx(TH.cur+1);else{thIdle();thUI();}});
 loadAutoNext();thAutoUI();
 $('thAutoNext').onclick=()=>applyAutoNext(!TH.autoNext,true);
-thV.addEventListener('error',()=>{const it=TH.list[TH.cur];$('thNow').textContent='⚠️ Format gak didukung browser: '+(it?it.title:'')+' (pakai mp4 H.264 / webm)';thIdle();});
+thV.addEventListener('error',()=>{if(!thV.getAttribute('src'))return;const it=TH.list[TH.cur];$('thNow').textContent=it&&it.link?'⚠️ Link gak bisa diputar: harus link langsung ke file .mp4/.webm dan servernya ngizinin diputar dari web lain':'⚠️ Format gak didukung browser: '+(it?it.title:'')+' (pakai mp4 H.264 / webm)';thIdle();});
+function thPlayUrl(){const inp=$('thUrl'),u=(inp.value||'').trim();if(!TH.unlocked){thGatePrompt();return;}
+ if(!/^https?:\/\/\S+$/i.test(u)){thToast('🔗 Tempel link video yang diawali http:// atau https://');return;}
+ if(/(youtube\.com|youtu\.be|tiktok\.com|instagram\.com|facebook\.com|fb\.watch|vimeo\.com|x\.com|twitter\.com)/i.test(u)){thToast('⚠️ Link YouTube/TikTok/IG/FB gak bisa diputar langsung — pakai link file .mp4/.webm',4200);return;}
+ let i=TH.list.findIndex(x=>x.src===u);if(i<0){let t='';try{t=thName(new URL(u).pathname);}catch(_){}TH.list.push({title:t||'Video dari link',src:u,link:true});i=TH.list.length-1;thRenderList();}inp.value='';thPlayIdx(i);}
+$('thUrlGo').onclick=thPlayUrl;$('thUrl').addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter'){e.preventDefault();thPlayUrl();}});
 thV.addEventListener('timeupdate',()=>{const d=thV.duration||0;if(!TH.seeking)$('thSeek').value=d?Math.round(thV.currentTime/d*1000):0;$('thT').textContent=thFmt(thV.currentTime)+' / '+thFmt(d);});
 $('thSeek').addEventListener('input',()=>{TH.seeking=true;const d=thV.duration||0;if(d)thV.currentTime=$('thSeek').value/1000*d;});$('thSeek').addEventListener('change',()=>TH.seeking=false);
 $('thVol').addEventListener('input',()=>{thV.volume=$('thVol').value/100;if(thV.muted&&thV.volume>0){thV.muted=false;thMuteUI();}});
@@ -1122,10 +1123,7 @@ function thIdleTex(lines){const c=document.createElement('canvas');c.width=720;c
  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
 function thSetIdle(lines){if(TH.idle)TH.idle.dispose();TH.idle=thIdleTex(lines);if(!TH.playing){BIOS.screen.material.map=TH.idle;BIOS.screen.material.needsUpdate=true;}}
 thSetIdle(['🔒 Masukkan kode kunci di 🔐 Konsol','Mode POV: jalan ke sini, tekan T / tombol 🎬']);
-// gerbang 18+ (sekali per sesi, sama kayak web kantor)
-function thAge(next){try{if(sessionStorage.getItem('ageOk')==='1')TH.ageOk=true;}catch(_){}if(TH.ageOk){next&&next();return;}
- $('ageGate').classList.add('on');$('ageYes').onclick=()=>{TH.ageOk=true;try{sessionStorage.setItem('ageOk','1');}catch(_){}$('ageGate').classList.remove('on');next&&next();};
- $('ageNo').onclick=()=>{$('ageGate').classList.remove('on');thToast('🚫 Bioskop khusus 18+');};}
+function thAge(next){next&&next();} // versi umum: tanpa gerbang 18+
 function thOpen(){if(!TH.unlocked){thGatePrompt();return;}if(!thInCinema()){thGoCinema();return;}thAge(()=>{TH.open=true;$('thPanel').classList.add('on');povKeysClear();thUI();thActUI();});}
 function thClose(){TH.open=false;TH.pendingEnter=false;$('thPanel').classList.remove('on');const c=$('thCode');if(c)c.blur();}
 function thToggle(){TH.open?thClose():thOpen();}
@@ -1146,26 +1144,49 @@ function thScrLock(on){on=on??!TH.scrLock;if(on&&!TH.unlocked){thGatePrompt();re
 // ---- nonton bareng: Panggil Maya / Ophelia / Keira, tukar partner, Han duduk, ciuman, kasur, kunci kamera ke pasangan, reset kamera, selesai ----
 const TH_NAMES={maya:'Maya',ophelia:'Ophelia',keira:'Keira'};
 const thChairs=()=>TH.bed?[BIOS.bedSeats[1],BIOS.bedSeats[0],BIOS.bedSeats[2],BIOS.seats.C1]:[BIOS.seats.C3,BIOS.seats.C2,BIOS.seats.C4,BIOS.seats.C1];
-function thSitTo(c,sp){if(!c||!sp)return;if(c.seat===sp&&c.state==='seated')return;if(POV.on&&c.id==='han')return;c.date=true;goSpot(c,sp,1e9);}
-function thHanSit(quiet){const h=CH.han;if(!h)return;if(POV.on){exitPov();}h.date=true;thSitTo(h,thChairs()[0]);if(!quiet)thToast('💺 Han duduk di kursi tengah');}
+function thSitTo(c,sp){if(!c||!sp)return;if(c.seat===sp&&(c.state==='sit'||c.state==='down'))return;if(POV.on&&c.id==='han')return;c.date=true;goSpot(c,sp,1e9);}
+function thHanSit(quiet){const h=CH.han;if(!h)return;if(POV.on){exitPov();}h.date=true;thSitTo(h,thChairs()[0]);if(!quiet)thToast(TH.date.length?'💺 Han duduk di sebelah '+TH_NAMES[TH.date[0]]:'💺 Han duduk — panggil partner biar ditemenin');}
 function thSeatAll(){const ch=thChairs();TH.date.forEach((id,i)=>thSitTo(CH[id],ch[i+1]));}
 function thCall(id){if(!thGuard(()=>thCall(id)))return;const c=CH[id];if(!c)return;
- if(!TH.date.includes(id)){if(TH.date.length>=3)TH.date.pop();TH.date.unshift(id);}else{TH.date=[id,...TH.date.filter(x=>x!==id)];}
+ if(c.away){c.away=false;c.root.position.set(GUEST_IN[0],0,GUEST_IN[1]);c.root.visible=true;}
+ if(!TH.date.includes(id)){if(TH.date.length>=3)thLeave(TH.date.pop());TH.date.unshift(id);}else{TH.date=[id,...TH.date.filter(x=>x!==id)];}
  if(!CH.han.date)thHanSit(true);thSeatAll();say(c,id==='maya'?'Siap, aku temenin nonton ya 🍿':'Otw ke bioskop, babe 💕');thToast('💗 '+TH_NAMES[id]+' dipanggil ke bioskop');thActUI();}
 function thSwap(){if(TH.date.length<2){thToast('🔄 Panggil minimal 2 partner dulu');return;}TH.date.push(TH.date.shift());thSeatAll();thToast('🔄 Partner utama sekarang: '+TH_NAMES[TH.date[0]]);thActUI();}
 function thKiss(){const id=TH.date[0],c=CH[id],h=CH.han;if(!c){thToast('💋 Panggil partner dulu');return;}
- if(id==='maya'){thToast('🍿 Maya cuma nemenin nonton — tukar partner dulu');return;}
- if(c.state!=='seated'||h.state!=='seated'){thToast('💋 Tunggu dua-duanya duduk dulu');return;}TH.kiss=performance.now()+3600;say(c,'😘💋');thToast('💋 Ciuman sama '+TH_NAMES[id]);}
+ if(c.state!=='sit'||h.state!=='sit'){thToast('💋 Tunggu dua-duanya duduk dulu');return;}TH.pose=null;TH.kiss=performance.now()+2200;say(c,'😘');thToast('💋 Cium singkat sama '+TH_NAMES[id]);}
 function thBedToggle(){if(!thGuard(()=>thBedToggle()))return;TH.bed=!TH.bed;if(CH.han.date||TH.date.length){thHanSit(true);thSeatAll();}thToast(TH.bed?'🛏️ Pindah nonton di kasur':'💺 Balik ke kursi');thActUI();}
 function thCouple(){TH.coupleCam=!TH.coupleCam;if(TH.coupleCam){if(TH.scrLock)thScrLock(false);if(POV.on)exitPov();}thToast(TH.coupleCam?'🔒 Kamera dikunci ke pasangan':'🔓 Kamera bebas');thActUI();}
 function thCamReset(){if(TH.scrLock)thScrLock(false);TH.coupleCam=false;if(!POV.on)view('bioskop');thActUI();thToast('🎥 Kamera direset');}
-function thEnd(quiet){[...TH.date,'han'].forEach(id=>{const c=CH[id];if(c&&c.date){c.date=false;c.busyUntil=0;}});TH.date=[];TH.bed=false;TH.coupleCam=false;TH.kiss=0;if(!quiet)thToast('🚶 Selesai — semua balik ke kegiatan masing-masing');thActUI();}
+function thEnd(quiet){[...TH.date].forEach(thLeave);{const h=CH.han;if(h&&h.date){h.date=false;h.busyUntil=0;}}TH.pose=null;TH.priv=false;thSlowSet(false);TH.date=[];TH.bed=false;TH.coupleCam=false;TH.kiss=0;if(!quiet)thToast('🚶 Selesai — semua balik ke kegiatan masing-masing');thActUI();}
+const GUEST_IN=[7.6,5.55]; // tamu masuk dari jalur samping rumah ke lorong bioskop
+function thLeave(id){const c=CH[id];if(!c)return;c.date=false;c.busyUntil=0;
+ if(c.guest){freeSpot(c);goTo(c,GUEST_IN[0],GUEST_IN[1],()=>{if(!c.date){c.root.visible=false;c.away=true;}});}}
+// 🔓 Mode privat (versi umum): bioskop jadi ruang berdua — cuma Han & partner yang dipanggil, Nayla & Alya nggak boleh ada di bioskop
+function thKidsOut(){CHL.filter(c=>c.kid).forEach(c=>{const p=c.root.position;if(!inCin(p.x,p.z)&&!(p.x>3.4&&p.x<12.2&&p.z>4.7&&p.z<6.4))return;
+  const sp=pick(SP.filter(s=>!s.occ&&allowed(s,c.id)&&s.room!=='bioskop'&&s.room!=='pantai'));if(sp)goSpot(c,sp);});}
+function thPrivToggle(){if(!thGuard(()=>thPrivToggle()))return;TH.priv=!TH.priv;if(TH.priv)thKidsOut();
+ thToast(TH.priv?'🔓 Mode privat ON — bioskop cuma buat Han & partner, Nayla & Alya nggak ikut':'🔐 Mode privat OFF',3200);thActUI();}
+// 🐢 Slow-mo: film + gerakan yang lagi nonton bareng jadi setengah kecepatan
+function thSlowSet(on){TH.slow=!!on;thV.defaultPlaybackRate=thV.playbackRate=TH.slow?.5:1;}
+function thSlowToggle(){thSlowSet(!TH.slow);thToast(TH.slow?'🐢 Slow-mo ON — film & gerakan 0,5×':'🐢 Slow-mo OFF');thActUI();}
+// 🎲 Pose acak (sopan): sorak, mikir, dadah, ngemil popcorn, peregangan, nyender ke bahu
+const TH_POSES=[['🙌 Sorak',{LUpperArm:-2.4,RUpperArm:-2.4,LForearm:-.3,RForearm:-.3}],['🤔 Mikir',{RUpperArm:-1.1,RForearm:-2.0,Head:.15}],
+ ['👋 Dadah',{RUpperArm:-2.6,RForearm:-.5},1],['🍿 Ngemil popcorn',{RUpperArm:-.8,RForearm:-1.8,Head:.1},2],['🙆 Peregangan',{LUpperArm:-2.8,RUpperArm:-2.8,LForearm:-.8,RForearm:-.8}],['😌 Nyender ke bahu',null,3]];
+function thRandPose(){const ids=['han',...TH.date].filter(id=>CH[id]&&CH[id].state==='sit');if(!ids.length){thToast('🎲 Duduk dulu, baru bisa ganti pose');return;}
+ let ks=TH_POSES.map((p,i)=>i).filter(i=>i!==TH.poseK&&(TH_POSES[i][2]!==3||ids.length>1));const k=pick(ks);TH.poseK=k;TH.kiss=0;
+ TH.pose={p:TH_POSES[k],ids,t0:performance.now(),end:performance.now()+4500};thToast('🎲 Pose acak: '+TH_POSES[k][0]);}
+function thPoseTick(){const P=TH.pose;if(!P)return;const n=performance.now();if(n>P.end){TH.pose=null;return;}const w=Math.max(0,Math.min(1,(n-P.t0)/500,(P.end-n)/500)),B=P.p[1],mode=P.p[2];
+ P.ids.forEach((id,i)=>{const c=CH[id];if(!c||c.state!=='sit')return;
+  if(mode===3){const o=CH[P.ids[i?0:1]];if(o)thLean(c,o.root.position.x,o.root.position.z,.28*w);return;}
+  const osc=mode?Math.sin(n/(mode===1?150:420))*.35:0;for(const b in B){const a=B[b]+(mode&&b==='RForearm'?osc:0);bend(c,c.bones[b],a*w);}});}
 const TH_ACTS=[['maya','💗 Panggil Maya',()=>thCall('maya')],['ophelia','💗 Panggil Ophelia',()=>thCall('ophelia')],['keira','💗 Panggil Keira',()=>thCall('keira')],
- ['swap','🔄 Tukar partner',thSwap],['sit','💺 Han duduk',()=>thHanSit()],['kiss','💋 Ciuman',thKiss],['bed','🛏️ Nonton di kasur',thBedToggle],
+ ['swap','🔄 Tukar partner utama',thSwap],['sit','💺 Han duduk di sebelah',()=>thHanSit()],['priv','🔐 Mode privat',thPrivToggle],
+ ['slow','🐢 Slow-mo',thSlowToggle],['pose','🎲 Pose acak',thRandPose],['kiss','💋 Ciuman',thKiss],['bed','🛏️ Nonton di kasur',thBedToggle],
  ['couple','🔒 Kunci ke pasangan',thCouple],['cam','🎥 Reset kamera',thCamReset],['end','🚶 Selesai',()=>thEnd()]];
 function thActUI(){const box=$('thAct');if(!box)return;if(!box.childElementCount){TH_ACTS.forEach(([id,l,f])=>{const b=document.createElement('button');b.className='thb';b.dataset.act=id;b.textContent=l;b.onclick=f;box.appendChild(b);});}
- box.querySelectorAll('button').forEach(b=>{const id=b.dataset.act;b.classList.toggle('on',(id==='bed'&&TH.bed)||(id==='couple'&&TH.coupleCam)||(TH.date[0]===id));if(id==='bed')b.textContent=TH.bed?'💺 Balik ke kursi':'🛏️ Nonton di kasur';});
- const st=$('thActSt');if(st)st.textContent=TH.date.length?'Partner: '+TH.date.map((d,i)=>(i?'':'⭐ ')+TH_NAMES[d]).join(', '):'Belum ada yang nemenin — panggil Maya';}
+ box.querySelectorAll('button').forEach(b=>{const id=b.dataset.act;b.classList.toggle('on',(id==='bed'&&TH.bed)||(id==='couple'&&TH.coupleCam)||(id==='priv'&&TH.priv)||(id==='slow'&&TH.slow)||(TH.date[0]===id));if(id==='bed')b.textContent=TH.bed?'💺 Balik ke kursi':'🛏️ Nonton di kasur';
+  if(id==='priv')b.textContent=TH.priv?'🔓 Mode privat ON':'🔐 Mode privat';if(id==='slow')b.textContent=TH.slow?'🐢 Slow-mo ON':'🐢 Slow-mo';});
+ const st=$('thActSt');if(st)st.textContent=(TH.date.length?'Partner: '+TH.date.map((d,i)=>(i?'':'⭐ ')+TH_NAMES[d]).join(', '):'Belum ada yang nemenin — panggil Maya')+(TH.priv?' · 🔓 Mode privat: berdua aja, anak-anak di rumah':'');}
 // lean waktu ciuman: badan + kepala condong ke pasangan
 const _thQ=new THREE.Quaternion(),_thQ2=new THREE.Quaternion(),_thA=new THREE.Vector3(),_thUp=new THREE.Vector3(0,1,0);
 function thLean(c,tx,tz,amt){const p=c.root.position;_thA.set(tx-p.x,0,tz-p.z);if(_thA.lengthSq()<1e-4)return;_thA.normalize();_thA.crossVectors(_thUp,_thA).normalize();
@@ -1179,7 +1200,10 @@ function thTick(dt){const t=performance.now()/1000;
  const inC=thInCinema();if(TH.wasIn&&!inC&&TH.unlocked&&!CH.han.date){TH.unlocked=false;TH.pendingEnter=false;thClose();$('thStop').onclick();thSetIdle(['🔒 Masukkan kode kunci di 🔐 Konsol','Mode POV: jalan ke sini, tekan T / tombol 🎬']);thUI();thToast('🔒 Keluar bioskop — kunci lagi otomatis');}
  if(!TH.wasIn&&inC&&TH.openOnArrive){TH.openOnArrive=false;setTimeout(thOpen,300);}TH.wasIn=inC;
  const mp=$('mobPlay');if(mp)mp.hidden=!(inC&&TH.unlocked);
- if(TH.kiss&&performance.now()<TH.kiss){const a=CH.han,b=CH[TH.date[0]];if(a&&b){const k=Math.min(1,(TH.kiss-performance.now())/600,(performance.now()-(TH.kiss-3600))/600)*.32;thLean(a,b.root.position.x,b.root.position.z,k);thLean(b,a.root.position.x,a.root.position.z,k);}}else TH.kiss=0;
+ thPoseTick();
+ for(const c of CHL){const want=TH.slow&&c.date?.5:1;if(c.mixer&&c.mixer.timeScale!==want)c.mixer.timeScale=want;
+  if(c.kid){const p=c.root.position,hid=TH.priv&&inCin(p.x,p.z);if(hid&&!c._privHid){c._privHid=true;c.root.visible=false;thKidsOut();}else if(!hid&&c._privHid){c._privHid=false;c.root.visible=true;}}}
+ if(TH.kiss&&performance.now()<TH.kiss){const a=CH.han,b=CH[TH.date[0]];if(a&&b){const k=Math.min(1,(TH.kiss-performance.now())/500,(performance.now()-(TH.kiss-2200))/500)*.3;thLean(a,b.root.position.x,b.root.position.z,k);thLean(b,a.root.position.x,a.root.position.z,k);}}else TH.kiss=0;
  if(TH.scrLock)thScreenCam();
  else if(TH.coupleCam&&!POV.on){const a=CH.han,b=CH[TH.date[0]]||a;if(a){const mx=(a.root.position.x+b.root.position.x)/2,mz=(a.root.position.z+b.root.position.z)/2;controls.target.lerp(new THREE.Vector3(mx,.9,mz),Math.min(1,dt*3));
   const want=new THREE.Vector3(mx,2.4,mz-3.2);camera.position.lerp(want,Math.min(1,dt*1.5));}}}
@@ -1196,6 +1220,14 @@ function thDoorSync(){const want=!!TH.unlocked;if(want===BIOS.doorOpen)return;
  BIOS.doorOpen=want;BIOS.door.visible=!want;BIOS.door.userData.noNav=want;buildNav();}
 function thActSync(){if(!TH.open)return;document.querySelectorAll('#thAct button').forEach(b=>{const id=b.dataset.act;if(TH_NAMES[id])b.hidden=!CH[id];});}
 
+
+// tamu bioskop: Ophelia & Keira (model sama kayak web kantor: badan Maya, baju & rambut beda warna), sembunyi sampai dipanggil
+const GUESTS=[{id:'ophelia',name:'Ophelia',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#c8283a',speed:1.1,nat:1.1,rad:.23,kid:false,start:GUEST_IN,guest:true,body:'models/ophelia-body.webp'},
+ {id:'keira',name:'Keira',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#3b4a7a',speed:1.1,nat:1.1,rad:.23,kid:false,start:GUEST_IN,guest:true,body:'models/keira-body.webp'}];
+LINES.ophelia={_:['Filmnya seru ya, babe 🍿','Hehe, nonton bareng gini enak 💕']};LINES.keira={_:['Popcornnya bagi dong 🍿','Adegan ini keren 😎']};
+async function loadGuest(def){const tl=new THREE.TextureLoader(),ld=u=>tl.loadAsync(u).then(t=>{t.flipY=false;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t;});
+ const [c,bt,ht,hr]=await Promise.all([loadChar(def),ld(def.body),ld('models/kp-head.webp'),ld('models/kp-hair.webp')]);c.root.visible=false;c.away=true;
+ c.root.traverse(o=>{if(!o.isMesh)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{const t=/body/.test(m.name)?bt:/head/.test(m.name)?ht:/opacity/.test(m.name)?hr:null;if(t){m.map=t;if(m.emissiveMap)m.emissiveMap=t;m.needsUpdate=true;}});});return c;}
 const clock=new THREE.Clock();let chatT=performance.now()+8000,clkT=0;
 let SIMPAUSE=false;
 function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
@@ -1204,19 +1236,20 @@ function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
  if(follow&&CH[follow]){const p=CH[follow].root.position,dx=p.x-controls.target.x,dz=p.z-controls.target.z,k=Math.min(1,dt*5);controls.target.x+=dx*k;controls.target.z+=dz*k;camera.position.x+=dx*k;camera.position.z+=dz*k;}
  if(!SIMPAUSE)updCat(dt,now);updEnv(dt);if(now>clkT){clkT=now+1000;updClock();}
  if(MARK.material.opacity>0)MARK.material.opacity=Math.max(0,MARK.material.opacity-dt*.6);
- if(now>chatT&&CHL.length){chatT=now+R(11000,19000);const c=pick(CHL.filter(c=>c.id!=='han'));if(c&&c.state!=='walk')say(c,lineFor(c.id,c.spot));}
+ if(now>chatT&&CHL.length){chatT=now+R(11000,19000);const c=pick(CHL.filter(c=>c.id!=='han'&&c.root.visible));if(c&&c.state!=='walk')say(c,lineFor(c.id,c.spot));}
  thTick(dt);thDoorSync();thActSync();updBeach(now/1000);if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
 
 updEnv(0,true);updClock();
 view('all',true);
 loop();
 setTimeout(()=>{$('load').style.opacity=0;setTimeout(()=>$('load').remove(),500);},150);
-window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,POV,enterPov,exitPov,stepPov,povMove,povCam,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;},TH,BIOS,thDoorSync,thAccess,thOpen,inCin};
+window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,POV,enterPov,exitPov,stepPov,povMove,povCam,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;},TH,BIOS,thDoorSync,thAccess,thOpen,inCin,thCall,thEnd,thSwap,thHanSit,thKiss,thPrivToggle,thSlowToggle,thRandPose,thPlayUrl,thPlayIdx,thActUI};
 CATP.then(()=>{window.__R.catReady=true;});
 let done=0;
 Promise.all(DEFS.map(d=>loadChar(d).then(c=>{done++;status(`Memuat penghuni rumah ${done}/4…`,1500);return c;}).catch(e=>{console.warn('gagal muat',d.file,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.ready=true;status('🏡 Selamat datang di rumah!',2500);
  // mulai: Maya di dapur, Han di sofa, Nayla & Alya main di taman
- const s=id=>SP.find(x=>x.id===id);if(CH.maya)goSpot(CH.maya,s('masak'));if(CH.han){goSpot(CH.han,s('sofa1'));}if(CH.nayla)goSpot(CH.nayla,s('ayunan'));if(CH.alya)goSpot(CH.alya,s('main1'));});
+ const s=id=>SP.find(x=>x.id===id);if(CH.maya)goSpot(CH.maya,s('masak'));if(CH.han){goSpot(CH.han,s('sofa1'));}if(CH.nayla)goSpot(CH.nayla,s('ayunan'));if(CH.alya)goSpot(CH.alya,s('main1'));
+ Promise.all(GUESTS.map(d=>loadGuest(d).catch(e=>{console.warn('gagal muat tamu',d.id,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.guestsReady=true;});});
 </script>
 </body>
 </html>

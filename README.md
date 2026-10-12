@@ -27,3 +27,10 @@ Semua karakter dan animasi dari [Microsoft Rocketbox Avatar Library](https://git
 Kucing Mochi: berdasarkan ["animated bengal cat"](https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8) karya [dinomaster](https://sketchfab.com/dinomaster), lisensi [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/). Bulu diwarnai ulang jadi oranye dan animasinya dirapikan (`models/mochi.glb`).
 
 Rumah, perabot, langit, dan awan dibikin langsung pakai kode. Mesin 3D: [three.js](https://threejs.org) (MIT).
+
+## 🎬 Bioskop (nonton bareng, versi umum)
+- Pintu bioskop dikunci pass code (sama kayak web kantor). Tombol **🔒 Kunci** buat ngunci lagi.
+- **📂 Putar dari folder komputer**: pilih folder video di PC/HP. Atau taruh file di `theater/` lalu jalankan `python3 tools/theater-list.py`.
+- **🔗 Tempel link video**: link langsung ke file .mp4/.webm (link YouTube/TikTok/IG nggak bisa).
+- **💞 Interaksi**: Panggil Maya / Ophelia / Keira (Ophelia & Keira datang lewat jalur samping, pulang lagi pas 🚶 Selesai), 🔄 Tukar partner utama, 💺 Han duduk di sebelah, 🔓 Mode privat (bioskop berdua, Nayla & Alya nggak boleh masuk), 🐢 Slow-mo (film & gerakan 0,5×), 🎲 Pose acak, 💋 Ciuman singkat.
+- Semua konten rating umum. Nggak ada gerbang 18+.
