@@ -39,6 +39,16 @@ html,body{height:100%;overflow:hidden;background:#bfe3ff;font-family:"Segoe UI",
 #credit button{margin-top:10px;font:inherit;font-weight:700;border:0;border-radius:10px;padding:6px 14px;background:#f59e0b;color:#fff;cursor:pointer}
 #creditline{position:fixed;right:10px;bottom:56px;font-size:10.5px;color:#4a3426;background:rgba(255,251,244,.8);padding:3px 8px;border-radius:8px;z-index:4;max-width:46%}
 #creditline a{color:#1d4ed8}
+#creditline #credi{display:none;font-size:11px;font-weight:800;color:#4a3426;text-decoration:none;background:rgba(255,251,244,.92);padding:3px 9px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.15);white-space:nowrap;cursor:pointer;touch-action:manipulation}
+/* Kredit ringkas (tombol kecil ⓘ di pojok kiri atas, di bawah kotak judul): dipakai di HP, layar sempit, dan mode POV */
+body.touch #creditline,body.pov #creditline{left:10px;right:auto;top:90px;bottom:auto;max-width:none;padding:0;background:none;border-radius:0}
+body.touch #creditline .full,body.pov #creditline .full{display:none}
+body.touch #creditline #credi,body.pov #creditline #credi{display:inline-block}
+@media (max-width:959px){
+ #creditline{left:10px;right:auto;top:90px;bottom:auto;max-width:none;padding:0;background:none;border-radius:0}
+ #creditline .full{display:none}
+ #creditline #credi{display:inline-block}
+}
 /* 🎮 Mode POV Han */
 #bar #bPov{background:linear-gradient(180deg,#6aa8f5,#3c7fd6);color:#fff}
 #povHint{display:none;position:fixed;left:50%;top:10px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 480px);background:rgba(43,36,64,.86);color:#fff;font-size:12px;font-weight:700;line-height:1.6;padding:6px 14px;border-radius:12px;z-index:6;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.2);pointer-events:none}
@@ -57,11 +67,10 @@ body.pov #povHint,body.pov #povPad{display:block}
 body.pov.touch #povStick{display:block}
 body.pov #bar,body.pov #who,body.pov #hint{display:none}
 body.pov #status{top:auto;bottom:34%}
-body.pov #creditline{left:10px;right:auto;top:auto;bottom:10px;max-width:calc(100% - 190px)}
 @media (max-width:700px){
  #povHint{top:8px;max-width:calc(100% - 20px);font-size:10.5px;padding:5px 10px}
  body.pov #top{display:none}
- body.pov #creditline{bottom:134px;max-width:calc(100% - 20px)}
+ body.pov #creditline{top:48px}
  #povStick{width:110px;height:110px;left:10px;bottom:12px}
  #povBtns{right:8px;bottom:12px;grid-template-columns:repeat(2,58px)}
  #povBtns button{width:58px}
@@ -71,7 +80,8 @@ body.pov #creditline{left:10px;right:auto;top:auto;bottom:10px;max-width:calc(10
  #who{top:auto;bottom:118px;right:8px}
  #who button{padding:6px 9px;font-size:12px}
  #hint{bottom:56px;font-size:11px;max-width:calc(100% - 120px)}
- #creditline{top:66px;bottom:auto;left:10px;right:auto;max-width:60%}
+ #creditline,body.touch #creditline{top:84px}
+ body.pov #creditline{top:48px}
 }
 </style>
 </head>
@@ -82,7 +92,7 @@ body.pov #creditline{left:10px;right:auto;top:auto;bottom:10px;max-width:calc(10
 <div id="status"></div>
 <div id="who"></div>
 <div id="hint"><b>Tap/klik lantai</b> = Han jalan ke situ · <b>tap kursi/sofa</b> = Han duduk · <b>tap nama</b> = ikutin · geser = putar kamera · cubit/scroll = zoom</div>
-<div id="creditline">Karakter: <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox</a> (MIT) · Kucing: <a href="https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8" target="_blank" rel="noopener">dinomaster</a> (CC BY 4.0) · <a href="#" id="credlink">kredit lengkap</a></div>
+<div id="creditline"><span class="full">Karakter: <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox</a> (MIT) · Kucing: <a href="https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8" target="_blank" rel="noopener">dinomaster</a> (CC BY 4.0) · <a href="#" id="credlink">kredit lengkap</a></span><a href="#" id="credi" title="Kredit &amp; lisensi: karakter Microsoft Rocketbox (MIT), kucing dinomaster (CC BY 4.0)" aria-label="Kredit dan lisensi">ⓘ Kredit</a></div>
 <div id="bar">
  <button id="bPov" title="Mode POV: jalan sendiri jadi Han, lihat dari mata Han">🎮 POV Han</button>
  <span class="sep"></span>
@@ -793,7 +803,7 @@ function setNight(n){envMode=n?'night':'day';updClock();}
 function setEnvMode(m){envMode=m;updClock();}
 $('bNight').onclick=()=>{setNight(!isNightH(envHour()));status(envMode==='day'?'☀️ Mode siang (manual) · tap 🕐 Jam asli buat balik':'🌙 Mode malam (manual) · tap 🕐 Jam asli buat balik',3200);};
 $('bTime').onclick=()=>{setEnvMode('auto');status('🕐 Langit ikut jam asli (WITA, Maros)',2500);};
-$('bCred').onclick=$('credlink').onclick=e=>{e.preventDefault();$('credit').style.display='block';};$('credClose').onclick=()=>$('credit').style.display='none';
+$('bCred').onclick=$('credlink').onclick=$('credi').onclick=e=>{e.preventDefault();$('credit').style.display='block';};$('credClose').onclick=()=>$('credit').style.display='none';
 
 /* ---------- klik / tap ---------- */
 const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();let pd=null;
