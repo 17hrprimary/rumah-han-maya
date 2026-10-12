@@ -392,9 +392,11 @@ function bend(c,b,ang){if(!b||!b.parent)return;c.root.getWorldQuaternion(_q1);_v
 function procSit(c){const b=c.bones;bend(c,b.Spine,-.05);bend(c,b.LThigh,-1.36);bend(c,b.RThigh,-1.36);bend(c,b.LCalf,1.36);bend(c,b.RCalf,1.36);bend(c,b.LUpperArm,-.42);bend(c,b.RUpperArm,-.42);bend(c,b.LForearm,-.75);bend(c,b.RForearm,-.75);}
 // crossfade halus: semua animasi lain turun bareng, yang baru naik dari bobotnya sekarang (total bobot tetap 1, jadi nggak ada pose-T nyelip)
 function play(c,name,fd=.35){if(c.cur===name)return;const nx=c.act[name];if(!nx)return;
- for(const k in c.act){const a=c.act[k];if(a!==nx&&a.isRunning()&&a.getEffectiveWeight()>0)a.fadeOut(fd);}
+ for(const k in c.act){const a=c.act[k];if(a!==nx&&a.isRunning())fadeW(a,fd,0);}
  const w0=nx.isRunning()?nx.getEffectiveWeight():0;if(!(w0>0)){nx.reset();if(name==='Idle')nx.time=Math.random()*nx.getClip().duration;}
- nx.enabled=true;nx.play();nx.stopFading();nx.setEffectiveWeight(w0);nx._scheduleFading(fd,w0,1);c.cur=name;}
+ nx.enabled=true;nx.play();fadeW(nx,fd,1,w0);c.cur=name;}
+// bobot animasi turun/naik mulus dari bobot sekarang (bukan loncat dari 1/0 kayak fadeIn/fadeOut bawaan)
+function fadeW(a,fd,to,from){const w=from!==undefined?from:a.getEffectiveWeight();a.stopFading();a.weight=1;a._scheduleFading(fd,w,to);}
 // animasi tambahan (anim-*.glb): cuma rotasi tulang + gerak pinggul, biar proporsi badan tiap karakter tetap aslinya
 const ANIMP={};
 function cleanClip(cl){cl.tracks=cl.tracks.filter(t=>{const i=t.name.lastIndexOf('.'),node=t.name.slice(0,i),pr=t.name.slice(i+1);if(pr==='scale')return false;if(pr==='position')return /^Bip0\d(_Pelvis)?$/.test(node);return true;});return cl;}
@@ -456,8 +458,8 @@ const CAT_S=.55,CAT_ROT=0,CAT_WALK_NAT=.208*CAT_S; // skala model, putaran hadap
  const d=document.createElement('div');d.className='cat';d.textContent='🐱 Mochi';d.addEventListener('pointerdown',e=>e.stopPropagation());d.addEventListener('click',e=>{e.stopPropagation();d.textContent='🐱 Mochi: meong~';setTimeout(()=>d.textContent='🐱 Mochi',2500);});const l=new CSS2DObject(d);l.position.set(0,.5,0);g.add(l);
  g.position.set(-3.2,0,2.4);}
 // model kucing realistis oranye (mochi.glb); kalau gagal dimuat, kucing sederhana di atas tetap dipakai
-function catPlay(n,fd=.35){if(!CAT.mixer||CAT.cur===n||!CAT.act[n])return;const nx=CAT.act[n];for(const k in CAT.act){const a=CAT.act[k];if(a!==nx&&a.isRunning()&&a.getEffectiveWeight()>0)a.fadeOut(fd);}
- const w0=nx.isRunning()?nx.getEffectiveWeight():0;if(!(w0>0))nx.reset();nx.enabled=true;nx.play();nx.stopFading();nx.setEffectiveWeight(w0);nx._scheduleFading(fd,w0,1);CAT.cur=n;}
+function catPlay(n,fd=.35){if(!CAT.mixer||CAT.cur===n||!CAT.act[n])return;const nx=CAT.act[n];for(const k in CAT.act){const a=CAT.act[k];if(a!==nx&&a.isRunning())fadeW(a,fd,0);}
+ const w0=nx.isRunning()?nx.getEffectiveWeight():0;if(!(w0>0))nx.reset();nx.enabled=true;nx.play();fadeW(nx,fd,1,w0);CAT.cur=n;}
 const CATP=new GLTFLoader().loadAsync('models/mochi.glb').then(gl=>{const m=gl.scene;m.scale.setScalar(CAT_S);m.rotation.y=CAT_ROT;
  m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=false;o.frustumCulled=false;const mt=o.material;if(mt){mt.metalness=0;if(mt.map){mt.emissiveMap=mt.map;mt.emissive.setRGB(1,1,1);mt.emissiveIntensity=.05+NIGHT*.3;CAT.mats.push(mt);}}}});
  CAT.g.add(m);CAT.body.visible=false;CAT.model=m;CAT.mixer=new THREE.AnimationMixer(m);gl.animations.forEach(cl=>{CAT.act[cl.name]=CAT.mixer.clipAction(cl);});
@@ -498,8 +500,8 @@ const WALLNAMES={cut:'🧱 Dinding: Potong',full:'🧱 Dinding: Penuh',roof:'�
 $('bWall').onclick=()=>{wallMode=wallMode==='cut'?'full':wallMode==='full'?'roof':'cut';ROOF.visible=wallMode==='roof';$('bWall').textContent=WALLNAMES[wallMode];ROOMLABELS.forEach(o=>o.visible=wallMode!=='roof');};
 
 // jam & mode langit: 'auto' = ikut jam asli (WITA), 'day'/'night' = paksa manual
-function periodName(h){return h>=4&&h<11?'Pagi':h>=11&&h<15?'Siang':h>=15&&h<18.2?'Sore':'Malam';}
-function isNightH(h){return h>=18.5||h<5.5;}
+function periodName(h){return h>=4&&h<11?'Pagi':h>=11&&h<15?'Siang':h>=15&&h<18.2?'Sore':h<4?'Malam':'Malam';}
+function isNightH(h){return h>=18.2||h<5;}
 function updClock(){const h=witaHour(),hh=Math.floor(h),mm=Math.floor((h-hh)*60),t=String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');
  $('clk').textContent=envMode==='auto'?`🕐 ${t} WITA · ${periodName(h)}`:`🕐 ${t} WITA · ${envMode==='day'?'Siang':'Malam'} (manual)`;
  $('bNight').textContent=isNightH(envHour())?'☀️ Siang':'🌙 Malam';$('bTime').classList.toggle('on',envMode==='auto');$('bTime').textContent=envMode==='auto'?'🕐 Jam asli ✓':'🕐 Jam asli';}
