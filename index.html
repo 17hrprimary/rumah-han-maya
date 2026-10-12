@@ -92,6 +92,7 @@ body.pov #creditline{left:10px;right:auto;top:auto;bottom:10px;max-width:calc(10
  <button data-v="dapur">🍳 Dapur</button>
  <button data-v="kamar">🛏️ Kamar</button>
  <button data-v="taman">🌳 Taman</button>
+ <button data-v="pantai">🏖️ Pantai</button>
  <button data-v="langit">🌤️ Langit</button>
  <span class="sep"></span>
  <button id="bTime" class="on">🕐 Jam asli ✓</button>
@@ -166,7 +167,7 @@ const T_ROAD=ctex(128,128,(g,w,h)=>{g.fillStyle='#5b5f66';g.fillRect(0,0,w,h);g.
 /* ---------- lampu & langit ---------- */
 const hemi=new THREE.HemisphereLight(0xe6f2ff,0x9c8a6a,1.15);scene.add(hemi);
 const sun=new THREE.DirectionalLight(0xfff0d8,1.9);sun.position.set(5,16,11);
-sun.castShadow=!MOBILE;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-14,right:14,top:14,bottom:-14,near:1,far:45});sun.shadow.bias=-.0005;sun.shadow.normalBias=.03;
+sun.castShadow=!MOBILE;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-19,right:19,top:19,bottom:-19,near:1,far:60});sun.target.position.set(0,0,-4);scene.add(sun.target);sun.shadow.bias=-.0005;sun.shadow.normalBias=.03;
 scene.add(sun);
 const LAMPS=[[-3.4,2.35,2.2,9],[3.4,2.25,2.6,8],[-1.4,2.3,5.3,7],[0,2.35,-2.3,12]].map(([x,y,z,d])=>{const l=new THREE.PointLight(0xffc98a,0,d,1.6);l.position.set(x,y,z);scene.add(l);return l;});
 const LAMPMATS=[];
@@ -213,7 +214,7 @@ function computeEnv(h,o){let i=0;while(i<ENVK.length-2&&h>=ENVK[i+1].h)i++;const
 const _glassN=new THREE.Color(0x5a4420);
 function applyEnv(C){skyU.top.value.copy(C.top);skyU.hor.value.copy(C.hor);skyU.glow.value.copy(C.glow);skyU.sunDir.value.copy(C.sunDir);
  scene.background.copy(C.hor);scene.fog.color.copy(C.hor);
- sun.color.copy(C.dirC);sun.intensity=C.dirI;sun.position.copy(C.light).multiplyScalar(22);
+ sun.color.copy(C.dirC);sun.intensity=C.dirI;sun.position.copy(C.light).multiplyScalar(26).add(sun.target.position);
  hemi.color.copy(C.hs);hemi.groundColor.copy(C.hg);hemi.intensity=C.hemiI;
  const n=C.night;NIGHT=n;LAMPS.forEach(l=>l.intensity=n*7);LAMPMATS.forEach(m=>m.emissiveIntensity=.06+n*1.04);GLASS.emissive.copy(_glassN).multiplyScalar(n);
  CHL.forEach(c=>c.mats.forEach(m=>m.emissiveIntensity=EM0+n*EM1));CAT.mats.forEach(m=>m.emissiveIntensity=.05+n*.3);
@@ -231,11 +232,11 @@ plane(140,140,new THREE.MeshStandardMaterial({map:T_GRASS,roughness:1}),0,-.02,0
 plane(140,4.2,new THREE.MeshStandardMaterial({map:T_ROAD,roughness:.95}),0,-.01,14.3,4.2);
 box(140,.08,1.4,'#d8d2c4',0,-.02,11.8);
 const FENCE='#f4efe6';
-function fenceLine(x1,z1,x2,z2,gap){const L=Math.hypot(x2-x1,z2-z1),n=Math.ceil(L/1.2),ry=Math.atan2(x2-x1,z2-z1);for(let i=0;i<=n;i++){const t=i/n,x=x1+(x2-x1)*t,z=z1+(z2-z1)*t;if(gap&&Math.abs(x-gap)<.8)continue;box(.08,.95,.08,FENCE,x,0,z);}
- const segs=gap?[[x1,gap-.8],[gap+.8,x2]]:[[0,1]];
+function fenceLine(x1,z1,x2,z2,gap){const gaps=gap==null?[]:[].concat(gap).sort((a,b)=>a-b);gap=gaps.length>0;const L=Math.hypot(x2-x1,z2-z1),n=Math.ceil(L/1.2),ry=Math.atan2(x2-x1,z2-z1);for(let i=0;i<=n;i++){const t=i/n,x=x1+(x2-x1)*t,z=z1+(z2-z1)*t;if(gaps.some(g=>Math.abs(x-g)<.8))continue;box(.08,.95,.08,FENCE,x,0,z);}
+ const segs=[];{let a=x1;for(const g of gaps){segs.push([a,g-.8]);a=g+.8;}segs.push([a,x2]);}
  if(gap){segs.forEach(([a,b])=>{const c=(a+b)/2,w=Math.abs(b-a);[.35,.75].forEach(y=>box(w,.07,.04,FENCE,c,y,z1));});}
  else{const g=grp((x1+x2)/2,(z1+z2)/2,ry);[.35,.75].forEach(y=>box(.04,.07,L,FENCE,0,y,0,g));}}
-fenceLine(-9,11,9,11,-1);fenceLine(-9,-6.5,9,-6.5);fenceLine(-9,-6.5,-9,11);fenceLine(9,-6.5,9,11);
+fenceLine(-9,11,9,11,-1);fenceLine(-9,-6.5,9,-6.5,[-7.5,7.5]);fenceLine(-9,-6.5,-9,11);fenceLine(9,-6.5,9,11); // pagar belakang punya dua pintu ke pantai
 for(let z=6.9;z<11;z+=.6)cyl(.26,.28,.03,'#cfc6b4',-1+((z*7)%1-.5)*.12,-.01,z,null,10);
 // kotak surat
 box(.06,1,.06,'#6b4f3a',.3,0,11.3);box(.3,.22,.4,'#d94f4f',.3,1,11.3);
@@ -354,12 +355,104 @@ box(.16,.25,.16,glow('#ffe1a3'),-1.65,1.9,4.62);
  box(.08,1.7,.08,'#7a5236',.25,0,1.15,g);box(.08,1.7,.08,'#7a5236',1.55,0,1.15,g);box(1.4,.08,.1,'#7a5236',.9,1.66,1.15,g);box(.5,.05,.22,'#e05a5a',.9,.45,1.15,g);[.7,1.1].forEach(x=>box(.01,1.2,.01,'#444',x,.48,1.15,g));}
 for(let i=0;i<14;i++){const x=3.2+rnd()*3.2,z=7.6+rnd()*1.4;cyl(.015,.015,.25,'#3d8b3d',x,0,z,null,4);sph(.07,pick(['#ff6b8b','#ffd166','#f78c6b','#c792ea','#ffffff']),x,.28,z);}
 box(3.6,.12,1.8,'#7b5a3f',4.8,-.02,8.3);
-for(let i=0;i<6;i++){const x=-7.5+rnd()*15,z=-6+rnd()*1.2;sph(.4+rnd()*.3,'#5a9e50',x,.3,z);}
+for(let i=0;i<6;i++){const x=-7.5+rnd()*15,z=-6+rnd()*1.2,r=.4+rnd()*.3;if(Math.abs(x)+r<5.6)sph(r,'#5a9e50',x,.3,z);} // semak di lorong samping dibuang biar jalan ke pantai lega
 sph(.12,'#ff7b54',-2.2,.12,9.3);
+
+/* ---------- PANTAI di belakang rumah: pasir, pasir basah, laut berombak, buih bibir air, payung, kursi pantai, kelapa ---------- */
+const SHORE=-19.75; // bibir air (garis pantai); lewat sini = laut, nggak bisa diinjak
+const SEA_T={value:0},BEACH={swash:null,wet:null};
+{
+ const T_SAND=ctex(256,256,(g,w,h)=>{g.fillStyle='#e9d3a4';g.fillRect(0,0,w,h);const r=mulberry(21);for(let i=0;i<6000;i++){const v=r();g.fillStyle=`hsla(${34+r()*14},${30+r()*30}%,${58+v*30}%,.55)`;g.fillRect(r()*w,r()*h,1.4,1.4);}
+  for(let i=0;i<26;i++){g.strokeStyle='rgba(160,128,84,.13)';g.lineWidth=2.5;g.beginPath();const y=r()*h;g.moveTo(0,y);g.bezierCurveTo(w*.33,y+r()*16-8,w*.66,y+r()*16-8,w,y);g.stroke();}});
+ const sandM=new THREE.MeshStandardMaterial({map:T_SAND,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-2});
+ plane(140,SHORE*-1-6.55+3,sandM,0,-.01,(-6.55+SHORE-3)/2,2.2);
+ // pasir basah dekat air (gelap, memudar ke arah darat)
+ const T_WET=ctex(16,128,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'rgba(150,118,78,.75)');gr.addColorStop(.55,'rgba(165,132,90,.45)');gr.addColorStop(1,'rgba(180,150,105,0)');g.fillStyle=gr;g.fillRect(0,0,w,h);});
+ T_WET.wrapS=T_WET.wrapT=THREE.ClampToEdgeWrapping;
+ BEACH.wet=plane(140,2.6,new THREE.MeshStandardMaterial({map:T_WET,transparent:true,depthWrite:false,roughness:.55,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-4}),0,-.006,SHORE+1.3);
+ // laut: ombak bergerak ke arah pantai (vertex), warna dangkal→dalam, buih di puncak ombak yang pecah
+ const seaG=new THREE.PlaneGeometry(320,130,160,100);seaG.rotateX(-Math.PI/2);seaG.translate(0,0,SHORE+.25-65);
+ const seaM=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.22,metalness:.05});
+ seaM.onBeforeCompile=s=>{s.uniforms.uT=SEA_T;
+  s.vertexShader='uniform float uT;\nvarying float vH;\nvarying float vWX;\nvarying float vWZ;\n'+s.vertexShader
+   .replace('#include <beginnormal_vertex>',`float wx=position.x,wz=position.z;
+    float sh=clamp((${SHORE.toFixed(2)}-1.0-wz)/7.0,0.,1.);sh=sh*sh*(3.-2.*sh);
+    float p1=1.1*wz-1.6*uT+.35*sin(.23*wx),c1=cos(p1);float p2=.55*wx+.9*wz-1.1*uT;float p3=-.42*wx+1.6*wz-2.1*uT;
+    float hh=.09*sin(p1)+.045*sin(p2)+.03*sin(p3);
+    float ddx=.09*c1*.0805*cos(.23*wx)+.02475*cos(p2)-.0126*cos(p3);
+    float ddz=.099*c1+.0405*cos(p2)+.048*cos(p3);
+    vH=hh*sh;vWX=wx;vWZ=wz;
+    vec3 objectNormal=normalize(vec3(-ddx*sh,1.,-ddz*sh));`)
+   .replace('#include <begin_vertex>','vec3 transformed=vec3(position);transformed.y+=hh*sh;');
+  s.fragmentShader='uniform float uT;\nvarying float vH;\nvarying float vWX;\nvarying float vWZ;\n'+s.fragmentShader
+   .replace('#include <color_fragment>',`#include <color_fragment>
+    float nr=clamp((vWZ-(${SHORE.toFixed(2)}-9.0))/9.0,0.,1.);
+    vec3 deep=vec3(.004,.06,.24),shal=vec3(.03,.33,.47);
+    diffuseColor.rgb=mix(deep,shal,nr*nr);
+    float ph=sin(1.1*vWZ-1.6*uT+.35*sin(.23*vWX));
+    float brk=smoothstep(.80,.98,ph)*smoothstep(.15,.75,nr)*(.55+.45*sin(vWX*1.3+uT*.7+vWZ));
+    float cap=smoothstep(.10,.15,vH)*.35;
+    diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.9,.94,.96),clamp(brk+cap,0.,1.));`);};
+ const sea=new THREE.Mesh(seaG,seaM);sea.receiveShadow=true;sea.userData.noNav=true;sea.frustumCulled=false;scene.add(sea);BEACH.sea=sea;
+ // air yang naik-turun di bibir pantai (swash) + garis buih
+ const T_SW=ctex(32,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'rgba(40,140,150,.95)');gr.addColorStop(.45,'rgba(70,170,175,.7)');gr.addColorStop(.62,'rgba(150,215,215,.55)');gr.addColorStop(.70,'rgba(248,252,252,.95)');gr.addColorStop(.76,'rgba(240,248,248,.55)');gr.addColorStop(.84,'rgba(220,235,235,0)');gr.addColorStop(1,'rgba(220,235,235,0)');g.fillStyle=gr;g.fillRect(0,0,w,h);});
+ T_SW.wrapT=THREE.ClampToEdgeWrapping;
+ const T_FOAM=ctex(256,64,(g,w,h)=>{const r=mulberry(5);for(let i=0;i<500;i++){g.fillStyle=`rgba(255,255,255,${.25+r()*.5})`;g.beginPath();g.arc(r()*w,h*.25+r()*h*.5,1+r()*3,0,7);g.fill();}});
+ const swM=new THREE.MeshStandardMaterial({map:T_SW,transparent:true,depthWrite:false,roughness:.3,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-6});
+ BEACH.swash=plane(140,2.6,swM,0,.004,SHORE+.15);BEACH.swash.userData.noNav=true;BEACH.swash.renderOrder=2;
+ const foamM=new THREE.MeshStandardMaterial({map:T_FOAM,transparent:true,depthWrite:false,roughness:.6,opacity:.8});
+ BEACH.foam=plane(140,.45,foamM,0,.012,SHORE+.6,null);BEACH.foam.userData.noNav=true;BEACH.foam.renderOrder=3;
+ T_FOAM.repeat.set(30,1);
+
+ // pohon kelapa: batang melengkung + pelepah daun menjuntai + buah kelapa
+ const palmLeafG=(()=>{const sh=new THREE.Shape();sh.moveTo(0,-.05);sh.quadraticCurveTo(.9,-.32,1.9,0);sh.quadraticCurveTo(.9,.32,0,.05);sh.closePath();return new THREE.ShapeGeometry(sh,8);})();
+ const leafM=mat('#3f8f3a',{side:THREE.DoubleSide,roughness:.8}),leafM2=mat('#57a447',{side:THREE.DoubleSide,roughness:.8}),trunkM=mat('#8d6b4a',{roughness:.95});
+ function palm(x,z,ry,hgt=4.3,lean=.9){const g=grp(x,z,ry);cyl(.17,.2,1.3,trunkM,0,0,0,g,10);
+  const pts=[];for(let i=0;i<=8;i++){const t=i/8;pts.push(new THREE.Vector3(lean*t*t,1.2+(hgt-1.2)*t,0));}
+  const tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),16,.15,8),trunkM);tube.castShadow=true;tube.userData.noNav=true;g.add(tube);
+  for(let k=0;k<5;k++)cyl(.165,.165,.04,'#6f5236',lean*((k+1)/6)**2,1.2+(hgt-1.2)*(k+1)/6,0,g,10).userData.noNav=true;
+  const top=grp(lean,0,0,g);top.position.y=hgt;top.userData.noNav=true;
+  for(let k=0;k<9;k++){const a=k/9*Math.PI*2+.3,arm=new THREE.Group();arm.rotation.y=a;top.add(arm);
+   const tilt=new THREE.Group();tilt.rotation.z=-(.12+(k%3)*.2);arm.add(tilt);const l1=new THREE.Mesh(palmLeafG,k%2?leafM:leafM2);l1.rotation.x=-Math.PI/2;l1.castShadow=true;tilt.add(l1);const l2=new THREE.Mesh(palmLeafG,k%2?leafM2:leafM);l2.scale.set(.75,1,1);l2.position.x=1.5;l2.rotation.set(-Math.PI/2,.55,0);l2.castShadow=true;tilt.add(l2);}
+  [[.12,0],[-.08,.1],[0,-.13]].forEach(([a,b])=>{sph(.1,'#5c7a2a',a,-.12,b,top);});return g;}
+ palm(-8.4,-9.2,.4,4.6,1.0);palm(8.6,-9.6,2.6,4.2,.8);palm(-10.2,-15.8,-.5,5.0,1.2);palm(9.9,-16.4,3.4,4.7,1.1);palm(-6.9,-17.2,.9,3.9,.7);
+
+ // payung pantai + kursi pantai (tinggi dudukan sama kayak kursi teras, biar duduknya pas)
+ const T_UMB=ctex(256,16,(g,w,h)=>{for(let i=0;i<12;i++){g.fillStyle=i%2?'#ffffff':'#ff6b5a';g.fillRect(i*w/12,0,w/12+1,h);}});
+ const T_UMB2=ctex(256,16,(g,w,h)=>{for(let i=0;i<12;i++){g.fillStyle=i%2?'#ffffff':'#3aa0e0';g.fillRect(i*w/12,0,w/12+1,h);}});
+ function umbrella(x,z,tex){cyl(.035,.035,2.25,'#f4efe6',x,0,z,null,8);const c=new THREE.Mesh(new THREE.ConeGeometry(1.35,.48,12,1,true),new THREE.MeshStandardMaterial({map:tex,roughness:.8,side:THREE.DoubleSide}));c.position.set(x,2.12,z);c.castShadow=true;c.userData.noNav=true;scene.add(c);sph(.05,'#f4efe6',x,2.38,z);}
+ umbrella(-3.6,-12.45,T_UMB);umbrella(3.45,-12.05,T_UMB2);
+ function beachChair(x,z,cloth){const c=chair(scene,x,z,Math.PI,'#f6efe2',1,.94);box(.34,.34,.012,cloth,0,.49,-.228,c);return c;}
+ beachChair(-4.3,-13.0,'#ff6b5a');beachChair(-2.9,-13.0,'#ffb347');beachChair(3.0,-12.6,'#3aa0e0');beachChair(3.9,-12.6,'#5fd0b0');
+ // meja kecil + kelapa muda, cooler box
+ cyl(.2,.2,.03,'#c8a27a',-5.15,.5,-12.95,null,14);cyl(.03,.03,.5,'#c8a27a',-5.15,0,-12.95,null,6);sph(.08,'#6b8f2a',-5.15,.6,-12.95);cyl(.004,.004,.14,'#ff5c8a',-5.12,.64,-12.95,null,4);
+ box(.5,.34,.34,'#3aa0e0',4.75,0,-12.55);box(.52,.06,.36,'#ffffff',4.75,.34,-12.55);
+ // tikar pantai, handuk, istana pasir, ember, kerang, bintang laut
+ const T_MAT=ctex(64,64,(g,w,h)=>{for(let i=0;i<8;i++){g.fillStyle=['#ffd166','#ef476f','#06d6a0','#118ab2'][i%4];g.fillRect(0,i*8,w,8);}});
+ plane(1.3,2.0,new THREE.MeshStandardMaterial({map:T_MAT,roughness:.9,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}),-.9,.004,-12.6);
+ {const g=grp(1.0,-15.6,0),sc='#d9b97f';cyl(.36,.4,.2,sc,0,0,0,g,16);[[-.2,-.2],[.2,-.2],[-.2,.2],[.2,.2]].forEach(([a,b])=>{cyl(.08,.09,.3,sc,a,.2,b,g,10);const cn=new THREE.Mesh(new THREE.ConeGeometry(.09,.13,10),mat(sc));cn.position.set(a,.565,b);cn.castShadow=true;g.add(cn);});cyl(.11,.13,.42,sc,0,.2,0,g,12);const fl=box(.005,.18,.005,'#7a5236',0,.62,0,g);box(.09,.06,.004,'#ef476f',.045,.74,0,g);}
+ cyl(.11,.08,.17,'#ef476f',.38,0,-16.15,null,12);box(.04,.02,.26,'#ffd166',.55,0,-16.05);
+ for(let i=0;i<14;i++){const x=-9+rnd()*18,z=SHORE+.6+rnd()*3.2;const sh=mesh(new THREE.SphereGeometry(.05,8,6,0,Math.PI*2,0,Math.PI/2),pick(['#ffe0d1','#ffd1dc','#fff4e0','#f2c9a0']),x,0,z);sh.scale.set(1,.5,1.2);sh.rotation.y=rnd()*6;}
+ {const T_STAR=ctex(64,64,(g,w,h)=>{g.fillStyle='#ff8a5c';g.beginPath();for(let i=0;i<10;i++){const a=i/10*Math.PI*2-Math.PI/2,r=i%2?11:30;g.lineTo(32+Math.cos(a)*r,32+Math.sin(a)*r);}g.fill();});
+  [[-1.9,-18.4],[5.2,-17.7]].forEach(([x,z])=>{const s=plane(.32,.32,new THREE.MeshStandardMaterial({map:T_STAR,transparent:true,alphaTest:.5,roughness:.8}),x,.005,z);s.rotation.z=rnd()*6;});}
+ // batu karang di ujung pantai + tali pembatas (batas area main kiri/kanan)
+ [[-11.6,-18.9,.8],[-12.3,-17.6,.6],[11.7,-19.2,.9],[12.4,-18.0,.55],[-11.9,-20.6,.7],[12.1,-20.8,.75]].forEach(([x,z,s])=>{const r=mesh(new THREE.DodecahedronGeometry(s,0),'#7d7a72',x,s*.35,z);r.scale.set(1.2,.7,1);r.rotation.set(rnd(),rnd()*6,rnd());});
+ [-11.45,11.45].forEach(x=>{for(let z=-6.9;z>SHORE+.3;z-=1.6)cyl(.06,.07,.7,'#8a6a48',x,0,z,null,8);const g=grp(x,(-6.9+SHORE+.3)/2,0);box(.025,.025,Math.abs(SHORE+.3+6.9)-.2,'#e8dcc0',0,.6,0,g);});
+ // gapura kecil di dua pintu pagar belakang
+ const T_SIGN=ctex(256,64,(g,w,h)=>{g.fillStyle='#fff4dc';g.fillRect(0,0,w,h);g.strokeStyle='#8a5a3b';g.lineWidth=6;g.strokeRect(3,3,w-6,h-6);g.fillStyle='#8a5a3b';g.font='bold 34px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('Ke Pantai',w/2,h/2+2);});
+ T_SIGN.wrapS=T_SIGN.wrapT=THREE.ClampToEdgeWrapping;
+ [-7.5,7.5].forEach(gx=>{[-.86,.86].forEach(d=>box(.1,2.15,.1,'#8a6a48',gx+d,0,-6.5));const bar=box(1.86,.1,.12,'#8a6a48',gx,2.1,-6.5);bar.userData.noNav=true;
+  const s=new THREE.Mesh(new THREE.PlaneGeometry(1.0,.25),new THREE.MeshStandardMaterial({map:T_SIGN,side:THREE.DoubleSide,roughness:.8}));s.position.set(gx,1.86,-6.5);s.userData.noNav=true;scene.add(s);});
+ // lampu taman pantai (nyala pas malam)
+ [[-5.9,-11.6],[6.0,-11.4],[0,-16.9]].forEach(([x,z])=>{cyl(.04,.05,1.5,'#5a4a3a',x,0,z,null,8);cyl(.1,.08,.22,glow('#ffd28a'),x,1.5,z,null,10);});
+ const bl=new THREE.PointLight(0xffc98a,0,14,1.4);bl.position.set(0,2.4,-13.5);scene.add(bl);LAMPS.push(bl);
+}
+// gerak ombak di bibir pantai (dipanggil tiap frame)
+function updBeach(t){SEA_T.value=t;const sw=.42*Math.sin(t*.62)+.16*Math.sin(t*1.37+1.3);if(BEACH.swash){BEACH.swash.position.z=SHORE+.15-sw;BEACH.foam.position.z=SHORE+.62-sw*1.05;BEACH.foam.material.opacity=.45+.4*Math.max(0,Math.cos(t*.62));BEACH.foam.material.map.offset.x=t*.01;}}
 
 /* ---------- label ruangan ---------- */
 function roomLabel(t,x,z){const d=document.createElement('div');d.className='room';d.textContent=t;const o=new CSS2DObject(d);o.position.set(x,.05,z);scene.add(o);return o;}
-const ROOMLABELS=[roomLabel('Ruang Tamu',-1.9,3.4),roomLabel('Dapur',4.6,.6),roomLabel('Kamar Han',-4.2,-1.0),roomLabel('Kamar Maya',0,-1.0),roomLabel('Kamar Nayla & Alya',4.0,-1.0),roomLabel('Teras',-2.3,6.0),roomLabel('Taman',2,9.6)];
+const ROOMLABELS=[roomLabel('Ruang Tamu',-1.9,3.4),roomLabel('Dapur',4.6,.6),roomLabel('Kamar Han',-4.2,-1.0),roomLabel('Kamar Maya',0,-1.0),roomLabel('Kamar Nayla & Alya',4.0,-1.0),roomLabel('Teras',-2.3,6.0),roomLabel('Taman',2,9.6),roomLabel('Pantai',-.9,-10.6)];
 
 /* ---------- navigasi: grid 10 cm + peta jarak bebas (clearance) + A* ---------- */
 // rintangan diambil otomatis dari semua benda di scene (dinding, furnitur, pagar, pohon, semak), jadi nggak ada yang kelewat
@@ -440,7 +533,10 @@ const st=(id,x,z,face,who,room)=>spot({id,type:'stand',x,z,face,ax:x,az:z,who,ro
 st('masak',4.95,2.0,HP,['maya','han'],'dapur');st('kulkas',4.95,3.95,HP,'all','dapur');st('buku',-5.2,3.3,-HP,['maya','han','nayla'],'tamu');
 st('gym',-3.3,-2.4,-HP,['han'],'kamar');st('samsak',-2.95,-.95,HP,['han'],'kamar');st('cermin',-1.35,-1.0,-HP,['maya','alya'],'kamar');
 st('siram',3.7,7.1,0,['maya','han'],'taman');st('ayunan',-3.7,8.6,0,['nayla','alya'],'taman');st('main1',-1.8,9.0,HP,['nayla','alya'],'taman');st('main2',.6,8.9,-HP,['nayla','alya','han'],'taman');
-st('mainan',5.35,-.98,0,['nayla','alya'],'kamar');st('jendela-teras',-2.4,5.9,0,'all','teras');st('kucing',-3.1,2.75,-.4,['nayla','alya','maya'],'tamu');
+st('mainan',5.35,-.98,0,['nayla','alya'],'kamar');
+// pantai: kursi pantai (menghadap laut), istana pasir, cari kerang, lihat ombak
+[[-4.3,-13.0],[-2.9,-13.0],[3.0,-12.6],[3.9,-12.6]].forEach(([x,z],i)=>seat('kursi-pantai'+i,x,z,Math.PI,.445,.22,-.18,'all','pantai'));
+st('istana1',1.0,-14.97,Math.PI,['nayla','alya'],'pantai');st('istana2',1.66,-15.6,-Math.PI/2,['nayla','alya'],'pantai');st('kerang',-1.6,-18.7,Math.PI,['nayla','alya','maya'],'pantai');st('ombak',5.4,-18.9,Math.PI,'all','pantai');st('ombak2',-4.6,-18.8,Math.PI,['maya','han'],'pantai');st('jendela-teras',-2.4,5.9,0,'all','teras');st('kucing',-3.1,2.75,-.4,['nayla','alya','maya'],'tamu');
 const SEATPICK=[[...SP.filter(s=>s.id.startsWith('sofa'))].map(s=>[s,.7,.75,.6,s.x,.75])].flat();
 SEATPICK.forEach(a=>seatPick(...a));
 SP.filter(s=>s.type==='sit'&&!s.id.startsWith('sofa')).forEach(s=>seatPick(s,s.front*2+.06,s.front*2+.06,.9,s.x,s.z));
@@ -451,6 +547,10 @@ const LINES={
  nayla:{ayunan:['Yeay, ayunannya tinggi! 🎈','Alya, dorongin dong!'],main1:['Alya, main petak umpet yuk! 🙈'],main2:['Bolanya ke sana! ⚽'],mainan:['Bonekaku mana ya? 🧸'],'kursi-nayla':['Aku gambar kucing 🎨'],kucing:['Mochi lucu banget 🐱'],makan:['Aku lapar~ 🍪'],_:['Hihi 😆','Ayo main lagi!']},
  alya:{ayunan:['Gantian dong, Nayla! 😤'],main1:['Satu, dua, tiga… aku cari ya!'],main2:['Tangkap! 🏐'],mainan:['Aku susun balok dulu 🧱'],'kursi-alya':['Gambarku bagus nggak? 🖍️'],kucing:['Mochi tidur ya? 😴'],cermin:['Aku cantik nggak? 🎀'],makan:['Enak banget! 😋'],_:['Nayla, tunggu aku!','Hehe 🤭']},
  han:{_:['💪'],gym:['💪 Angkat beban dulu'],samsak:['Hiyaa! 🥊']}};
+Object.assign(LINES.maya,{'kursi-pantai':['Anginnya sejuk banget 🌴','Babe, sini duduk sebelahku 🏖️'],kerang:['Kerangnya cantik-cantik 🐚'],ombak:['Dengar suara ombaknya, babe 🌊','Lautnya biru banget 💙']});
+Object.assign(LINES.nayla,{istana:['Istana pasirku paling tinggi! 🏰','Alya, ambilin air dong 🪣'],kerang:['Aku dapat kerang pink! 🐚'],ombak:['Ombaknya ngejar kakiku! 🌊'],'kursi-pantai':['Santai dulu ah 😎']});
+Object.assign(LINES.alya,{istana:['Aku bikin parit buat istananya 🏰','Jangan dirusak ombak ya! 😤'],kerang:['Kerangnya buat Mama Maya 🐚'],ombak:['Airnya dingin! 🥶'],'kursi-pantai':['Aku pakai kacamata hitam 😎']});
+Object.assign(LINES.han,{ombak:['🌊 Segarnya angin laut'],'kursi-pantai':['🏖️ Santai dulu']});
 function lineFor(id,sp){const L=LINES[id]||{};const key=sp?(L[sp.id]?sp.id:(sp.id.replace(/\d+$/,''))):'_';return pick(L[key]||L._||['🙂']);}
 
 /* ---------- karakter ---------- */
@@ -631,7 +731,7 @@ const CATP=new GLTFLoader().loadAsync('models/mochi.glb').then(gl=>{const m=gl.s
  CAT.g.add(m);CAT.body.visible=false;CAT.model=m;CAT.mixer=new THREE.AnimationMixer(m);gl.animations.forEach(cl=>{CAT.act[cl.name]=CAT.mixer.clipAction(cl);});
  const first=CAT.act[CAT.state==='walk'?'Walk':'Idle'];if(first){first.reset().setEffectiveWeight(1).play();CAT.cur=CAT.state==='walk'?'Walk':'Idle';}
  if(CAT.act.Walk)CAT.act.Walk.timeScale=Math.max(.45,CAT.v/CAT_WALK_NAT);return true;}).catch(e=>{console.warn('gagal muat mochi.glb',e);(window.__R||{errors:[]}).errors.push('mochi: '+e);return false;});
-const CATSPOTS=[[-3.2,2.4],[.2,5.7],[4.3,-1.0],[2.2,4.0],[2.4,7.9],[-.4,-2.0],[-6.2,1.0],[7.4,-1.5]];
+const CATSPOTS=[[-3.2,2.4],[.2,5.7],[4.3,-1.0],[2.2,4.0],[2.4,7.9],[-.4,-2.0],[-6.2,1.0],[7.4,-1.5],[5.6,-10.6],[-6.3,-11.4],[-.6,-14.6],[2.6,-17.3]]; // 4 terakhir: pantai
 const CAT_R=.13;
 function catDyn(){return CHL.map(o=>{const p=o.root.position;return [p.x,p.z,CAT_R+o.rad];});}
 function updCat(dt,now){const g=CAT.g,p=g.position,M=!!CAT.model;if(CAT.state==='walk'){let t=CAT.path[0];
@@ -656,7 +756,7 @@ function updCat(dt,now){const g=CAT.g,p=g.position,M=!!CAT.model;if(CAT.state===
  if(CAT.mixer)CAT.mixer.update(dt);}
 
 /* ---------- kamera, tampilan ---------- */
-const VIEWS={all:[[0,.4,1.2],[0,14.5,15.5]],teras:[[0,.6,5.6],[1,5.5,12.5]],tamu:[[-3,.6,2.2],[-2.2,6.5,9]],dapur:[[3.5,.6,2.2],[3.2,6.5,9]],kamar:[[0,.6,-2.2],[0,8.5,5.6]],langit:[[0,1.6,1],[2,3.2,22]],taman:[[0,.5,8.2],[3,7,17.5]]};
+const VIEWS={all:[[0,.4,1.2],[0,14.5,15.5]],teras:[[0,.6,5.6],[1,5.5,12.5]],tamu:[[-3,.6,2.2],[-2.2,6.5,9]],dapur:[[3.5,.6,2.2],[3.2,6.5,9]],kamar:[[0,.6,-2.2],[0,8.5,5.6]],langit:[[0,1.6,1],[2,3.2,22]],taman:[[0,.5,8.2],[3,7,17.5]],pantai:[[0,1.0,-15.6],[-1.6,4.0,-6.0]]};
 let fly=null,follow=null;
 function aspectK(){const a=innerWidth/innerHeight;return a<1?Math.min(2.1,1/a*.95):1;}
 function view(k,instant){follow=null;markWho();const [t,c]=VIEWS[k];const K=aspectK();const tv=new THREE.Vector3(...t),cv=new THREE.Vector3(t[0]+(c[0]-t[0])*K,t[1]+(c[1]-t[1])*K,t[2]+(c[2]-t[2])*K);cv.y=Math.max(cv.y,1.2);
@@ -796,7 +896,7 @@ function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
  if(!SIMPAUSE)updCat(dt,now);updEnv(dt);if(now>clkT){clkT=now+1000;updClock();}
  if(MARK.material.opacity>0)MARK.material.opacity=Math.max(0,MARK.material.opacity-dt*.6);
  if(now>chatT&&CHL.length){chatT=now+R(11000,19000);const c=pick(CHL.filter(c=>c.id!=='han'));if(c&&c.state!=='walk')say(c,lineFor(c.id,c.spot));}
- if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
+ updBeach(now/1000);if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
 
 updEnv(0,true);updClock();
 view('all',true);
