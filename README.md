@@ -10,6 +10,7 @@ Rumah 3D (three.js) dengan teras, ruang tamu, dapur, tiga kamar (Han, Maya, Nayl
 
 - **Furnitur solid + A\***: semua benda (dinding, kusen, furnitur, pagar, pohon, semak) otomatis jadi rintangan di grid 10 cm dengan peta jarak bebas. Karakter dan Mochi cari jalan pakai A* (8 arah, lebih suka lewat tengah lorong), lalu jalurnya dirapikan (tarik tali) selama garisnya tetap aman. Tikungan cuma dipotong kalau nggak nyerempet apa pun.
 - **Antar karakter nggak saling tembus**: tiap orang punya radius badan. Yang lagi diam/duduk dianggap rintangan dan dijalani memutar; kalau papasan di pintu, yang prioritasnya lebih rendah (Han > Maya > Nayla > Alya > Mochi) nunggu dulu. Mochi minggir kalau ngalangin jalan. Orang dewasa yang duduk telapak kakinya napak lantai.
+- **🎮 POV Han**: tombol pertama di bar bawah. Jalan sendiri jadi Han, dilihat dari mata Han (atau 🧍 dari belakang). PC: WASD jalan, ←→ / Q E / drag mouse lihat sekeliling, Shift lari, V ganti mata/belakang, Esc keluar. HP: stick kiri jalan, geser layar lihat sekeliling, tombol 👁️ / 🏃 / ✕ di kanan bawah. Tabrakan pakai peta jarak bebas yang sama dengan A* plus radius badan orang lain & Mochi (geser per 3 cm, meluncur di sepanjang dinding), jadi nggak nembus apa pun. Kalau Han lagi duduk, dia berdiri dulu. Tap nama orang lain waktu POV = dia nyapa.
 
 Karakter (Maya, Han, Nayla, Alya) memakai label nama CSS2D. Maya memakai perbaikan emissive yang sama dengan web kantor (emissiveMap = tekstur warna, intensitas 0.12 siang, naik 0.48 waktu malam).
 

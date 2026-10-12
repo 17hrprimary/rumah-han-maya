@@ -39,6 +39,33 @@ html,body{height:100%;overflow:hidden;background:#bfe3ff;font-family:"Segoe UI",
 #credit button{margin-top:10px;font:inherit;font-weight:700;border:0;border-radius:10px;padding:6px 14px;background:#f59e0b;color:#fff;cursor:pointer}
 #creditline{position:fixed;right:10px;bottom:56px;font-size:10.5px;color:#4a3426;background:rgba(255,251,244,.8);padding:3px 8px;border-radius:8px;z-index:4;max-width:46%}
 #creditline a{color:#1d4ed8}
+/* 🎮 Mode POV Han */
+#bar #bPov{background:linear-gradient(180deg,#6aa8f5,#3c7fd6);color:#fff}
+#povHint{display:none;position:fixed;left:50%;top:10px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 480px);background:rgba(43,36,64,.86);color:#fff;font-size:12px;font-weight:700;line-height:1.6;padding:6px 14px;border-radius:12px;z-index:6;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.2);pointer-events:none}
+#povHint b{color:#ffd2a8}
+#povHint .kb{display:inline-block;background:#fff;color:#4a3426;border-radius:5px;padding:0 5px;margin:0 1px;font-size:11px;line-height:1.5;box-shadow:0 2px 0 #cdbba8}
+#povHint .tch{display:none}
+body.touch #povHint .kbd{display:none}body.touch #povHint .tch{display:inline}
+#povPad{display:none}
+#povStick{display:none;position:fixed;left:14px;bottom:14px;width:124px;height:124px;border-radius:50%;background:rgba(255,251,244,.55);border:3px solid #f5c08a;box-shadow:0 4px 14px rgba(0,0,0,.15);z-index:8;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#povKnob{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:linear-gradient(180deg,#ffb36b,#e9802f);border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.2);pointer-events:none}
+#povBtns{position:fixed;right:10px;bottom:14px;display:grid;grid-template-columns:repeat(2,64px);gap:7px;z-index:8}
+#povBtns button{font:inherit;width:64px;min-height:46px;border-radius:14px;border:2px solid #f5c08a;background:rgba(255,251,244,.95);color:#4a3426;font-size:12px;font-weight:800;line-height:1.15;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#povBtns button.on{background:linear-gradient(180deg,#6aa8f5,#3c7fd6);color:#fff;border-color:#fff}
+#povBtns button.x{grid-column:span 2;width:auto;min-height:36px;background:linear-gradient(180deg,#ff9b7a,#e8603c);color:#fff;border-color:#fff}
+body.pov #povHint,body.pov #povPad{display:block}
+body.pov.touch #povStick{display:block}
+body.pov #bar,body.pov #who,body.pov #hint{display:none}
+body.pov #status{top:auto;bottom:34%}
+body.pov #creditline{left:10px;right:auto;top:auto;bottom:10px;max-width:calc(100% - 190px)}
+@media (max-width:700px){
+ #povHint{top:8px;max-width:calc(100% - 20px);font-size:10.5px;padding:5px 10px}
+ body.pov #top{display:none}
+ body.pov #creditline{bottom:134px;max-width:calc(100% - 20px)}
+ #povStick{width:110px;height:110px;left:10px;bottom:12px}
+ #povBtns{right:8px;bottom:12px;grid-template-columns:repeat(2,58px)}
+ #povBtns button{width:58px}
+}
 @media (max-width:700px){
  #top .t{font-size:15px}#top{padding:6px 10px}
  #who{top:auto;bottom:118px;right:8px}
@@ -57,6 +84,8 @@ html,body{height:100%;overflow:hidden;background:#bfe3ff;font-family:"Segoe UI",
 <div id="hint"><b>Tap/klik lantai</b> = Han jalan ke situ · <b>tap kursi/sofa</b> = Han duduk · <b>tap nama</b> = ikutin · geser = putar kamera · cubit/scroll = zoom</div>
 <div id="creditline">Karakter: <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox</a> (MIT) · Kucing: <a href="https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8" target="_blank" rel="noopener">dinomaster</a> (CC BY 4.0) · <a href="#" id="credlink">kredit lengkap</a></div>
 <div id="bar">
+ <button id="bPov" title="Mode POV: jalan sendiri jadi Han, lihat dari mata Han">🎮 POV Han</button>
+ <span class="sep"></span>
  <button data-v="all">🏠 Semua</button>
  <button data-v="teras">🌿 Teras</button>
  <button data-v="tamu">🛋️ Ruang Tamu</button>
@@ -70,6 +99,9 @@ html,body{height:100%;overflow:hidden;background:#bfe3ff;font-family:"Segoe UI",
  <button id="bWall">🧱 Dinding: Potong</button>
  <button id="bCred">ⓘ Kredit</button>
 </div>
+<div id="povHint"><b>🎮 POV Han</b> <span class="kbd">· <span class="kb">W</span><span class="kb">A</span><span class="kb">S</span><span class="kb">D</span> jalan · <span class="kb">←</span><span class="kb">→</span> / <span class="kb">Q</span><span class="kb">E</span> / drag mouse: lihat sekeliling · <span class="kb">Shift</span> lari · <span class="kb">V</span> mata Han / belakang · <span class="kb">Esc</span> keluar</span><span class="tch">· stick kiri: jalan · geser layar: lihat sekeliling</span></div>
+<div id="povPad"><div id="povStick"><div id="povKnob"></div></div>
+ <div id="povBtns"><button type="button" data-a="fp" title="Ganti: dari mata Han / dari belakang Han (V)">👁️ Mata</button><button type="button" data-a="run" title="Lari (Shift)">🏃 Lari</button><button type="button" data-a="exit" class="x" title="Keluar POV (Esc)">✕ Keluar POV</button></div></div>
 <div id="credit">
  <h3>Kredit</h3>
  <p><b>Maya</b> — modifikasi warna/tekstur dari avatar "Female_Adult_03", <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox Avatar Library</a> (model yang sama dengan web kantor).</p>
@@ -579,6 +611,7 @@ function updChar(c,dt,now){
  if(c.state==='walk')stepWalk(c,dt,now);
  else if(c.state==='turn'){const da=wrapA(c.turnTo-c.yaw),st=3.2*dt;if(Math.abs(da)<=st){c.yaw=c.turnTo;c.state='idle';play(c,'Idle',.35);const f=c.afterTurn;c.afterTurn=null;f&&f();}else c.yaw+=Math.sign(da)*st;}
  else if(c.state==='down'||c.state==='up')stepTr(c,dt);
+ else if(c.state==='pov')stepPov(c,dt);
  c.root.rotation.y=c.yaw-c.faceOff;c.mixer.update(dt);if(c.ikW>0)legIK(c);else if(c.state==='sit'&&!c.act.Sit)procSit(c);}
 
 /* ---------- kucing Mochi ---------- */
@@ -629,7 +662,8 @@ function aspectK(){const a=innerWidth/innerHeight;return a<1?Math.min(2.1,1/a*.9
 function view(k,instant){follow=null;markWho();const [t,c]=VIEWS[k];const K=aspectK();const tv=new THREE.Vector3(...t),cv=new THREE.Vector3(t[0]+(c[0]-t[0])*K,t[1]+(c[1]-t[1])*K,t[2]+(c[2]-t[2])*K);cv.y=Math.max(cv.y,1.2);
  document.querySelectorAll('#bar button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
  if(instant){controls.target.copy(tv);camera.position.copy(cv);controls.update();return;}fly={t0:performance.now(),ft:controls.target.clone(),fc:camera.position.clone(),tv,cv};}
-function selectChar(id,greet){const c=CH[id];if(!c)return;follow=id;fly=null;markWho();document.querySelectorAll('#bar button[data-v]').forEach(b=>b.classList.remove('on'));
+function selectChar(id,greet){const c=CH[id];if(!c)return;
+ if(POV.on){if(greet&&id!=='han'){const g={maya:'Iya, babe? 😊',nayla:'Haii, Papa! 👋',alya:'Papa! ✌️'};say(c,g[id]);gesture(c,'Wave');}return;}follow=id;fly=null;markWho();document.querySelectorAll('#bar button[data-v]').forEach(b=>b.classList.remove('on'));
  const p=c.root.position,d=camera.position.clone().sub(controls.target);const L=d.length();if(L>9)d.multiplyScalar(7.5*Math.min(aspectK(),1.6)/L);controls.target.set(p.x,.9,p.z);camera.position.copy(controls.target).add(d);
  if(greet){const g={han:'Han di sini 💪',maya:'Iya, babe? 😊',nayla:'Haii! Aku Nayla 👋',alya:'Haii! Aku Alya ✌️'};say(c,g[id]);gesture(c,'Wave');}}
 function markWho(){document.querySelectorAll('#who button').forEach(b=>b.classList.toggle('on',b.dataset.id===follow));}
@@ -640,7 +674,8 @@ let wallMode='cut';
 function segX(ax,az,bx,bz,cx,cz,dx,dz){const d=(bx-ax)*(dz-cz)-(bz-az)*(dx-cx);if(Math.abs(d)<1e-9)return false;const u=((cx-ax)*(dz-cz)-(cz-az)*(dx-cx))/d,v=((cx-ax)*(bz-az)-(cz-az)*(bx-ax))/d;return u>0&&u<1&&v>0&&v<1;}
 function updateWalls(){const cx=camera.position.x,cz=camera.position.z,tx=controls.target.x,tz=controls.target.z;
  for(const W of WALLS){let clip=false,fade=false;
-  if(wallMode==='cut'){if(!W.outer)clip=true;else{const mx=(W.p1[0]+W.p2[0])/2,mz=(W.p1[1]+W.p2[1])/2;clip=((cx-mx)*W.n[0]+(cz-mz)*W.n[1])>0;}}
+  if(POV.on){}
+  else if(wallMode==='cut'){if(!W.outer)clip=true;else{const mx=(W.p1[0]+W.p2[0])/2,mz=(W.p1[1]+W.p2[1])/2;clip=((cx-mx)*W.n[0]+(cz-mz)*W.n[1])>0;}}
   else if(wallMode==='full')fade=segX(cx,cz,tx,tz,W.p1[0],W.p1[1],W.p2[0],W.p2[1]);
   if(clip!==W.clipped){W.clipped=clip;W.mat.clippingPlanes=clip?[CLIP]:[];W.mat.needsUpdate=true;W.caps.forEach(o=>o.visible=clip);}
   if(fade!==W.faded){W.faded=fade;W.mat.transparent=fade;W.mat.opacity=fade?.14:1;W.mat.depthWrite=!fade;W.mat.needsUpdate=true;}
@@ -666,7 +701,7 @@ const MARK=new THREE.Mesh(new THREE.RingGeometry(.18,.26,24),new THREE.MeshBasic
 renderer.domElement.addEventListener('pointerdown',e=>{pd={x:e.clientX,y:e.clientY,t:performance.now()};});
 renderer.domElement.addEventListener('pointerup',e=>{if(!pd)return;const moved=Math.hypot(e.clientX-pd.x,e.clientY-pd.y),dt=performance.now()-pd.t;pd=null;if(moved>8||dt>600)return;tap(e.clientX,e.clientY);});
 function status(t,ms=2500){const s=$('status');s.textContent=t;s.style.display='block';clearTimeout(status._t);status._t=setTimeout(()=>s.style.display='none',ms);}
-function tap(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);
+function tap(x,y){if(POV.on)return;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);
  const ch=ray.intersectObjects(CHL.map(c=>c.pick),false);if(ch.length){selectChar(ch[0].object.userData.char,true);return;}
  const han=CH.han;if(!han){status('⏳ Han lagi dimuat…');return;}
  const now=performance.now();const se=ray.intersectObjects(SEATS,false);
@@ -675,6 +710,80 @@ function tap(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCame
  if(!inPlay(hit.x,hit.z)){status(hit.z<-19.7&&Math.abs(hit.x)<11.2?'Itu laut, babe 🌊 Han nggak berenang dulu ya':'Di luar pagar, babe 😄');return;}
  let g=[hit.x,hit.z];if(!walkable(g[0],g[1],han.rad)){const f=nearFree(g[0],g[1],han.rad,null,2);if(!f){status('Nggak bisa ke situ, babe');return;}g=f;}
  han.userUntil=now+90000;freeSpot(han);goTo(han,g[0],g[1],()=>{han.busyUntil=performance.now()+60000;});MARK.position.set(g[0],.02,g[1]);MARK.material.opacity=1;}
+
+/* ---------- 🎮 Mode POV Han ----------
+   Han dikendalikan sendiri: PC = WASD jalan, ←→/Q/E atau drag mouse buat lihat sekeliling, Shift lari, V ganti mata Han / dari belakang, Esc keluar.
+   HP = stick kiri buat jalan, geser layar buat lihat sekeliling, tombol kanan bawah. Tabrakan pakai peta jarak bebas yang sama dengan A* (dinding, furnitur, pagar)
+   + lingkaran badan karakter lain & Mochi, jadi nggak bisa nembus apa pun. Selama POV, rutinitas otomatis Han berhenti; yang lain tetap jalan & minggir/muter. */
+const POV={on:false,fp:true,yaw:0,pitch:-.05,dist:2.6,keys:new Set(),stick:{x:0,y:0,id:null},look:null,run:false,bob:0,av:0,mdir:[0,0],saved:null,eye:new THREE.Vector3(),snap:true,col:null};
+if(matchMedia('(pointer:coarse)').matches||innerWidth<=700)document.body.classList.add('touch');
+addEventListener('resize',()=>document.body.classList.toggle('touch',matchMedia('(pointer:coarse)').matches||innerWidth<=700));
+function povFpUI(){const b=document.querySelector('#povBtns [data-a="fp"]');b.textContent=POV.fp?'👁️ Mata':'🧍 Belakang';b.classList.toggle('on',!POV.fp);
+ const h=CH.han;if(h)h.root.visible=!POV.fp;camera.fov=POV.fp?70:55;camera.near=POV.fp?.05:.1;camera.updateProjectionMatrix();POV.snap=true;}
+function enterPov(){const h=CH.han;if(!h){status('⏳ Han lagi dimuat…');return;}if(POV.on)return;
+ POV.on=true;POV.fp=true;POV.saved=camera.position.clone().sub(controls.target);follow=null;fly=null;markWho();
+ POV.yaw=h.yaw;POV.pitch=-.05;POV.keys.clear();POV.run=false;POV.snap=true;document.querySelector('#povBtns [data-a="run"]').classList.remove('on');
+ controls.enabled=false;document.body.classList.add('pov');ROOF.visible=true;ROOMLABELS.forEach(o=>o.visible=false);povFpUI();
+ if(!POV.col){const ms=new Set(WALLS.map(W=>W.mat));POV.col=[];scene.traverse(o=>{if(o.isMesh&&ms.has(o.material))POV.col.push(o);});ROOF.traverse(o=>{if(o.isMesh)POV.col.push(o);});}
+ // kalau Han lagi duduk / jalan: berdiri dulu, berhenti, baru dikendalikan
+ freeSpot(h);h.onArrive=null;h.path=[];h.waitUp=null;h.gestEnd=0;h.userUntil=performance.now()+1e9;POV.av=0;
+ const go=()=>{if(!POV.on||h.state==='pov')return;h.state='pov';h.v=0;h.path=[];h.exitVia=null;play(h,'Idle',.3);};
+ if(h.state==='sit'||h.state==='down'){standUp(h,go);if(h.waitUp)status('🪑 Han nunggu depan kursinya kosong dulu…',2500);}else if(h.state==='up')h.next=go;else go();
+ status(document.body.classList.contains('touch')?'🎮 POV Han · stick kiri buat jalan, geser layar buat lihat':'🎮 POV Han · WASD jalan, drag mouse buat lihat, Esc keluar',3200);}
+function exitPov(){if(!POV.on)return;const h=CH.han;POV.on=false;POV.keys.clear();POV.look=null;povStickReset();document.body.classList.remove('pov');
+ camera.fov=45;camera.near=.1;camera.updateProjectionMatrix();ROOF.visible=wallMode==='roof';ROOMLABELS.forEach(o=>o.visible=wallMode!=='roof');controls.enabled=true;
+ if(h){h.root.visible=true;if(h.state==='pov'){h.state='idle';h.v=0;play(h,'Idle',.35);}h.waitUp=null;if(h.state==='sit'&&h.seat&&!h.seat.occ){h.spot=h.seat;h.seat.occ='han';}const now=performance.now();h.userUntil=now+60000;h.busyUntil=now+60000;
+  const p=h.root.position,d=(POV.saved||new THREE.Vector3(0,6,7)).clone();if(d.length()>8)d.setLength(7.5);controls.target.set(p.x,.9,p.z);camera.position.copy(controls.target).add(d);controls.update();}
+ status('👋 Keluar dari POV',1800);}
+// cek satu langkah kecil: boleh kalau badan tetap bebas dari rintangan & orang lain (kalau udah kejepit, boleh asal makin longgar)
+function povFree(c,x,z,px,pz){const r=c.rad,cn=clrAt(x,z);if(cn<r&&cn<=clrAt(px,pz)+1e-4)return false;
+ for(const o of agentsFor(c)){const m=r+o.rad,dn=Math.hypot(x-o.x,z-o.z);if(dn<m&&dn<=Math.hypot(px-o.x,pz-o.z))return false;
+  if(o.sit){const kx=o.x+Math.sin(o.yaw)*.36,kz=o.z+Math.cos(o.yaw)*.36,km=r+.12,dk=Math.hypot(x-kx,z-kz);if(dk<km&&dk<=Math.hypot(px-kx,pz-kz))return false;}}return true;}
+// geser sedikit-sedikit (≤3 cm), kalau mentok: meluncur sepanjang dinding/furnitur
+function povMove(c,dx,dz){const p=c.root.position,n=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.03)),sx=dx/n,sz=dz/n;let moved=0;
+ for(let k=0;k<n;k++){const x=p.x,z=p.z;if(povFree(c,x+sx,z+sz,x,z)){p.x+=sx;p.z+=sz;}else if(Math.abs(sx)>1e-6&&povFree(c,x+sx,z,x,z))p.x+=sx;else if(Math.abs(sz)>1e-6&&povFree(c,x,z+sz,x,z))p.z+=sz;else break;moved+=Math.hypot(p.x-x,p.z-z);}
+ return moved;}
+function stepPov(c,dt){const K=POV.keys,st=POV.stick;
+ const turn=(K.has('tl')?1:0)-(K.has('tr')?1:0);if(turn)POV.yaw+=turn*2.2*dt;
+ let fwd=(K.has('f')?1:0)-(K.has('b')?1:0),str=(K.has('r')?1:0)-(K.has('l')?1:0);if(st.x||st.y){fwd=-st.y;str=st.x;}
+ const sy=Math.sin(POV.yaw),cy=Math.cos(POV.yaw);let mx=fwd*sy-str*cy,mz=fwd*cy+str*sy;const ml=Math.hypot(mx,mz),mag=Math.min(1,ml);
+ const run=POV.run||K.has('run');const vt=ml>.12?c.speed*(run?1.9:1)*mag:0;if(ml>.12)POV.mdir=[mx/ml,mz/ml];
+ c.v=Math.max(0,c.v+Math.max(-6*dt,Math.min(4*dt,vt-c.v)));
+ let got=0;if(c.v>.005){const want=c.v*dt;got=povMove(c,POV.mdir[0]*want,POV.mdir[1]*want);if(got<want*.5)c.v=Math.max(0,Math.min(c.v,got/dt*1.2));POV.bob+=got*7.5;}
+ POV.av+=(got/Math.max(dt,1e-3)-POV.av)*Math.min(1,dt*10);
+ // arah badan: mata Han = ikut arah lihat; dari belakang = badan muter ke arah jalan
+ const face=POV.fp||ml<=.12?(POV.fp?POV.yaw:c.yaw):Math.atan2(mx,mz);const da=wrapA(face-c.yaw),tr=(POV.fp?14:9)*dt;c.yaw+=Math.max(-tr,Math.min(tr,da));
+ // animasi ikut kecepatan yang beneran kejadian (mentok dinding = diam, nggak kedip jalan/diam)
+ if(POV.av>.12){play(c,'Walk',.25);if(c.act.Walk)c.act.Walk.timeScale=Math.max(.3,POV.av/c.nat);}else if(POV.av<.06)play(c,'Idle',.3);}
+const _pe=new THREE.Vector3(),_pd=new THREE.Vector3(),_pt=new THREE.Vector3(),_pray=new THREE.Raycaster();
+function povCam(dt){const h=CH.han;if(!h)return;const p=h.root.position;
+ POV.pitch=Math.max(POV.fp?-1.25:-1.2,Math.min(POV.fp?1.2:.25,POV.pitch));
+ const cp=Math.cos(POV.pitch);_pd.set(Math.sin(POV.yaw)*cp,Math.sin(POV.pitch),Math.cos(POV.yaw)*cp);
+ if(POV.fp){if(h.state==='pov')_pe.set(p.x+Math.sin(h.yaw)*.05,h.headY+.07+Math.sin(POV.bob)*.018*Math.min(1,h.v),p.z+Math.cos(h.yaw)*.05);else{h.bones.Head.getWorldPosition(_pe);_pe.y+=.07;}}
+ else{_pt.set(p.x,Math.min(h.headY,1.5)-(h.state==='pov'?0:.3),p.z);let d=POV.dist;_pray.set(_pt,_pd.clone().negate());_pray.far=d+.3;const hit=_pray.intersectObjects(POV.col,false)[0];if(hit)d=Math.max(.35,hit.distance-.25);_pe.copy(_pt).addScaledVector(_pd,-d);_pe.y=Math.max(.3,_pe.y);}
+ const k=POV.snap||POV.eye.distanceTo(_pe)>1.5?1:1-Math.exp(-dt*(POV.fp?22:12));POV.snap=false;POV.eye.lerp(_pe,k);camera.position.copy(POV.eye);
+ if(POV.fp)camera.lookAt(_pt.copy(POV.eye).add(_pd));else camera.lookAt(_pt.set(p.x,Math.min(h.headY,1.5)-(h.state==='pov'?0:.3),p.z));}
+// input
+const POVKEY={KeyW:'f',ArrowUp:'f',KeyS:'b',ArrowDown:'b',KeyA:'l',KeyD:'r',KeyQ:'tl',ArrowLeft:'tl',KeyE:'tr',ArrowRight:'tr',ShiftLeft:'run',ShiftRight:'run'};
+addEventListener('keydown',e=>{if(!POV.on||e.ctrlKey||e.metaKey||e.altKey)return;const a=POVKEY[e.code];
+ if(a){POV.keys.add(a);e.preventDefault();return;}if(e.code==='Escape'){exitPov();e.preventDefault();}else if(e.code==='KeyV'&&!e.repeat){POV.fp=!POV.fp;POV.pitch=POV.fp?-.05:-.3;povFpUI();}});
+addEventListener('keyup',e=>{const a=POVKEY[e.code];if(a)POV.keys.delete(a);});
+addEventListener('blur',()=>POV.keys.clear());
+const cvs=renderer.domElement;
+cvs.addEventListener('pointerdown',e=>{if(!POV.on||POV.look)return;POV.look={id:e.pointerId,x:e.clientX,y:e.clientY};});
+addEventListener('pointermove',e=>{const L=POV.look;if(!POV.on||!L||L.id!==e.pointerId)return;const s=e.pointerType==='touch'?.0065:.0045;POV.yaw-=(e.clientX-L.x)*s;POV.pitch-=(e.clientY-L.y)*s;L.x=e.clientX;L.y=e.clientY;});
+const povLookEnd=e=>{if(POV.look&&POV.look.id===e.pointerId)POV.look=null;};addEventListener('pointerup',povLookEnd);addEventListener('pointercancel',povLookEnd);
+cvs.addEventListener('wheel',e=>{if(!POV.on||POV.fp)return;POV.dist=Math.max(1.2,Math.min(5,POV.dist*(e.deltaY>0?1.1:.9)));},{passive:true});
+const stk=$('povStick'),knob=$('povKnob');
+function povStickSet(e){const r=stk.getBoundingClientRect(),R=r.width/2-8;let x=(e.clientX-r.left-r.width/2)/R,y=(e.clientY-r.top-r.height/2)/R;const l=Math.hypot(x,y);if(l>1){x/=l;y/=l;}
+ POV.stick.x=Math.abs(x)<.12?0:x;POV.stick.y=Math.abs(y)<.12?0:y;knob.style.transform=`translate(${x*R}px,${y*R}px)`;}
+function povStickReset(){POV.stick.x=POV.stick.y=0;POV.stick.id=null;knob.style.transform='';}
+stk.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();POV.stick.id=e.pointerId;try{stk.setPointerCapture(e.pointerId);}catch(_){}povStickSet(e);});
+stk.addEventListener('pointermove',e=>{if(POV.stick.id===e.pointerId)povStickSet(e);});
+['pointerup','pointercancel','lostpointercapture'].forEach(t=>stk.addEventListener(t,e=>{if(POV.stick.id===e.pointerId)povStickReset();}));
+document.querySelectorAll('#povBtns button').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();const a=b.dataset.a;
+ if(a==='exit')exitPov();else if(a==='run'){POV.run=!POV.run;b.classList.toggle('on',POV.run);}else if(a==='fp'){POV.fp=!POV.fp;POV.pitch=POV.fp?-.05:-.3;povFpUI();}}));
+$('bPov').onclick=enterPov;
 
 /* ---------- loop ---------- */
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);labelR.setSize(innerWidth,innerHeight);});
@@ -687,13 +796,13 @@ function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
  if(!SIMPAUSE)updCat(dt,now);updEnv(dt);if(now>clkT){clkT=now+1000;updClock();}
  if(MARK.material.opacity>0)MARK.material.opacity=Math.max(0,MARK.material.opacity-dt*.6);
  if(now>chatT&&CHL.length){chatT=now+R(11000,19000);const c=pick(CHL.filter(c=>c.id!=='han'));if(c&&c.state!=='walk')say(c,lineFor(c.id,c.spot));}
- controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
+ if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
 
 updEnv(0,true);updClock();
 view('all',true);
 loop();
 setTimeout(()=>{$('load').style.opacity=0;setTimeout(()=>$('load').remove(),500);},150);
-window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;}};
+window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,POV,enterPov,exitPov,stepPov,povMove,povCam,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;}};
 CATP.then(()=>{window.__R.catReady=true;});
 let done=0;
 Promise.all(DEFS.map(d=>loadChar(d).then(c=>{done++;status(`Memuat penghuni rumah ${done}/4…`,1500);return c;}).catch(e=>{console.warn('gagal muat',d.file,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.ready=true;status('🏡 Selamat datang di rumah!',2500);
