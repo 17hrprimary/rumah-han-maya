@@ -128,7 +128,7 @@ body.pov #status{top:auto;bottom:34%}
 <div id="status"></div>
 <div id="who"></div>
 <div id="hint"><b>Tap/klik lantai</b> = Han jalan ke situ · <b>tap kursi/sofa</b> = Han duduk · <b>tap nama</b> = ikutin · geser = putar kamera · cubit/scroll = zoom</div>
-<div id="creditline"><span class="full">Karakter: <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox</a> (MIT) · Kucing: <a href="https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8" target="_blank" rel="noopener">dinomaster</a> (CC BY 4.0) · <a href="#" id="credlink">kredit lengkap</a></span><a href="#" id="credi" title="Kredit &amp; lisensi: karakter Microsoft Rocketbox (MIT), kucing dinomaster (CC BY 4.0)" aria-label="Kredit dan lisensi">ⓘ Kredit</a></div>
+<div id="creditline"><span class="full">Karakter: <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox</a> (MIT) · Ophelia &amp; Keira: <a href="https://quaternius.com/packs/universalbasecharacters.html" target="_blank" rel="noopener">Quaternius</a> (CC0) · Kucing: <a href="https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8" target="_blank" rel="noopener">dinomaster</a> (CC BY 4.0) · <a href="#" id="credlink">kredit lengkap</a></span><a href="#" id="credi" title="Kredit &amp; lisensi: karakter Microsoft Rocketbox (MIT), Ophelia &amp; Keira Quaternius UBC (CC0), kucing dinomaster (CC BY 4.0)" aria-label="Kredit dan lisensi">ⓘ Kredit</a></div>
 <div id="bar">
  <button id="bPov" title="Mode POV: jalan sendiri jadi Han, lihat dari mata Han">🎮 POV Han</button>
  <span class="sep"></span>
@@ -181,6 +181,7 @@ body.pov #status{top:auto;bottom:34%}
  <p><b>Nayla</b> — avatar "Female_Child_01" · <b>Alya</b> — avatar "Female_Child_02", dua-duanya dari Microsoft Rocketbox.</p>
  <p>Animasi diam, jalan, dan duduk: Microsoft Rocketbox (di-retarget ke tiap karakter).</p>
  <p>© 2020 Microsoft. Dipakai dengan <a href="https://github.com/microsoft/Microsoft-Rocketbox/blob/master/LICENSE.md" target="_blank" rel="noopener">lisensi MIT</a> (salinan: <a href="models/LICENSE-Microsoft-Rocketbox.md" target="_blank">models/LICENSE-Microsoft-Rocketbox.md</a>).</p>
+ <p><b>Ophelia &amp; Keira</b> — model yang sama dengan web kantor (<code>ubc_woman.glb</code>): "Universal Base Characters" karya <a href="https://quaternius.com/packs/universalbasecharacters.html" target="_blank" rel="noopener">Quaternius</a>, lisensi <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Buat rumah dikasih baju sesuai warna di kantor (Ophelia kemeja merah + jeans, kacamata kotak, jepit kuning; Keira seragam gelap, kacamata bulat tebal, lencana). Gerak jalan/duduk ngikut animasi Rocketbox (di-retarget per frame).</p>
  <p><b>Kucing Mochi</b> — berdasarkan <a href="https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8" target="_blank" rel="noopener">"animated bengal cat"</a> karya <a href="https://sketchfab.com/dinomaster" target="_blank" rel="noopener">dinomaster</a>, lisensi <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Warna bulu diubah jadi oranye, animasi dirapikan biar bisa diulang.</p>
  <p>Langit realtime (jam WITA), awan, matahari, bulan, dan bintang dibikin langsung pakai kode.</p>
  <p>Rumah dan perabot dibikin langsung pakai kode. Mesin 3D: <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> (MIT).</p>
@@ -666,9 +667,92 @@ st('istana1',1.0,-14.97,Math.PI,['nayla','alya'],'pantai');st('istana2',1.66,-15
 Object.entries(CIN_Z).forEach(([r,z])=>CIN_X.forEach((x,i)=>{BIOS.seats[r+(i+1)]=seat('bios-'+r+(i+1),x,z,Math.PI,.45,.25,-.2,CIN_WHO,'bioskop');}));
 [-.65,0,.65].forEach((dx,i)=>BIOS.bedSeats.push(seat('bios-kasur'+(i+1),18+dx,4.6,Math.PI,.52,.3,-.35,CIN_WHO,'bioskop')));
 BIOS.post=st('jaga-bioskop',12.75,6.75,-2.58,['maya'],'bioskop');
+SP.forEach(sp=>{if(Array.isArray(sp.who)&&sp.who.includes('maya')&&!sp.who.includes('ophelia')&&sp.id!=='meja-maya'&&sp.id!=='jaga-bioskop'&&sp.id!=='cermin')sp.who=sp.who.concat(['ophelia','keira']);});
 const SEATPICK=[[...SP.filter(s=>s.id.startsWith('sofa'))].map(s=>[s,.7,.75,.6,s.x,.75])].flat();
 SEATPICK.forEach(a=>seatPick(...a));
 SP.filter(s=>s.type==='sit'&&!s.id.startsWith('sofa')).forEach(s=>seatPick(s,s.front*2+.06,s.front*2+.06,.9,s.x,s.z));
+
+/* ---------- Ophelia & Keira: model dari web kantor ----------
+   Model = ubc_woman.glb dari web kantor (Quaternius Universal Base Characters, CC0), dibajuin buat Rumah (atasan/celana/sepatu dicat
+   per area tulang, warna sama kayak di kantor: Ophelia kemeja merah + jeans, Keira seragam gelap + lencana). Rambut, kacamata
+   (Ophelia kotak, Keira bulat tebal), jepit rambut Ophelia, lencana Keira: sama kayak penampilan mereka di web kantor.
+   Geraknya: badan "sopir" = rig Maya (jalan A*, duduk, kaki napak, lambai) yang disembunyiin; tiap frame arah tiap ruas tulangnya
+   disalin ke tulang UBC (retarget arah ruas, dikalibrasi sekali di pose asal). */
+const UBC_MAP=(()=>{const m=[['Pelvis','pelvis','Spine','spine_01'],['Spine','spine_01','Spine1','spine_02'],['Spine1','spine_02','Spine2','spine_03'],['Spine2','spine_03','Neck','neck_01'],['Neck','neck_01','Head','Head'],['Head','Head']];
+ for(const [S,s] of [['L','l'],['R','r']]){m.push([S+'Clavicle','clavicle_'+s,S+'UpperArm','upperarm_'+s],[S+'UpperArm','upperarm_'+s,S+'Forearm','lowerarm_'+s],[S+'Forearm','lowerarm_'+s,S+'Hand','hand_'+s],[S+'Hand','hand_'+s,S+'Finger2','middle_01_'+s]);
+  [['0','thumb'],['1','index'],['2','middle'],['3','ring'],['4','pinky']].forEach(([f,n])=>m.push([S+'Finger'+f,n+'_01_'+s,S+'Finger'+f+'1',n+'_02_'+s],[S+'Finger'+f+'1',n+'_02_'+s,S+'Finger'+f+'2',n+'_03_'+s],[S+'Finger'+f+'2',n+'_03_'+s]));
+  m.push([S+'Thigh','thigh_'+s,S+'Calf','calf_'+s],[S+'Calf','calf_'+s,S+'Foot','foot_'+s],[S+'Foot','foot_'+s,S+'Toe0','ball_'+s],[S+'Toe0','ball_'+s]);}
+ return m;})();
+function ubcAcc(head,box,L){ // kacamata & aksesori, dibikin di ruang bind lalu ditempel ke tulang kepala (kayak thGlbGlasses di web kantor)
+ const g=new THREE.Group(),cx=(box.max.x-box.min.x)/4+.004,cy=(box.min.y+box.max.y)/2,fz=box.max.z+.014;
+ const fm=new THREE.MeshStandardMaterial({color:L.glasses==='roundThick'?0x15131a:0x1d1a20,roughness:.35,metalness:.3});
+ const lm=new THREE.MeshStandardMaterial({color:L.glasses==='roundThick'?0xbeaaff:0xdde8f0,transparent:true,opacity:L.glasses==='roundThick'?.3:.16,roughness:.1,depthWrite:false});
+ const add=(geo,mat,x,y,z,rx=0,ry=0,rz=0)=>{const o=new THREE.Mesh(geo,mat);o.position.set(x,y,z);o.rotation.set(rx,ry,rz);g.add(o);return o;};
+ let hw;
+ if(L.glasses==='square'){const w=.046,h=.031,t=.0028;hw=w/2;
+  for(const sx of[-1,1]){const x=sx*cx;add(new THREE.BoxGeometry(w+t,t,t),fm,x,cy+h/2,fz);add(new THREE.BoxGeometry(w+t,t,t),fm,x,cy-h/2,fz);add(new THREE.BoxGeometry(t,h,t),fm,x-w/2,cy,fz);add(new THREE.BoxGeometry(t,h,t),fm,x+w/2,cy,fz);add(new THREE.PlaneGeometry(w,h),lm,x,cy,fz);}
+ }else{const r=.021,tb=L.glasses==='roundThick'?.0042:.0026;hw=r;
+  for(const sx of[-1,1]){const x=sx*cx;add(new THREE.TorusGeometry(r,tb,10,28),fm,x,cy,fz);add(new THREE.CircleGeometry(r,24),lm,x,cy,fz);}}
+ const bw=2*cx-2*hw;add(new THREE.BoxGeometry(Math.max(bw,.006),.0035,.0035),fm,0,cy+.004,fz);
+ for(const sx of[-1,1])add(new THREE.BoxGeometry(.003,.004,.11),fm,sx*(cx+hw+.003),cy+.004,fz-.056);
+ if(L.clip)add(new THREE.BoxGeometry(.012,.034,.014),new THREE.MeshStandardMaterial({color:L.clip,roughness:.4}),-(cx+hw+.03),cy+.075,fz-.06,0,0,.5);
+ head.updateMatrixWorld(true);g.applyMatrix4(head.matrixWorld.clone().invert());head.add(g);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.frustumCulled=false;}});return g;}
+function ubcBadge(B,body){ // lencana polisi Keira (dada kiri), kayak di web kantor
+ const side=Math.sign(B.thigh_l.getWorldPosition(new THREE.Vector3()).x)||1,sh=B.upperarm_l.getWorldPosition(new THREE.Vector3()).y,v=new THREE.Vector3(),pos=body.geometry.attributes.position;
+ let best=null;for(let i=0;i<pos.count;i++){body.getVertexPosition(i,v);v.applyMatrix4(body.matrixWorld);if(Math.abs(v.x-side*.075)<.02&&v.y<sh-.07&&v.y>sh-.12&&(!best||v.z>best.z))best=v.clone();}
+ if(!best)return;const g=new THREE.Group();
+ const m1=new THREE.MeshStandardMaterial({color:0xc9ced6,roughness:.3,metalness:.8}),m2=new THREE.MeshStandardMaterial({color:0xe8c15a,roughness:.35,metalness:.7});
+ const a=new THREE.Mesh(new THREE.CylinderGeometry(.022,.022,.006,6),m1);a.rotation.x=Math.PI/2;g.add(a);const b=new THREE.Mesh(new THREE.CylinderGeometry(.009,.009,.008,12),m2);b.rotation.x=Math.PI/2;b.position.z=.002;g.add(b);
+ g.position.copy(best);g.position.z+=.006;const sp=B.spine_03;sp.updateMatrixWorld(true);g.updateMatrixWorld(true);g.applyMatrix4(sp.matrixWorld.clone().invert());sp.add(g);}
+const _uq=new THREE.Quaternion(),_uq2=new THREE.Quaternion(),_uv=new THREE.Vector3(),_uv2=new THREE.Vector3();
+async function ubcSkin(c,def){const gl=await new GLTFLoader().loadAsync(def.skin);const u=gl.scene,L=def.look||{},B={};let eyes=null,body=null;
+ u.traverse(o=>{if(o.isBone)B[o.name]=o;
+  if(o.isMesh){o.castShadow=true;o.receiveShadow=false;o.frustumCulled=false;let mt=o.material;if(!mt)return;
+   if(/Hair/i.test(mt.name)){mt=o.material=mt.clone();mt.color.set(L.hair??0x2b1810);mt.side=THREE.DoubleSide;}else mt.side=THREE.FrontSide;
+   mt.metalness=0;if(mt.map){mt.map.anisotropy=4;mt.emissiveMap=mt.map;if(/Hair/i.test(mt.name))mt.emissive.copy(mt.color);else mt.emissive.setRGB(1,1,1);mt.emissiveIntensity=EM0+NIGHT*EM1;c.mats.push(mt);}
+   if(/^Eyes/i.test(o.name)&&!eyes)eyes=o;if(/Superhero/i.test(o.name))body=o;}});
+ u.updateMatrixWorld(true);
+ if(eyes&&B.Head&&L.glasses)ubcAcc(B.Head,new THREE.Box3().setFromObject(eyes),L);
+ if(L.police&&body&&B.spine_03)ubcBadge(B,body);
+ // rig sopir: balik ke pose asal, badan Maya disembunyiin
+ c.model.traverse(o=>{if(o.isMesh)o.visible=false;});
+ const keep=c.rest.map(([o])=>[o,o.position.clone(),o.quaternion.clone(),o.scale.clone()]);c.rest.forEach(([o,p,q,sc])=>{o.position.copy(p);o.quaternion.copy(q);o.scale.copy(sc);});
+ c.root.add(u);c.root.updateMatrixWorld(true);
+ const rInv=new THREE.Matrix4(),rq=new THREE.Quaternion();
+ const upd=()=>{c.root.updateMatrixWorld(true);rInv.copy(c.root.matrixWorld).invert();c.root.getWorldQuaternion(rq).invert();};
+ const P=o=>o.getWorldPosition(new THREE.Vector3()).applyMatrix4(rInv),Q=o=>o.getWorldQuaternion(new THREE.Quaternion()).premultiply(rq);
+ const S=k=>c.bones[k];upd();
+ // hadap: samain arah kiri-kanan pinggul; skala: samain panjang kaki
+ const vs=P(S('LThigh')).sub(P(S('RThigh'))),vt=P(B.thigh_l).sub(P(B.thigh_r));u.rotation.y=Math.atan2(vt.z,vt.x)-Math.atan2(vs.z,vs.x);upd();
+ const leg=(a,b,f)=>a.distanceTo(b)+b.distanceTo(f);
+ const sc=leg(P(S('LThigh')),P(S('LCalf')),P(S('LFoot')))/leg(P(B.thigh_l),P(B.calf_l),P(B.foot_l));u.scale.setScalar(sc);upd();
+ const low=root=>{let m=1e9;const v=new THREE.Vector3();root.traverse(o=>{if(!o.isSkinnedMesh)return;const p=o.geometry.attributes.position;for(let i=0;i<p.count;i+=3){o.getVertexPosition(i,v);v.applyMatrix4(o.matrixWorld).applyMatrix4(rInv);if(v.y<m)m=v.y;}});return m;};
+ const ps0=P(S('Pelvis')),pt=P(B.pelvis);u.position.x+=ps0.x-pt.x;u.position.z+=ps0.z-pt.z;u.position.y+=low(c.model)-low(u);upd(); // telapak disamain (pose asal), bukan mata kaki
+ const map=[],byT={};
+ for(const [sk,tn,skc,tnc] of UBC_MAP){const sb=S(sk),tb=B[tn];if(!sb||!tb)continue;
+  const Ws0=Q(sb),Wt0=Q(tb);if(skc&&S(skc)&&B[tnc]&&!/Foot$/.test(sk)){const ds=P(S(skc)).sub(P(sb)).normalize(),dt=P(B[tnc]).sub(P(tb)).normalize();Wt0.premultiply(new THREE.Quaternion().setFromUnitVectors(dt,ds));}
+  const e={s:sb,t:tb,C:Ws0.clone().invert().multiply(Wt0),q:new THREE.Quaternion(),p:null,p0:Q(tb.parent)};map.push(e);byT[tn]=e;}
+ map.forEach(e=>{e.p=byT[e.t.parent.name]||null;});
+ const pp=B.pelvis.parent;const ppInv=new THREE.Matrix4().copy(rInv).multiply(pp.matrixWorld).invert();
+ const D={l:P(B.foot_l).sub(P(S('LFoot'))),r:P(B.foot_r).sub(P(S('RFoot')))};
+ c.ubc={D,srcFoot:{l:S('LFoot'),r:S('RFoot')},footE:{l:byT.foot_l,r:byT.foot_r},u,B,map,ps:S('Pelvis'),ps0:P(S('Pelvis')),pt:B.pelvis,pt0:P(B.pelvis),ppInv,inv:new THREE.Matrix4(),rq:new THREE.Quaternion(),scale:sc};
+ keep.forEach(([o,p,q,s2])=>{o.position.copy(p);o.quaternion.copy(q);o.scale.copy(s2);});c.mixer.update(0);ubcPose(c);}
+function ubcPose(c){const U=c.ubc;c.root.updateMatrixWorld(true);U.inv.copy(c.root.matrixWorld).invert();c.root.getWorldQuaternion(U.rq).invert();
+ for(const e of U.map){e.s.getWorldQuaternion(_uq).premultiply(U.rq);e.q.copy(_uq).multiply(e.C);_uq2.copy(e.p?e.p.q:e.p0).invert().multiply(e.q);e.t.quaternion.copy(_uq2);}
+ U.ps.getWorldPosition(_uv).applyMatrix4(U.inv).sub(U.ps0).add(U.pt0).applyMatrix4(U.ppInv);U.pt.position.copy(_uv);U.u.updateMatrixWorld(true);ubcIK(c);}
+// kaki: IK 2 tulang biar mata kaki UBC ke titik mata kaki rig sopir (yang udah napak) — beda panjang paha/betis nggak bikin kaki tenggelam/ngambang
+const _kia=new THREE.Vector3(),_kib=new THREE.Vector3(),_kic=new THREE.Vector3(),_kit=new THREE.Vector3(),_kin=new THREE.Vector3(),_ki1=new THREE.Vector3(),_ki2=new THREE.Vector3(),_kiq=new THREE.Quaternion(),_kiq2=new THREE.Quaternion(),_kiq3=new THREE.Quaternion(),_kirq=new THREE.Quaternion();
+function ubcRotW(b,q){b.getWorldQuaternion(_kiq2);b.parent.getWorldQuaternion(_kiq3);b.quaternion.copy(_kiq3.invert().multiply(q).multiply(_kiq2));b.updateMatrixWorld(true);}
+function ubcIK(c){const U=c.ubc,cl=x=>Math.min(1,Math.max(-1,x));c.root.getWorldQuaternion(_kirq);
+ for(const s of['l','r']){const th=U.B['thigh_'+s],ca=U.B['calf_'+s],fo=U.B['foot_'+s];
+  U.srcFoot[s].getWorldPosition(_kit);_kit.add(_kin.copy(U.D[s]).applyQuaternion(_kirq));
+  th.getWorldPosition(_kia);ca.getWorldPosition(_kib);fo.getWorldPosition(_kic);
+  const la=_kia.distanceTo(_kib),lb=_kib.distanceTo(_kic),cur=_kia.distanceTo(_kic),dd=Math.min(Math.max(_kia.distanceTo(_kit),Math.abs(la-lb)+1e-3),la+lb-1e-3);
+  _ki1.subVectors(_kib,_kia);_ki2.subVectors(_kic,_kib);_kin.crossVectors(_ki1,_ki2);
+  if(_kin.lengthSq()>1e-10){_kin.normalize();const aC=Math.acos(cl((la*la+lb*lb-cur*cur)/(2*la*lb))),aN=Math.acos(cl((la*la+lb*lb-dd*dd)/(2*la*lb)));ubcRotW(ca,_kiq.setFromAxisAngle(_kin,aC-aN));}
+  fo.getWorldPosition(_kic);_ki1.subVectors(_kic,_kia).normalize();_ki2.subVectors(_kit,_kia).normalize();ubcRotW(th,_kiq.setFromUnitVectors(_ki1,_ki2));
+  fo.parent.getWorldQuaternion(_kiq3);_kiq2.copy(_kirq).multiply(U.footE[s].q);fo.quaternion.copy(_kiq3.invert().multiply(_kiq2));fo.updateMatrixWorld(true);}}
+function ubcTick(){for(const c of CHL)if(c.ubc)ubcPose(c);}
 
 /* ---------- kata-kata ---------- */
 const LINES={
@@ -679,6 +763,8 @@ const LINES={
 Object.assign(LINES.maya,{'kursi-pantai':['Anginnya sejuk banget 🌴','Babe, sini duduk sebelahku 🏖️'],kerang:['Kerangnya cantik-cantik 🐚'],ombak:['Dengar suara ombaknya, babe 🌊','Lautnya biru banget 💙']});
 Object.assign(LINES.nayla,{istana:['Istana pasirku paling tinggi! 🏰','Alya, ambilin air dong 🪣'],kerang:['Aku dapat kerang pink! 🐚'],ombak:['Ombaknya ngejar kakiku! 🌊'],'kursi-pantai':['Santai dulu ah 😎']});
 Object.assign(LINES.alya,{istana:['Aku bikin parit buat istananya 🏰','Jangan dirusak ombak ya! 😤'],kerang:['Kerangnya buat Mama Maya 🐚'],ombak:['Airnya dingin! 🥶'],'kursi-pantai':['Aku pakai kacamata hitam 😎']});
+LINES.ophelia={sofa:['Babe, nonton apa kita nanti? 🍿','Sofanya empuk banget 😌'],makan:['Makan dulu yuk, babe 🍚'],kulkas:['Ada es krim nggak sih? 🍦'],buku:['Novel ini seru banget 📚'],masak:['Aku bantuin masak ya 🍳'],siram:['Tanamannya seger 🌿'],teras:['Ngopi di teras enak nih ☕'],'jendela-teras':['Cuacanya cerah 🌤️'],kucing:['Mochiii, sini 🐱'],'kursi-pantai':['Berjemur dulu ah 😎'],ombak:['Ombaknya bagus, babe 🌊'],kerang:['Kerang ini buat kamu 🐚'],_:['Hai babe 💕','Rumahnya nyaman ya 🏡']};
+LINES.keira={sofa:['Istirahat bentar abis patroli 😮‍💨'],makan:['Makan dulu, biar kuat jaga 🍚'],kulkas:['Minum dingin dulu 🧃'],buku:['Baca laporan kasus 📁'],masak:['Biar aku yang masak 🍳'],siram:['Tamannya aman terkendali 🌱'],teras:['Pantau situasi dari teras 👮‍♀️'],'jendela-teras':['Semua aman di luar 👀'],kucing:['Mochi, jangan nakal ya 🐱'],'kursi-pantai':['Libur sebentar 🏖️'],ombak:['Jangan berenang terlalu jauh ya 🌊'],kerang:['Barang bukti: kerang 🐚'],_:['Siap, Han 👮‍♀️','Semua aman 👍']};
 Object.assign(LINES.han,{ombak:['🌊 Segarnya angin laut'],'kursi-pantai':['🏖️ Santai dulu']});
 function lineFor(id,sp){const L=LINES[id]||{};const key=sp?(L[sp.id]?sp.id:(sp.id.replace(/\d+$/,''))):'_';return pick(L[key]||L._||['🙂']);}
 
@@ -687,7 +773,10 @@ const DEFS=[
  {id:'han',name:'Han',file:'models/han.glb',anim:'models/anim-han.glb',color:'#2f6fd6',speed:1.2,nat:1.36,rad:.25,kid:false,start:[-2.0,2.9]},
  {id:'maya',name:'Maya',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#e2468a',speed:1.1,nat:1.1,rad:.23,kid:false,start:[3.2,1.0]},
  {id:'nayla',name:'Nayla',file:'models/nayla.glb',anim:'models/anim-kid.glb',color:'#9b4fe0',speed:.95,nat:1.0,rad:.19,kid:true,start:[-2.2,8.4]},
- {id:'alya',name:'Alya',file:'models/alya.glb',anim:'models/anim-kid.glb',color:'#1f9e55',speed:.95,nat:1.0,rad:.19,kid:true,start:[-.6,8.8]}];
+ {id:'alya',name:'Alya',file:'models/alya.glb',anim:'models/anim-kid.glb',color:'#1f9e55',speed:.95,nat:1.0,rad:.19,kid:true,start:[-.6,8.8]},
+ // Ophelia & Keira: model dari web kantor (ubc_woman.glb, Quaternius UBC CC0) yang dibajuin; geraknya ngikut rig Maya (lihat ubcSkin)
+ {id:'ophelia',name:'Ophelia',file:'models/maya.glb',anim:'models/anim-maya.glb',skin:'models/ophelia.glb',look:{hair:0x1b1720,glasses:'square',clip:0xffd23f},color:'#d8343a',speed:1.1,nat:1.1,rad:.23,kid:false,start:[-.9,2.0]},
+ {id:'keira',name:'Keira',file:'models/maya.glb',anim:'models/anim-maya.glb',skin:'models/keira.glb',look:{hair:0x141217,glasses:'roundThick',police:true},color:'#4a4760',speed:1.1,nat:1.1,rad:.23,kid:false,start:[1.5,4.3]}];
 const EM0=.12,EM1=.48; // sama persis kayak web kantor: emissive dari tekstur warna, naik pas malam
 const CH={};const CHL=[];
 let NIGHT=0;
@@ -708,10 +797,12 @@ function loadAnims(f){return ANIMP[f]||(ANIMP[f]=new GLTFLoader().loadAsync(f).t
 function gesture(c,name){const a=c.act[name];if(!a||c.state!=='idle')return;play(c,name,.3);c.gestEnd=performance.now()+a.getClip().duration*1000-400;}
 function measure(c){c.root.updateMatrixWorld(true);const b=c.bones;b.LThigh.getWorldPosition(_w1);b.RThigh.getWorldPosition(_w2);const mid=_w1.clone().add(_w2).multiplyScalar(.5);return mid;}
 async function loadChar(def){const [gl,extra]=await Promise.all([new GLTFLoader().loadAsync(def.file),def.anim?loadAnims(def.anim).catch(e=>{console.warn('gagal muat animasi',def.anim,e);return [];}):[]]);const model=gl.scene;const root=new THREE.Group();root.name=def.id;root.add(model);scene.add(root);
+ if(def.skin){const rp=nearFree(def.start[0],def.start[1],def.rad+.05);if(rp)def.start=rp;}
  const c={...def,root,model,mats:[],bones:{},act:{},cur:'',state:'idle',path:[],spot:null,seat:null,busyUntil:0,userUntil:0,yaw:0,v:0,ikW:0,ik:null,tr:null,next:null,exitVia:null,onArrive:null};
  model.traverse(o=>{const k=o.name.replace(/^Bip0\d/,'').replace(/[ _]/g,'');if(o.isBone||o.type==='Bone'||/^Bip0\d/.test(o.name))c.bones[k]=c.bones[k]||o;
   if(o.isMesh){o.castShadow=true;o.receiveShadow=false;o.frustumCulled=false;const mt=o.material;if(mt){mt.metalness=0;if(mt.map){mt.map.anisotropy=4;mt.emissiveMap=mt.map;mt.emissive.setRGB(1,1,1);mt.emissiveIntensity=EM0;c.mats.push(mt);}}}});
- const clips={};gl.animations.forEach(cl=>clips[cl.name]=cl);extra.forEach(cl=>{if(cl.name!=='Walk'||def.id==='maya'||def.guest)clips[cl.name]=cl;});
+if(def.skin){c.rest=[];model.traverse(o=>c.rest.push([o,o.position.clone(),o.quaternion.clone(),o.scale.clone()]));}
+ const clips={};gl.animations.forEach(cl=>clips[cl.name]=cl);extra.forEach(cl=>{if(cl.name!=='Walk'||def.file==='models/maya.glb')clips[cl.name]=cl;});
  c.mixer=new THREE.AnimationMixer(model);Object.values(clips).forEach(cl=>{const a=c.mixer.clipAction(cl);if(cl.name==='Wave'){a.setLoop(THREE.LoopOnce,1);a.clampWhenFinished=true;}else a.setLoop(THREE.LoopRepeat);c.act[cl.name]=a;});
  // ukur: tinggi pinggul, arah hadap, posisi pinggul pas duduk
  c.act.Idle.reset().play();c.mixer.update(0);const hs=measure(c);c.hipStand=hs.y;
@@ -731,6 +822,7 @@ async function loadChar(def){const [gl,extra]=await Promise.all([new GLTFLoader(
  const lab=new CSS2DObject(wrap);lab.position.set(0,c.headY+.32,0);root.add(lab);c.lab=lab;c.bub=bub;c.tag=tag;
  const pk=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,c.headY+.2,10),new THREE.MeshBasicMaterial({visible:false}));pk.position.y=(c.headY+.2)/2;pk.userData.char=c.id;root.add(pk);c.pick=pk;
  c.mats.forEach(m=>m.emissiveIntensity=EM0+NIGHT*EM1);
+ if(def.skin)await ubcSkin(c,def);
  CH[c.id]=c;CHL.push(c);return c;}
 function say(c,t,ms=4200){c.bub.textContent=t;c.bub.style.display='block';clearTimeout(c._st);c._st=setTimeout(()=>c.bub.style.display='none',ms);}
 function freeSpot(c){if(c.spot&&c.spot.occ===c.id)c.spot.occ=null;c.spot=null;}
@@ -746,7 +838,7 @@ function standUp(c,then){c.gestEnd=0;const sp=c.seat;if(!sp||(c.state!=='sit'&&c
  c.waitUp=null;const P=new THREE.Vector3(sp.ax,0,sp.az);if(c.ik){c.ik.B=[c.ik.T[0].clone(),c.ik.T[1].clone()];c.ik.A=plantedFeet(c,P);}
  c.tr={from:c.root.position.clone(),to:P,t:0,dur:1.0,dir:-1};c.state='up';c.next=then||null;c.exitVia=sp.via?sp.via.slice().reverse():null;c.seat=null;play(c,'Idle',.9);}
 // karakter & kucing lain di sekitar (buat saling menghindar)
-const PRI={han:0,maya:1,nayla:2,alya:3,ophelia:4,keira:5};
+const PRI={han:0,maya:1,ophelia:1.3,keira:1.6,nayla:2,alya:3};
 function agentsFor(c){const out=[];for(const o of CHL){if(o===c||!o.root.visible&&o.state!=='pov')continue;const p=o.root.position;const st=o.state;
   const moving=(st==='walk'&&o.v>.15)||(st==='pov'&&o.v>.1);out.push({x:p.x,z:p.z,rad:o.rad,moving,pri:PRI[o.id],sit:st==='sit'||st==='down'||st==='up',yaw:o.yaw,ref:o});}
  if(c!==CAT){const p=CAT.g.position;out.push({x:p.x,z:p.z,rad:.13,moving:CAT.state==='walk'&&CAT.v>.08,pri:9,sit:false,yaw:CAT.yaw,ref:CAT});}return out;}
@@ -892,9 +984,9 @@ function view(k,instant){follow=null;markWho();const [t,c]=VIEWS[k];const K=aspe
  document.querySelectorAll('#bar button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
  if(instant){controls.target.copy(tv);camera.position.copy(cv);controls.update();return;}fly={t0:performance.now(),ft:controls.target.clone(),fc:camera.position.clone(),tv,cv};}
 function selectChar(id,greet){const c=CH[id];if(!c)return;
- if(POV.on){if(greet&&id!=='han'){const g={maya:'Iya, babe? 😊',nayla:'Haii, Papa! 👋',alya:'Papa! ✌️'};say(c,g[id]);gesture(c,'Wave');}return;}follow=id;fly=null;markWho();document.querySelectorAll('#bar button[data-v]').forEach(b=>b.classList.remove('on'));
+ if(POV.on){if(greet&&id!=='han'){const g={maya:'Iya, babe? 😊',ophelia:'Hai babe 💕',keira:'Siap, Han 👮‍♀️',nayla:'Haii, Papa! 👋',alya:'Papa! ✌️'};say(c,g[id]);gesture(c,'Wave');}return;}follow=id;fly=null;markWho();document.querySelectorAll('#bar button[data-v]').forEach(b=>b.classList.remove('on'));
  const p=c.root.position,d=camera.position.clone().sub(controls.target);const L=d.length();if(L>9)d.multiplyScalar(7.5*Math.min(aspectK(),1.6)/L);controls.target.set(p.x,.9,p.z);camera.position.copy(controls.target).add(d);
- if(greet){const g={han:'Han di sini 💪',maya:'Iya, babe? 😊',nayla:'Haii! Aku Nayla 👋',alya:'Haii! Aku Alya ✌️'};say(c,g[id]);gesture(c,'Wave');}}
+ if(greet){const g={han:'Han di sini 💪',maya:'Iya, babe? 😊',ophelia:'Hai, aku Ophelia 💕',keira:'Keira, siap jaga 👮‍♀️',nayla:'Haii! Aku Nayla 👋',alya:'Haii! Aku Alya ✌️'};say(c,g[id]);gesture(c,'Wave');}}
 function markWho(){document.querySelectorAll('#who button').forEach(b=>b.classList.toggle('on',b.dataset.id===follow));}
 const WHO=$('who');DEFS.forEach(d=>{const b=document.createElement('button');b.dataset.id=d.id;b.innerHTML=`<span class="dot" style="background:${d.color}"></span>${d.name}`;b.onclick=()=>{if(follow===d.id){follow=null;markWho();}else selectChar(d.id,true);};WHO.appendChild(b);});
 document.querySelectorAll('#bar button[data-v]').forEach(b=>b.onclick=()=>view(b.dataset.v));
@@ -1221,13 +1313,6 @@ function thDoorSync(){const want=!!TH.unlocked;if(want===BIOS.doorOpen)return;
 function thActSync(){if(!TH.open)return;document.querySelectorAll('#thAct button').forEach(b=>{const id=b.dataset.act;if(TH_NAMES[id])b.hidden=!CH[id];});}
 
 
-// tamu bioskop: Ophelia & Keira (model sama kayak web kantor: badan Maya, baju & rambut beda warna), sembunyi sampai dipanggil
-const GUESTS=[{id:'ophelia',name:'Ophelia',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#c8283a',speed:1.1,nat:1.1,rad:.23,kid:false,start:GUEST_IN,guest:true,body:'models/ophelia-body.webp'},
- {id:'keira',name:'Keira',file:'models/maya.glb',anim:'models/anim-maya.glb',color:'#3b4a7a',speed:1.1,nat:1.1,rad:.23,kid:false,start:GUEST_IN,guest:true,body:'models/keira-body.webp'}];
-LINES.ophelia={_:['Filmnya seru ya, babe 🍿','Hehe, nonton bareng gini enak 💕']};LINES.keira={_:['Popcornnya bagi dong 🍿','Adegan ini keren 😎']};
-async function loadGuest(def){const tl=new THREE.TextureLoader(),ld=u=>tl.loadAsync(u).then(t=>{t.flipY=false;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t;});
- const [c,bt,ht,hr]=await Promise.all([loadChar(def),ld(def.body),ld('models/kp-head.webp'),ld('models/kp-hair.webp')]);c.root.visible=false;c.away=true;
- c.root.traverse(o=>{if(!o.isMesh)return;(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{const t=/body/.test(m.name)?bt:/head/.test(m.name)?ht:/opacity/.test(m.name)?hr:null;if(t){m.map=t;if(m.emissiveMap)m.emissiveMap=t;m.needsUpdate=true;}});});return c;}
 const clock=new THREE.Clock();let chatT=performance.now()+8000,clkT=0;
 let SIMPAUSE=false;
 function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
@@ -1237,7 +1322,7 @@ function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
  if(!SIMPAUSE)updCat(dt,now);updEnv(dt);if(now>clkT){clkT=now+1000;updClock();}
  if(MARK.material.opacity>0)MARK.material.opacity=Math.max(0,MARK.material.opacity-dt*.6);
  if(now>chatT&&CHL.length){chatT=now+R(11000,19000);const c=pick(CHL.filter(c=>c.id!=='han'&&c.root.visible));if(c&&c.state!=='walk')say(c,lineFor(c.id,c.spot));}
- thTick(dt);thDoorSync();thActSync();updBeach(now/1000);if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
+ thTick(dt);thDoorSync();thActSync();updBeach(now/1000);ubcTick();if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
 
 updEnv(0,true);updClock();
 view('all',true);
@@ -1246,10 +1331,10 @@ setTimeout(()=>{$('load').style.opacity=0;setTimeout(()=>$('load').remove(),500)
 window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,POV,enterPov,exitPov,stepPov,povMove,povCam,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;},TH,BIOS,thDoorSync,thAccess,thOpen,inCin,thCall,thEnd,thSwap,thHanSit,thKiss,thPrivToggle,thSlowToggle,thRandPose,thPlayUrl,thPlayIdx,thActUI};
 CATP.then(()=>{window.__R.catReady=true;});
 let done=0;
-Promise.all(DEFS.map(d=>loadChar(d).then(c=>{done++;status(`Memuat penghuni rumah ${done}/4…`,1500);return c;}).catch(e=>{console.warn('gagal muat',d.file,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.ready=true;status('🏡 Selamat datang di rumah!',2500);
+Promise.all(DEFS.map(d=>loadChar(d).then(c=>{done++;status(`Memuat penghuni rumah ${done}/${DEFS.length}…`,1500);return c;}).catch(e=>{console.warn('gagal muat',d.file,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.ready=true;status('🏡 Selamat datang di rumah!',2500);
  // mulai: Maya di dapur, Han di sofa, Nayla & Alya main di taman
  const s=id=>SP.find(x=>x.id===id);if(CH.maya)goSpot(CH.maya,s('masak'));if(CH.han){goSpot(CH.han,s('sofa1'));}if(CH.nayla)goSpot(CH.nayla,s('ayunan'));if(CH.alya)goSpot(CH.alya,s('main1'));
- Promise.all(GUESTS.map(d=>loadGuest(d).catch(e=>{console.warn('gagal muat tamu',d.id,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.guestsReady=true;});});
+ window.__R.guestsReady=true;});
 </script>
 </body>
 </html>

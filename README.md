@@ -13,7 +13,9 @@ Rumah 3D (three.js) dengan teras, ruang tamu, dapur, tiga kamar (Han, Maya, Nayl
 - **🏖️ Pantai**: lewat dua gapura "Ke Pantai" di pagar belakang (kiri & kanan rumah). Pasir, pasir basah, laut dengan ombak bergerak ke arah pantai (shader gelombang + buih di puncak ombak pecah), air naik-turun di bibir pantai, pohon kelapa, dua payung, empat kursi pantai (tinggi dudukan sama kayak kursi teras, jadi duduk proper & kaki napak), istana pasir, kerang, bintang laut, batu karang, tali pembatas, dan lampu pantai yang nyala pas malam. Karakter & Mochi jalan ke sana pakai A* (siang aja; malam mereka di dalam). Laut = rintangan, jadi Han di mode POV berhenti di bibir air. Tombol 🏖️ Pantai di bar bawah buat lihat pantainya.
 - **🎮 POV Han**: tombol pertama di bar bawah. Jalan sendiri jadi Han, dilihat dari mata Han (atau 🧍 dari belakang). PC: WASD jalan, ←→ / Q E / drag mouse lihat sekeliling, Shift lari, V ganti mata/belakang, Esc keluar. HP: stick kiri jalan, geser layar lihat sekeliling, tombol 👁️ / 🏃 / ✕ di kanan bawah. Tabrakan pakai peta jarak bebas yang sama dengan A* plus radius badan orang lain & Mochi (geser per 3 cm, meluncur di sepanjang dinding), jadi nggak nembus apa pun. Kalau Han lagi duduk, dia berdiri dulu. Tap nama orang lain waktu POV = dia nyapa.
 
-Karakter (Maya, Han, Nayla, Alya) memakai label nama CSS2D. Maya memakai perbaikan emissive yang sama dengan web kantor (emissiveMap = tekstur warna, intensitas 0.12 siang, naik 0.48 waktu malam).
+- **Ophelia & Keira** (dari web kantor): model `ubc_woman.glb` yang sama dengan web kantor, dikasih baju per area tulang (`models/ophelia.glb`, `models/keira.glb`): Ophelia kemeja merah + jeans, kacamata kotak, jepit rambut kuning; Keira seragam gelap, kacamata bulat tebal, lencana polisi. Geraknya pakai rig Maya yang disembunyiin (jalan A*, duduk, kaki napak, lambai sama persis), lalu tiap frame arah tiap ruas tulang di-retarget ke tulang UBC, plus IK 2 tulang di kaki biar telapak tetap napak. Mereka ikut rutinitas orang dewasa, dan cuma masuk bioskop kalau dipanggil dari panel (💗 Panggil Ophelia / 💗 Panggil Keira).
+
+Karakter (Maya, Han, Nayla, Alya, Ophelia, Keira) memakai label nama CSS2D. Maya memakai perbaikan emissive yang sama dengan web kantor (emissiveMap = tekstur warna, intensitas 0.12 siang, naik 0.48 waktu malam).
 
 ## Kredit
 
@@ -21,8 +23,9 @@ Karakter (Maya, Han, Nayla, Alya) memakai label nama CSS2D. Maya memakai perbaik
 - **Han**: avatar "Sports_Male_04"; lengan, bahu, dada, leher, dan kaki dibikin lebih kekar.
 - **Nayla**: "Female_Child_01" · **Alya**: "Female_Child_02".
 - Animasi diam, jalan, dan duduk di-retarget ke tiap karakter.
+- **Ophelia & Keira**: model `ubc_woman.glb` dari web kantor = "Universal Base Characters" karya [Quaternius](https://quaternius.com/packs/universalbasecharacters.html), lisensi [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Tekstur dikasih baju buat rumah; animasinya dari Rocketbox (di-retarget).
 
-Semua karakter dan animasi dari [Microsoft Rocketbox Avatar Library](https://github.com/microsoft/Microsoft-Rocketbox), © 2020 Microsoft, lisensi MIT (salinan: `models/LICENSE-Microsoft-Rocketbox.md`).
+Karakter lainnya dan semua animasi dari [Microsoft Rocketbox Avatar Library](https://github.com/microsoft/Microsoft-Rocketbox), © 2020 Microsoft, lisensi MIT (salinan: `models/LICENSE-Microsoft-Rocketbox.md`).
 
 Kucing Mochi: berdasarkan ["animated bengal cat"](https://sketchfab.com/3d-models/animated-bengal-cat-30444a1c97e9411693023c75403b38d8) karya [dinomaster](https://sketchfab.com/dinomaster), lisensi [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/). Bulu diwarnai ulang jadi oranye dan animasinya dirapikan (`models/mochi.glb`).
 
@@ -32,5 +35,5 @@ Rumah, perabot, langit, dan awan dibikin langsung pakai kode. Mesin 3D: [three.j
 - Pintu bioskop dikunci pass code (sama kayak web kantor). Tombol **🔒 Kunci** buat ngunci lagi.
 - **📂 Putar dari folder komputer**: pilih folder video di PC/HP. Atau taruh file di `theater/` lalu jalankan `python3 tools/theater-list.py`.
 - **🔗 Tempel link video**: link langsung ke file .mp4/.webm (link YouTube/TikTok/IG nggak bisa).
-- **💞 Interaksi**: Panggil Maya / Ophelia / Keira (Ophelia & Keira datang lewat jalur samping, pulang lagi pas 🚶 Selesai), 🔄 Tukar partner utama, 💺 Han duduk di sebelah, 🔓 Mode privat (bioskop berdua, Nayla & Alya nggak boleh masuk), 🐢 Slow-mo (film & gerakan 0,5×), 🎲 Pose acak, 💋 Ciuman singkat.
+- **💞 Interaksi**: Panggil Maya / Ophelia / Keira (mereka jalan sendiri dari mana pun di rumah ke bioskop, balik ke kegiatan masing-masing pas 🚶 Selesai), 🔄 Tukar partner utama, 💺 Han duduk di sebelah, 🔓 Mode privat (bioskop berdua, Nayla & Alya nggak boleh masuk), 🐢 Slow-mo (film & gerakan 0,5×), 🎲 Pose acak, 💋 Ciuman singkat.
 - Semua konten rating umum. Nggak ada gerbang 18+.
