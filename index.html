@@ -83,6 +83,46 @@ body.pov #status{top:auto;bottom:34%}
  #creditline,body.touch #creditline{top:84px}
  body.pov #creditline{top:48px}
 }
+/* ---------- 🎬 Bioskop ---------- */
+.thpanel{display:none;position:fixed;right:12px;top:12px;z-index:25;width:min(330px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;background:rgba(27,18,38,.94);color:#fff;border:2px solid #b3122e;border-radius:16px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.thpanel.on{display:block}
+.thpanel .small{color:#e8d6e8}.thpanel .small b{color:#ffd2e4}.thpanel .sec{color:#ffb3cf;margin-top:8px}
+.thh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.thh b{color:#ffd2e4;font-size:14px}
+.thh button{border:none;background:none;color:#ffd2e4;font-size:16px;cursor:pointer}
+.throw{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+#thCode{flex:1;min-width:0;border-radius:10px;border:2px solid #ff9cc7;padding:7px 10px;font:inherit;font-size:16px;letter-spacing:4px;background:#fff;color:#5a3a52}
+.thb{border:2px solid #ff9cc7;background:#3a1f3c;color:#fff;font:inherit;font-size:12px;font-weight:800;border-radius:10px;padding:6px 9px;cursor:pointer}
+.thb:hover{background:#5a2a52}.thb.on{border-color:#ffe28a;background:#5a2a52;color:#ffe28a}.thb.dim{opacity:.5}.thpick{display:inline-block}
+.therr{color:#ff9c9c;font-size:12px;font-weight:700;margin-top:6px;min-height:14px}
+.thnow{font-weight:800;font-size:12.5px;color:#ffe28a;margin-bottom:6px;word-break:break-word}
+.thctl{display:flex;gap:5px;flex-wrap:wrap}
+#thSeek{width:100%;margin-top:8px;accent-color:#f2559a}#thVol{width:80px;vertical-align:middle;accent-color:#f2559a}
+.thtime{display:flex;justify-content:space-between;align-items:center}
+.thlist{display:flex;flex-direction:column;gap:4px;max-height:190px;overflow:auto;margin-top:4px}
+.thlist button{text-align:left;border:1.5px solid #5a3a5e;background:#2a1a30;color:#fff;font:inherit;font-size:12px;border-radius:9px;padding:5px 8px;cursor:pointer;word-break:break-word}
+.thlist button.on{border-color:#ffe28a;background:#5a2a52}
+#thVideo{position:fixed;left:0;bottom:0;width:2px;height:2px;opacity:.01;pointer-events:none;z-index:-1;background:#000}
+#thVideo.full{left:50%;top:50%;transform:translate(-50%,-50%);width:min(100vw,calc(100vh*9/16));height:min(100vh,calc(100vw*16/9));object-fit:contain;background:#000;opacity:1;pointer-events:auto;z-index:99}
+.thpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.thpad button{min-height:44px;border-radius:12px;border:2px solid #ff9cc7;background:#3a1f3c;color:#fff;font:inherit;font-size:18px;font-weight:900;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.thpad button.wide{grid-column:span 1;font-size:13px}
+.thpad button.ok{background:linear-gradient(180deg,#6ad39a,#3cae6e);border-color:#fff}
+.thpad button.del{background:#5a2a52;font-size:13px}
+@media(max-width:900px){
+ .thpanel{right:8px;top:8px;left:8px;width:auto;max-height:min(62vh,520px);padding:10px}
+ .thctl .thb{min-height:40px;padding:8px 10px;font-size:13px}
+ #thCode{font-size:18px;min-height:44px}
+}
+#thToast{position:fixed;left:50%;top:64px;transform:translateX(-50%);z-index:26;background:rgba(27,18,38,.94);color:#ffd2e4;font-weight:800;font-size:13px;padding:8px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s;max-width:min(90vw,460px);text-align:center}
+#thToast.on{opacity:1}
+#mobPlay{position:fixed;right:10px;bottom:132px;z-index:9;font:inherit;font-size:14px;font-weight:900;border-radius:14px;border:2px solid #fff;background:linear-gradient(180deg,#f2559a,#b3122e);color:#fff;padding:9px 14px;box-shadow:0 3px 10px rgba(0,0,0,.25);cursor:pointer}
+#mobPlay[hidden]{display:none}
+#ageGate{display:none;position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);align-items:center;justify-content:center}
+#ageGate.on{display:flex}
+.agebox{background:#1b1226;color:#fff;border:2px solid #b3122e;border-radius:16px;padding:16px;width:min(320px,calc(100% - 32px));text-align:center}
+.agebox .small{color:#e8d6e8;font-size:13px}
+.agetitle{font-weight:900;font-size:18px;color:#ffd2e4;margin-bottom:6px}
+#bar #bBios{background:linear-gradient(180deg,#f2559a,#b3122e);color:#fff}
 </style>
 </head>
 <body>
@@ -103,6 +143,7 @@ body.pov #status{top:auto;bottom:34%}
  <button data-v="kamar">🛏️ Kamar</button>
  <button data-v="taman">🌳 Taman</button>
  <button data-v="pantai">🏖️ Pantai</button>
+ <button id="bBios" title="Bioskop: masukin kode dulu, terus Han jalan lewat lorong ke bioskop">🎬 Bioskop</button>
  <button data-v="langit">🌤️ Langit</button>
  <span class="sep"></span>
  <button id="bTime" class="on">🕐 Jam asli ✓</button>
@@ -113,6 +154,30 @@ body.pov #status{top:auto;bottom:34%}
 <div id="povHint"><b>🎮 POV Han</b> <span class="kbd">· <span class="kb">W</span><span class="kb">A</span><span class="kb">S</span><span class="kb">D</span> jalan · <span class="kb">←</span><span class="kb">→</span> / <span class="kb">Q</span><span class="kb">E</span> / drag mouse: lihat sekeliling · <span class="kb">Shift</span> lari · <span class="kb">V</span> mata Han / belakang · <span class="kb">Esc</span> keluar</span><span class="tch">· stick kiri: jalan · geser layar: lihat sekeliling</span></div>
 <div id="povPad"><div id="povStick"><div id="povKnob"></div></div>
  <div id="povBtns"><button type="button" data-a="fp" title="Ganti: dari mata Han / dari belakang Han (V)">👁️ Mata</button><button type="button" data-a="run" title="Lari (Shift)">🏃 Lari</button><button type="button" data-a="exit" class="x" title="Keluar POV (Esc)">✕ Keluar POV</button></div></div>
+    <div class="thpanel" id="thPanel">
+     <div class="thh"><b>🎬 Bioskop Han &amp; Maya</b><button id="thX" title="Tutup (Esc)">✕</button></div>
+     <div id="thLock"><div class="small">🔒 Bioskop dikunci. Masukkan <b>kode kunci</b> (tombol angka di bawah — gak perlu keyboard HP).</div>
+      <div class="throw"><input id="thCode" type="password" inputmode="numeric" autocomplete="off" maxlength="16" placeholder="Kode kunci" readonly><button class="thb" id="thGo">🔓 Buka</button></div>
+      <div class="thpad" id="thPad" aria-label="Papan angka kode">
+        <button type="button" data-n="1">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button>
+        <button type="button" data-n="4">4</button><button type="button" data-n="5">5</button><button type="button" data-n="6">6</button>
+        <button type="button" data-n="7">7</button><button type="button" data-n="8">8</button><button type="button" data-n="9">9</button>
+        <button type="button" class="del" data-n="del">⌫ Hapus</button><button type="button" data-n="0">0</button><button type="button" class="ok" data-n="ok">🔓 Buka</button>
+      </div>
+      <div class="therr" id="thErr"></div></div>
+     <div id="thMain" hidden>
+      <div class="thnow" id="thNow">Pilih film dari daftar 👇</div>
+      <div class="thctl"><button class="thb" id="thPrev" title="Sebelumnya">⏮</button><button class="thb" id="thPlay" title="Putar / jeda (Spasi)">▶️</button><button class="thb" id="thNext" title="Berikutnya">⏭</button><button class="thb" id="thStop" title="Stop">⏹</button><button class="thb" id="thFull" title="Layar penuh">⛶ Layar penuh</button><button class="thb on" id="thAutoNext" title="Auto play next: lanjut film berikutnya otomatis">⏭ Auto ON</button><button class="thb" id="thScrLock" title="Kunci kamera lurus di tengah layar bioskop (nonton lurus, gak miring)">🎯 Kunci kamera ke layar</button></div>
+      <input type="range" id="thSeek" min="0" max="1000" value="0"><div class="small thtime"><span id="thT">0:00 / 0:00</span><span><button class="thb" id="thMute" title="Mute / unmute video">🔊</button> <input type="range" id="thVol" min="0" max="100" value="90"></span></div>
+      <div class="sec">🎞️ Folder theater/ <span id="thCount"></span></div><div class="thlist" id="thList"><div class="small">Memuat daftar…</div></div>
+      <div class="throw"><label class="thb thpick">📂 Putar dari folder komputer<input type="file" id="thPick" accept="video/*" webkitdirectory multiple hidden></label><button class="thb" id="thLockBtn" title="Kunci lagi">🔒 Kunci</button></div>
+      <div class="sec">💞 Interaksi Maya / Ophelia / Keira</div><div class="thctl" id="thAct"></div><div class="small" id="thActSt"></div>
+      <div class="small">Tips: lorong ke bioskop ada di ujung kanan teras. Pakai <b>🎮 POV Han</b> buat jalan sendiri. Di POV tekan <b>T</b> (PC) atau tombol <b>🎬</b> (HP) buat buka panel. <b>Spasi</b> = putar/jeda, <b>Esc</b> = tutup panel.</div></div>
+    </div>
+<video id="thVideo" playsinline preload="metadata"></video>
+    <button type="button" id="mobPlay" hidden title="Buka panel bioskop">🎬</button>
+    <div id="thToast"></div>
+    <div id="ageGate"><div class="agebox"><div class="agetitle">🔞 Konten Dewasa 18+</div><div class="small">Bioskop ini khusus pengguna 18 tahun ke atas. Kamu yakin udah 18+?</div><div class="thctl" style="justify-content:center;margin-top:10px"><button class="thb on" id="ageYes">Ya, saya 18+</button><button class="thb" id="ageNo">Bukan</button></div></div></div>
 <div id="credit">
  <h3>Kredit</h3>
  <p><b>Maya</b> — modifikasi warna/tekstur dari avatar "Female_Adult_03", <a href="https://github.com/microsoft/Microsoft-Rocketbox" target="_blank" rel="noopener">Microsoft Rocketbox Avatar Library</a> (model yang sama dengan web kantor).</p>
@@ -246,7 +311,7 @@ function fenceLine(x1,z1,x2,z2,gap){const gaps=gap==null?[]:[].concat(gap).sort(
  const segs=[];{let a=x1;for(const g of gaps){segs.push([a,g-.8]);a=g+.8;}segs.push([a,x2]);}
  if(gap){segs.forEach(([a,b])=>{const c=(a+b)/2,w=Math.abs(b-a);[.35,.75].forEach(y=>box(w,.07,.04,FENCE,c,y,z1));});}
  else{const g=grp((x1+x2)/2,(z1+z2)/2,ry);[.35,.75].forEach(y=>box(.04,.07,L,FENCE,0,y,0,g));}}
-fenceLine(-9,11,9,11,-1);fenceLine(-9,-6.5,9,-6.5,[-7.5,7.5]);fenceLine(-9,-6.5,-9,11);fenceLine(9,-6.5,9,11); // pagar belakang punya dua pintu ke pantai
+fenceLine(-9,11,9,11,-1);fenceLine(-9,-6.5,9,-6.5,[-7.5,7.5]);fenceLine(-9,-6.5,-9,11);fenceLine(9,-6.5,9,4.75);fenceLine(9,6.35,9,11); // pagar belakang punya dua pintu ke pantai
 for(let z=6.9;z<11;z+=.6)cyl(.26,.28,.03,'#cfc6b4',-1+((z*7)%1-.5)*.12,-.01,z,null,10);
 // kotak surat
 box(.06,1,.06,'#6b4f3a',.3,0,11.3);box(.3,.22,.4,'#d94f4f',.3,1,11.3);
@@ -465,19 +530,74 @@ function roomLabel(t,x,z){const d=document.createElement('div');d.className='roo
 const ROOMLABELS=[roomLabel('Ruang Tamu',-1.9,3.4),roomLabel('Dapur',4.6,.6),roomLabel('Kamar Han',-4.2,-1.0),roomLabel('Kamar Maya',0,-1.0),roomLabel('Kamar Nayla & Alya',4.0,-1.0),roomLabel('Teras',-2.3,6.0),roomLabel('Taman',2,9.6),roomLabel('Pantai',-.9,-10.6)];
 
 /* ---------- navigasi: grid 10 cm + peta jarak bebas (clearance) + A* ---------- */
+const HP=Math.PI/2;
+/* ---------- 🎬 BIOSKOP + LORONG PENGHUBUNG 1 lantai (diambil dari web kantor: layar portrait 9:16, gorden, panggung, booth proyektor, konsol kunci 🔐, lampu dinding, kasur besar di lorong tengah, neon RGB) ---------- */
+const CINR=[12.06,-2.44,23.94,10.44],CORR=[3.5,4.81,12.06,6.29],CIN_H=5.2,COR_H=2.7;
+const BIOS={wallMats:[],roof:new THREE.Group(),rgb:[],seats:{},bedSeats:[],screen:null,console:null,bed:null,tap:[]};scene.add(BIOS.roof);BIOS.roof.visible=false;
+const inCin=(x,z)=>x>CINR[0]&&x<CINR[2]&&z>CINR[1]&&z<CINR[3];
+function bwMat(c,r=.9){const m=new THREE.MeshStandardMaterial({color:c,roughness:r,clippingPlanes:[]});BIOS.wallMats.push(m);return m;}
+const BW=bwMat('#17121d'),CW=bwMat('#efe4d2'),BWX=bwMat('#2b2233');
+function bwall(ax,a0,a1,c,h,m,holes=[],lint=2.25){ // ax 'x' = dinding sejajar sumbu x di z=c, 'z' = sejajar sumbu z di x=c
+ const segs=[];let s=a0;[...holes].sort((p,q)=>p[0]-q[0]).forEach(([h0,h1])=>{if(h0>s)segs.push([s,h0]);s=h1;});if(a1>s)segs.push([s,a1]);
+ const put=(u0,u1,y0,y1)=>{const L=u1-u0,mid=(u0+u1)/2;const b=ax==='x'?box(L,y1-y0,.12,m,mid,y0,c):box(.12,y1-y0,L,m,c,y0,mid);b.userData.bwall=true;return b;};
+ segs.forEach(([u0,u1])=>put(u0,u1,0,h));holes.forEach(([h0,h1])=>{put(h0,h1,lint,h).userData.noNav=true;});}
+// lantai karpet bioskop + lantai lorong
+plane(11.88,12.88,'#2a1830',18,.013,4);plane(8.56,1.48,'#cdb38f',7.78,.013,5.55);
+// dinding bioskop (hitam) — pintu masuk dari lorong di dinding barat
+bwall('x',11.94,24.06,-2.5,CIN_H,BW);bwall('x',11.94,24.06,10.5,CIN_H,BW);bwall('z',-2.5,10.5,24,CIN_H,BW);bwall('z',-2.5,10.5,12,CIN_H,BW,[[4.81,6.29]],2.4);
+// lorong 1 lantai: masuk dari ujung kanan teras, ada celah lewat di jalur samping rumah
+bwall('x',3.5,12,4.75,COR_H,CW,[[6.95,8.25]]);bwall('x',3.5,12,6.35,COR_H,CW,[[6.95,8.25]]);
+{const r1=box(12.4,.16,13.24,'#211a28',18,CIN_H,4);const r2=box(8.7,.1,1.86,'#8a5a3b',7.75,COR_H,5.55);[r1,r2].forEach(r=>{r.userData.noNav=true;BIOS.roof.add(r);});}
+// papan nama di luar gedung
+{const t=ctex(512,128,(g,w,h)=>{g.fillStyle='#1b1226';g.fillRect(0,0,w,h);g.strokeStyle='#ff7fb0';g.lineWidth=8;g.strokeRect(6,6,w-12,h-12);g.fillStyle='#ffd2e4';g.font='bold 64px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('🎬 BIOSKOP',w/2,h/2);});
+ const s1=new THREE.Mesh(new THREE.PlaneGeometry(4,1),new THREE.MeshBasicMaterial({map:t}));s1.position.set(18,4.2,10.58);scene.add(s1);
+ const s2=new THREE.Mesh(new THREE.PlaneGeometry(1.6,.4),new THREE.MeshBasicMaterial({map:t}));s2.position.set(3.44,2.3,5.55);s2.rotation.y=-HP;scene.add(s2);}
+// layar portrait 9:16 + dinding layar hitam + gorden + valance + panggung kecil
+box(4.6,5.0,.06,'#050407',18,.05,-2.4);
+{const g=new THREE.PlaneGeometry(2.5,4.44);const m=new THREE.MeshBasicMaterial({color:'#ffffff'});const sc=new THREE.Mesh(g,m);sc.position.set(18,.42+2.22,-2.35);scene.add(sc);BIOS.screen=sc;BIOS.tap.push(sc);sc.userData.thScreen=true;}
+[-1,1].forEach(s=>{for(let i=0;i<5;i++)box(.2,4.9,.14,i%2?'#8e1730':'#a81d3a',18+s*(1.45+i*.18),.05,-2.28+(i%2)*.05);});
+box(4.9,.5,.2,'#6e1226',18,4.62,-2.25);
+box(5.2,.3,1.0,'#3a2430',18,0,-1.85);
+// booth proyektor di dinding belakang + sorot cahaya
+{box(1.8,.9,.9,'#241c2c',18,3.7,9.95);const lens=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.12,16),new THREE.MeshBasicMaterial({color:'#fff6d8'}));lens.rotation.x=HP;lens.position.set(18,4.1,9.46);scene.add(lens);
+ const bm=new THREE.MeshBasicMaterial({color:'#fff3cf',transparent:true,opacity:.07,depthWrite:false,side:THREE.DoubleSide});const L=12.0;
+ const beam=new THREE.Mesh(new THREE.ConeGeometry(1.6,L,24,1,true),bm);beam.rotation.x=-HP;beam.position.set(18,3.4,9.4-L/2);beam.visible=false;beam.userData.noNav=true;scene.add(beam);BIOS.beam=beam;}
+// konsol kunci 🔐 di ujung lorong dekat pintu bioskop
+{box(.42,1.0,.26,'#2a2230',11.3,0,4.95);const t=ctex(256,192,(g,w,h)=>{g.fillStyle='#1b1226';g.fillRect(0,0,w,h);g.fillStyle='#ffd2e4';g.font='bold 54px sans-serif';g.textAlign='center';g.fillText('🔐',w/2,80);g.font='bold 30px sans-serif';g.fillText('KODE BIOSKOP',w/2,140);});
+ const p=new THREE.Mesh(new THREE.PlaneGeometry(.36,.27),new THREE.MeshBasicMaterial({map:t}));p.position.set(11.3,1.12,5.09);p.rotation.x=-.5;scene.add(p);BIOS.console=p;BIOS.tap.push(p);p.userData.thConsole=true;}
+// lampu dinding (temaram, selalu nyala)
+{const lm=new THREE.MeshBasicMaterial({color:'#ffcf8a'});[[12.08,1.2,HP],[12.08,8.6,HP],[23.92,1.2,-HP],[23.92,4.6,-HP],[23.92,8.6,-HP]].forEach(([x,z,r])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(.3,.22,.08),lm);m.position.set(x,2.7,z);m.rotation.y=r;scene.add(m);});
+ [[5.2,5.55],[9.6,5.55]].forEach(([x,z])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(.5,.05,.3),lm);m.position.set(x,COR_H-.05,z);BIOS.roof.add(m);});}
+// neon RGB di 4 sudut + strip neon di dinding panjang (warna muter)
+{[[12.25,-2.25],[23.75,-2.25],[12.25,10.25],[23.75,10.25]].forEach(([x,z],i)=>{const m=new THREE.MeshBasicMaterial({color:'#ff3fa0'});const n=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,4.6,8),m);n.position.set(x,2.5,z);n.userData.noNav=true;scene.add(n);BIOS.rgb.push({m,ph:i*.25});});
+ [12.09,23.91].forEach((x,i)=>{const m=new THREE.MeshBasicMaterial({color:'#7f5cff'});const n=new THREE.Mesh(new THREE.BoxGeometry(.03,.05,12.4),m);n.position.set(x,4.3,4);scene.add(n);BIOS.rgb.push({m,ph:.5+i*.25});});
+ BIOS.light=new THREE.PointLight('#ff6fb5',4,16,1.6);BIOS.light.position.set(18,4.2,4);scene.add(BIOS.light);
+ BIOS.slight=new THREE.PointLight('#cfd8ff',2.2,9,1.6);BIOS.slight.position.set(18,2.6,-1.0);scene.add(BIOS.slight);}
+// kursi bioskop merah: 2 blok × 4 baris (A–D), lorong tengah buat kasur
+const CIN_X=[13.9,14.7,15.5,16.3,19.7,20.5,21.3,22.1],CIN_Z={A:2.6,B:4.1,C:5.6,D:7.1},CIN_WHO=['han','maya','ophelia','keira'];
+function cinChair(x,z){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=Math.PI;scene.add(g);
+ const red='#8e1b2b',dk='#2a1418';const add=(w,h,d,c,px,py,pz)=>{const m=box(w,h,d,c,0,0,0);g.add(m);m.position.set(px,py+h/2,pz);return m;};
+ add(.5,.33,.42,dk,0,0,0);add(.56,.12,.5,red,0,.33,0);add(.56,.66,.1,red,0,.33,-.25);[-1,1].forEach(s=>add(.06,.26,.48,'#3a1a22',s*.31,.33,0));return g;}
+Object.entries(CIN_Z).forEach(([r,z])=>CIN_X.forEach(x=>cinChair(x,z)));
+// kasur besar di lorong tengah (kaki kasur ke arah layar): rangka, kasur, selimut lipat, 2 bantal besar, headboard
+{const bx=18,bz=5.8;box(2.3,.28,3.1,'#4a2e22',bx,0,bz);box(2.2,.24,3.0,'#f1e7ef',bx,.28,bz);box(2.2,.07,.7,'#b0306a',bx,.52,bz+.35);
+ [-.5,.5].forEach(s=>box(.9,.2,.45,'#fff4fa',bx+s,.52,bz+1.2));box(2.4,1.25,.14,'#5a3428',bx,0,bz+1.6);}
+// pintu bioskop: tertutup (jadi rintangan) selama kode belum dibuka; kebuka otomatis habis kode benar
+{const d=box(.1,2.36,1.46,'#3a1f3c',12,0,5.55);d.userData.thDoor=true;BIOS.door=d;BIOS.doorOpen=false;
+ const kn=box(.05,.05,.05,'#ffd27a',11.93,1.05,5.05);kn.userData.noNav=true;d.add(kn);kn.position.set(-.07,-.13,-.5);}
 // rintangan diambil otomatis dari semua benda di scene (dinding, furnitur, pagar, pohon, semak), jadi nggak ada yang kelewat
-const NAV={x0:-11.6,z0:-20.4,x1:11.6,z1:11.6,res:.1,cap:.7};NAV.nx=Math.round((NAV.x1-NAV.x0)/NAV.res);NAV.nz=Math.round((NAV.z1-NAV.z0)/NAV.res);
+const NAV={x0:-11.6,z0:-20.4,x1:24.4,z1:11.6,res:.1,cap:.7};NAV.nx=Math.round((NAV.x1-NAV.x0)/NAV.res);NAV.nz=Math.round((NAV.z1-NAV.z0)/NAV.res);
 NAV.clr=new Float32Array(NAV.nx*NAV.nz).fill(NAV.cap);NAV.rects=[];
 // area main: halaman dalam pagar + pantai di belakang (sampai bibir air)
 const LOTR=[-9,-6.5,9,11],BEACHR=[-11.2,-19.75,11.2,-6.5];
-const inPlay=(x,z)=>inR(LOTR,x,z)||inR(BEACHR,x,z);
+const inPlay=(x,z)=>inR(LOTR,x,z)||inR(BEACHR,x,z)||inR([8.9,4.81,12.1,6.29],x,z)||inCin(x,z);
 function inR(r,x,z){return x>r[0]&&x<r[2]&&z>r[1]&&z<r[3];}
 function buildNav(){const bb=new THREE.Box3(),R=NAV.rects;R.length=0;NAV.clr.fill(NAV.cap);scene.updateMatrixWorld(true);
  scene.traverse(o=>{if(!o.isMesh||o.userData.noNav)return;let p=o;while(p){if(p.userData.noNav)return;p=p.parent;}
   if(o.material&&o.material.visible===false)return;bb.setFromObject(o);if(bb.isEmpty()||bb.min.y>1.15||bb.max.y<.06)return;if(bb.max.x-bb.min.x>40||bb.max.z-bb.min.z>40)return;
   R.push([bb.min.x,bb.min.z,bb.max.x,bb.max.z]);});
  // di luar area main = rintangan (luar pagar, ujung pantai, laut)
- R.push([9,-6.5,14,14],[-14,-6.5,-9,14],[-14,11,14,14],[11.2,-24,14,-6.5],[-14,-24,-11.2,-6.5],[-14,-24,14,-19.75]);
+ R.push([9,-6.5,30,-2.5],[9,10.5,30,14],[24,-6.5,30,14],[9,-2.5,12,4.75],[9,6.35,12,10.5],[-14,-6.5,-9,14],[-14,11,30,14],[11.2,-24,14,-6.5],[-14,-24,-11.2,-6.5],[-14,-24,14,-19.75]);
  const {nx,nz,res,x0,z0,cap,clr}=NAV;
  for(const [a,b,c,d] of R){const i0=Math.max(0,Math.floor((a-cap-x0)/res)),i1=Math.min(nx-1,Math.ceil((c+cap-x0)/res)),j0=Math.max(0,Math.floor((b-cap-z0)/res)),j1=Math.min(nz-1,Math.ceil((d+cap-z0)/res));
   for(let j=j0;j<=j1;j++){const z=z0+(j+.5)*res,dz=z<b?b-z:z>d?z-d:0;for(let i=i0;i<=i1;i++){const x=x0+(i+.5)*res,dx=x<a?a-x:x>c?x-c:0,dd=Math.sqrt(dx*dx+dz*dz),k=j*nx+i;if(dd<clr[k])clr[k]=dd;}}}}
@@ -528,7 +648,6 @@ function findPath(x0,z0,x1,z1,r=.25,dyn=null){
 buildNav();
 
 /* ---------- tempat (spot) ---------- */
-const HP=Math.PI/2;
 const SP=[];
 function spot(o){o.occ=null;SP.push(o);return o;}
 // kursi: x,z = tengah dudukan; top = tinggi dudukan; front/back = jarak tengah ke tepi depan / muka sandaran; ax,az = titik berdiri di depan kursi; via = jalur masuk
@@ -547,6 +666,10 @@ st('mainan',5.35,-.98,0,['nayla','alya'],'kamar');
 // pantai: kursi pantai (menghadap laut), istana pasir, cari kerang, lihat ombak
 [[-4.3,-13.0],[-2.9,-13.0],[3.0,-12.6],[3.9,-12.6]].forEach(([x,z],i)=>seat('kursi-pantai'+i,x,z,Math.PI,.445,.22,-.18,'all','pantai'));
 st('istana1',1.0,-14.97,Math.PI,['nayla','alya'],'pantai');st('istana2',1.66,-15.6,-Math.PI/2,['nayla','alya'],'pantai');st('kerang',-1.6,-18.7,Math.PI,['nayla','alya','maya'],'pantai');st('ombak',5.4,-18.9,Math.PI,'all','pantai');st('ombak2',-4.6,-18.8,Math.PI,['maya','han'],'pantai');st('jendela-teras',-2.4,5.9,0,'all','teras');st('kucing',-3.1,2.75,-.4,['nayla','alya','maya'],'tamu');
+/* bioskop: tempat duduk (kursi A1–D8 + 3 tempat di kasur) + pos jaga Maya */
+Object.entries(CIN_Z).forEach(([r,z])=>CIN_X.forEach((x,i)=>{BIOS.seats[r+(i+1)]=seat('bios-'+r+(i+1),x,z,Math.PI,.45,.25,-.2,CIN_WHO,'bioskop');}));
+[-.65,0,.65].forEach((dx,i)=>BIOS.bedSeats.push(seat('bios-kasur'+(i+1),18+dx,4.6,Math.PI,.52,.3,-.35,CIN_WHO,'bioskop')));
+BIOS.post=st('jaga-bioskop',12.75,6.75,-2.58,['maya'],'bioskop');
 const SEATPICK=[[...SP.filter(s=>s.id.startsWith('sofa'))].map(s=>[s,.7,.75,.6,s.x,.75])].flat();
 SEATPICK.forEach(a=>seatPick(...a));
 SP.filter(s=>s.type==='sit'&&!s.id.startsWith('sofa')).forEach(s=>seatPick(s,s.front*2+.06,s.front*2+.06,.9,s.x,s.z));
@@ -664,7 +787,7 @@ function bedThink(){return false;}
 function getUp(c,then){then&&then();}
 function allowed(sp,id){return sp.who==='all'||sp.who.includes(id);}
 function think(c,now){if(c.state==='pov')return;if(bedThink(c,now))return;if((c.state!=='idle'&&c.state!=='sit')||now<c.busyUntil)return;if(c.id==='han'&&now<c.userUntil)return;
- let opts=SP.filter(s=>!s.occ&&allowed(s,c.id)&&s!==c.spot);if(NIGHT>.5)opts=opts.filter(s=>s.room!=='taman'&&s.room!=='pantai');if(!opts.length)return;
+ let opts=SP.filter(s=>!s.occ&&allowed(s,c.id)&&s!==c.spot&&s.room!=='bioskop');if(NIGHT>.5)opts=opts.filter(s=>s.room!=='taman'&&s.room!=='pantai');if(!opts.length)return;
  if(c.kid){const other=CHL.find(o=>o.kid&&o!==c&&o.spot);if(other&&Math.random()<.5){const same=opts.filter(s=>s.room===other.spot.room);if(same.length)opts=same;}}
  goSpot(c,pick(opts));}
 // apakah jalan di depan (sampai ~1,4 m) lewat dekat titik (x,z)?
@@ -766,7 +889,7 @@ function updCat(dt,now){const g=CAT.g,p=g.position,M=!!CAT.model;if(CAT.state===
  if(CAT.mixer)CAT.mixer.update(dt);}
 
 /* ---------- kamera, tampilan ---------- */
-const VIEWS={all:[[0,.4,1.2],[0,14.5,15.5]],teras:[[0,.6,5.6],[1,5.5,12.5]],tamu:[[-3,.6,2.2],[-2.2,6.5,9]],dapur:[[3.5,.6,2.2],[3.2,6.5,9]],kamar:[[0,.6,-2.2],[0,8.5,5.6]],langit:[[0,1.6,1],[2,3.2,22]],taman:[[0,.5,8.2],[3,7,17.5]],pantai:[[0,1.0,-15.6],[-1.6,4.0,-6.0]]};
+const VIEWS={all:[[0,.4,1.2],[0,14.5,15.5]],teras:[[0,.6,5.6],[1,5.5,12.5]],tamu:[[-3,.6,2.2],[-2.2,6.5,9]],dapur:[[3.5,.6,2.2],[3.2,6.5,9]],kamar:[[0,.6,-2.2],[0,8.5,5.6]],langit:[[0,1.6,1],[2,3.2,22]],taman:[[0,.5,8.2],[3,7,17.5]],pantai:[[0,1.0,-15.6],[-1.6,4.0,-6.0]],bioskop:[[18,.9,3.6],[18,10.5,16.5]]};
 let fly=null,follow=null;
 function aspectK(){const a=innerWidth/innerHeight;return a<1?Math.min(2.1,1/a*.95):1;}
 function view(k,instant){follow=null;markWho();const [t,c]=VIEWS[k];const K=aspectK();const tv=new THREE.Vector3(...t),cv=new THREE.Vector3(t[0]+(c[0]-t[0])*K,t[1]+(c[1]-t[1])*K,t[2]+(c[2]-t[2])*K);cv.y=Math.max(cv.y,1.2);
@@ -814,10 +937,11 @@ function status(t,ms=2500){const s=$('status');s.textContent=t;s.style.display='
 function tap(x,y){if(POV.on)return;ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);
  const ch=ray.intersectObjects(CHL.map(c=>c.pick),false);if(ch.length){selectChar(ch[0].object.userData.char,true);return;}
  const han=CH.han;if(!han){status('⏳ Han lagi dimuat…');return;}
- const now=performance.now();const se=ray.intersectObjects(SEATS,false);
- if(se.length){const sp=se[0].object.userData.spot;if(han.seat===sp){status('🪑 Han udah duduk di situ');return;}if(sp.occ&&sp.occ!=='han'){status(`🪑 Kursinya lagi dipakai ${CH[sp.occ]?CH[sp.occ].name:''}`);return;}han.userUntil=now+90000;goSpot(han,sp,90000);status('🪑 Han jalan ke kursi, terus duduk');return;}
+ const now=performance.now();if(ray.intersectObjects(BIOS.tap,false).length){thAccess();return;}const se=ray.intersectObjects(SEATS,false);
+ if(se.length){const sp=se[0].object.userData.spot;if(sp.room==='bioskop'&&!TH.unlocked){thGatePrompt();return;}if(han.seat===sp){status('🪑 Han udah duduk di situ');return;}if(sp.occ&&sp.occ!=='han'){status(`🪑 Kursinya lagi dipakai ${CH[sp.occ]?CH[sp.occ].name:''}`);return;}han.userUntil=now+90000;goSpot(han,sp,90000);status('🪑 Han jalan ke kursi, terus duduk');return;}
  const hit=new THREE.Vector3();if(!ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),hit))return;
  if(!inPlay(hit.x,hit.z)){status(hit.z<-19.7&&Math.abs(hit.x)<11.2?'Itu laut, babe 🌊 Han nggak berenang dulu ya':'Di luar pagar, babe 😄');return;}
+ if(inCin(hit.x,hit.z)&&!TH.unlocked){thGatePrompt();return;}
  let g=[hit.x,hit.z];if(!walkable(g[0],g[1],han.rad)){const f=nearFree(g[0],g[1],han.rad,null,2);if(!f){status('Nggak bisa ke situ, babe');return;}g=f;}
  han.userUntil=now+90000;freeSpot(han);goTo(han,g[0],g[1],()=>{han.busyUntil=performance.now()+60000;});MARK.position.set(g[0],.02,g[1]);MARK.material.opacity=1;}
 
@@ -897,6 +1021,181 @@ $('bPov').onclick=enterPov;
 
 /* ---------- loop ---------- */
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);labelR.setSize(innerWidth,innerHeight);});
+/* ---------- 🎬 BIOSKOP: pemutar film, kunci pass code 🔐, gerbang 18+, nonton bareng (Maya/Ophelia/Keira) — diambil dari web kantor ---------- */
+const TH_SALT='kantor-ai-bioskop:',TH_HASH='33fd05f2730af5a504f44819feb9f2f790eefd15f4fea0cfc5a4d398dbaa13e7';
+const TH_DIR='theater/',TH_EXT=/\.(mp4|webm|m4v|mov|ogv|ogg)$/i,TH_REPO='17hrprimary/rumah-han-maya';
+const TH={unlocked:false,open:false,list:[],cur:-1,playing:false,autoNext:true,scrLock:false,scrSave:null,pendingEnter:false,vtex:null,idle:null,date:[],bed:false,coupleCam:false,kiss:0,openOnArrive:false,wasIn:false,ageOk:false};
+const thLog=m=>{console.log(m);thToast(m);};
+function thToast(m,ms=2600){const t=$('thToast');if(!t)return;t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),ms);}
+function povKeysClear(){POV.keys.clear();POV.run=false;}
+function thSha256Fallback(str){const K=[],H=[];let n=2,c=0;const isP=v=>{for(let i=2;i*i<=v;i++)if(v%i===0)return false;return true;};
+ while(c<64){if(isP(n)){if(c<8)H[c]=(Math.pow(n,.5)*4294967296)|0;K[c++]=(Math.pow(n,1/3)*4294967296)|0;}n++;}
+ const b=new TextEncoder().encode(str),l=b.length,words=[];for(let i=0;i<l;i++)words[i>>2]|=b[i]<<(24-(i%4)*8);
+ words[l>>2]|=0x80<<(24-(l%4)*8);const nw=((l+8)>>6<<4)+16;for(let i=words.length;i<nw;i++)words[i]=words[i]|0;words[nw-1]=l*8;
+ const h=H.slice(),r=(v,s)=>(v>>>s)|(v<<(32-s));
+ for(let j=0;j<nw;j+=16){const w=words.slice(j,j+16);let [a,bb,cc,d,e,f,g,hh]=h;
+  for(let i=0;i<64;i++){if(i>=16){const x=w[i-15],y=w[i-2];w[i]=(w[i-16]+(r(x,7)^r(x,18)^(x>>>3))+w[i-7]+(r(y,17)^r(y,19)^(y>>>10)))|0;}
+   const t1=(hh+(r(e,6)^r(e,11)^r(e,25))+((e&f)^(~e&g))+K[i]+(w[i]|0))|0,t2=((r(a,2)^r(a,13)^r(a,22))+((a&bb)^(a&cc)^(bb&cc)))|0;
+   hh=g;g=f;f=e;e=(d+t1)|0;d=cc;cc=bb;bb=a;a=(t1+t2)|0;}
+  [a,bb,cc,d,e,f,g,hh].forEach((v,i)=>h[i]=(h[i]+v)|0);}
+ return h.map(v=>(v>>>0).toString(16).padStart(8,'0')).join('');}
+async function thSha256(str){try{if(crypto&&crypto.subtle){const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,'0')).join('');}}catch(_){}return thSha256Fallback(str);}
+const thV=$('thVideo');TH.video=thV;thV.volume=.9;
+function thInCinema(){const h=CH.han;return !!(h&&inCin(h.root.position.x,h.root.position.z));}
+const thFmt=s=>{s=Math.max(0,Math.floor(s||0));const h=Math.floor(s/3600),m=Math.floor(s/60)%60,x=String(s%60).padStart(2,'0');return h?h+':'+String(m).padStart(2,'0')+':'+x:m+':'+x;};
+const thName=f=>decodeURIComponent(String(f).split('/').pop()).replace(TH_EXT,'').replace(/[_]+/g,' ');
+function thUI(){$('thLock').hidden=TH.unlocked;$('thMain').hidden=!TH.unlocked;
+ const it=TH.list[TH.cur];$('thNow').textContent=it?(thV.paused?'⏸ ':'▶️ ')+it.title:'Pilih film dari daftar 👇';$('thPlay').textContent=thV.paused?'▶️':'⏸';
+ [...$('thList').querySelectorAll('button')].forEach((b,i)=>b.classList.toggle('on',i===TH.cur));
+ const mp=$('mobPlay');if(mp){const show=!!(thInCinema()&&TH.unlocked);mp.hidden=!show;if(show)mp.textContent=(!TH.list.length||TH.cur<0||thV.paused)?'▶️ Putar':'⏸ Jeda';}}
+function thRenderList(){const L=$('thList');L.innerHTML='';$('thCount').textContent=TH.list.length?'('+TH.list.length+' film)':'';
+ if(!TH.list.length){L.innerHTML='<div class="small">Belum ada video di folder <b>theater/</b>. Pakai <b>📂 Putar dari folder komputer</b> buat langsung dari PC.</div>';return;}
+ TH.list.forEach((it,i)=>{const b=document.createElement('button');b.textContent=(it.local?'💻 ':'🎞️ ')+it.title;b.onclick=()=>thPlayIdx(i);L.appendChild(b);});thUI();}
+async function thLoadList(){if(TH.loaded)return;TH.loaded=true;let files=[];
+ try{const r=await fetch(TH_DIR+'/videos.json?'+Date.now(),{cache:'no-store'});if(r.ok){const j=await r.json();files=(Array.isArray(j)?j:(j.videos||[])).map(x=>typeof x==='string'?{file:x}:x).filter(x=>x&&x.file);}}catch(_){}
+ if(!files.length)try{const r=await fetch('https://api.github.com/repos/'+TH_REPO+'/contents/'+TH_DIR);if(r.ok)files=(await r.json()).filter(x=>x.type==='file'&&TH_EXT.test(x.name)).map(x=>({file:x.name}));}catch(_){}
+ TH.list=TH.list.filter(x=>x.local).concat(files.filter(x=>TH_EXT.test(x.file)).map(x=>({title:x.title||thName(x.file),src:TH_DIR+'/'+String(x.file).split('/').map(encodeURIComponent).join('/')})));
+ thRenderList();}
+function thEnsureTex(){if(!TH.vtex){TH.vtex=new THREE.VideoTexture(thV);TH.vtex.colorSpace=THREE.SRGBColorSpace;}BIOS.screen.material.map=TH.vtex;BIOS.screen.material.needsUpdate=true;TH.playing=true;BIOS.beam.visible=true;BIOS.beam.material.opacity=.07;BIOS.slight.intensity=.5;}
+function thIdle(){TH.playing=false;BIOS.screen.material.map=TH.idle;BIOS.screen.material.needsUpdate=true;BIOS.beam.visible=false;BIOS.slight.intensity=2.2;}
+function thPlayIdx(i){if(!TH.unlocked||!TH.list[i])return;TH.cur=i;const it=TH.list[i];thV.src=it.src;thV.load();thEnsureTex();
+ thV.play().catch(e=>{$('thNow').textContent='⚠️ Gagal putar: '+it.title+' ('+(e.name||e)+')';});thLog('🎬 Bioskop: Han nonton '+it.title);thUI();}
+thV.addEventListener('play',thUI);thV.addEventListener('pause',thUI);
+function thAutoUI(){const b=$('thAutoNext');if(!b)return;b.classList.toggle('on',!!TH.autoNext);b.textContent=TH.autoNext?'⏭ Auto ON':'⏭ Auto OFF';b.title=TH.autoNext?'Auto play next ON — film berikutnya otomatis. Klik buat mati.':'Auto play next OFF — berhenti di akhir film. Klik buat nyala.';}
+function loadAutoNext(){try{const v=localStorage.getItem('rumahThAutoNext');if(v==='0')TH.autoNext=false;else TH.autoNext=true;}catch(_){TH.autoNext=true;}}
+function applyAutoNext(on,announce){TH.autoNext=!!on;try{localStorage.setItem('rumahThAutoNext',TH.autoNext?'1':'0');}catch(_){}thAutoUI();if(announce&&typeof log==='function')log(TH.autoNext?'⏭ Auto play next: ON':'⏭ Auto play next: OFF');}
+thV.addEventListener('ended',()=>{if(TH.autoNext&&TH.cur<TH.list.length-1)thPlayIdx(TH.cur+1);else{thIdle();thUI();}});
+loadAutoNext();thAutoUI();
+$('thAutoNext').onclick=()=>applyAutoNext(!TH.autoNext,true);
+thV.addEventListener('error',()=>{const it=TH.list[TH.cur];$('thNow').textContent='⚠️ Format gak didukung browser: '+(it?it.title:'')+' (pakai mp4 H.264 / webm)';thIdle();});
+thV.addEventListener('timeupdate',()=>{const d=thV.duration||0;if(!TH.seeking)$('thSeek').value=d?Math.round(thV.currentTime/d*1000):0;$('thT').textContent=thFmt(thV.currentTime)+' / '+thFmt(d);});
+$('thSeek').addEventListener('input',()=>{TH.seeking=true;const d=thV.duration||0;if(d)thV.currentTime=$('thSeek').value/1000*d;});$('thSeek').addEventListener('change',()=>TH.seeking=false);
+$('thVol').addEventListener('input',()=>{thV.volume=$('thVol').value/100;if(thV.muted&&thV.volume>0){thV.muted=false;thMuteUI();}});
+function thMuteUI(){const b=$('thMute');if(b){b.textContent=thV.muted?'🔇':'🔊';b.classList.toggle('on',thV.muted);}}
+$('thMute').onclick=()=>{thV.muted=!thV.muted;thMuteUI();};thV.addEventListener('volumechange',thMuteUI);
+$('thPlay').onclick=()=>{if(TH.cur<0){if(TH.list.length)thPlayIdx(0);return;}if(thV.paused){thEnsureTex();thV.play();}else thV.pause();};
+$('thPrev').onclick=()=>{if(TH.list.length)thPlayIdx((TH.cur-1+TH.list.length)%TH.list.length);};
+$('thNext').onclick=()=>{if(TH.list.length)thPlayIdx((TH.cur+1)%TH.list.length);};
+$('thStop').onclick=()=>{thV.pause();thV.removeAttribute('src');thV.load();TH.cur=-1;thIdle();thUI();};
+$('thFull').onclick=()=>{if(TH.cur<0)return;const v=thV;v.classList.add('full');v.controls=true;
+ const rq=v.requestFullscreen||v.webkitRequestFullscreen;if(rq)rq.call(v).catch(()=>{});else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen();};
+const thUnfull=()=>{if(!document.fullscreenElement&&!document.webkitFullscreenElement){thV.classList.remove('full');thV.controls=false;}};
+document.addEventListener('fullscreenchange',thUnfull);document.addEventListener('webkitfullscreenchange',thUnfull);thV.addEventListener('webkitendfullscreen',()=>{thV.classList.remove('full');thV.controls=false;});
+thV.addEventListener('dblclick',()=>{if(document.fullscreenElement)document.exitFullscreen();else{thV.classList.remove('full');thV.controls=false;}});
+$('thPick').addEventListener('change',e=>{const fs=[...e.target.files].filter(f=>TH_EXT.test(f.name)||/^video\//.test(f.type)).sort((a,b)=>a.name.localeCompare(b.name));
+ if(!fs.length){$('thNow').textContent='⚠️ Gak ada file video di folder itu';return;}
+ TH.list.filter(x=>x.local).forEach(x=>URL.revokeObjectURL(x.src));
+ TH.list=fs.map(f=>({title:thName(f.name),src:URL.createObjectURL(f),local:true})).concat(TH.list.filter(x=>!x.local));TH.cur=-1;thRenderList();});
+function thGatePrompt(msg){ // minta kode SEBELUM masuk Bioskop (boleh di luar ruangan)
+ TH.pendingEnter=true;TH.open=true;$('thPanel').classList.add('on');povKeysClear();thUI();
+ $('thErr').textContent=msg||'🔒 Masukkan kode kunci dulu sebelum masuk Bioskop';
+ if(!document.body.classList.contains('touch'))setTimeout(()=>{const c=$('thCode');c.removeAttribute('readonly');c.focus();c.select&&c.select();},30);
+ thToast('🔒 Bioskop dikunci — masukkan kode dulu');}
+async function thTry(){const c=$('thCode').value.trim();if(!c)return;const h=await thSha256(TH_SALT+c);
+ if(h===TH_HASH){TH.unlocked=true;thDoorSync();try{sessionStorage.setItem('thUnlock',h);}catch(_){}$('thErr').textContent='';$('thCode').value='';
+  thSetIdle(['🔓 Kebuka! Pilih film di panel 🎬','Selamat nonton, Papa 🍿']);thLog('🎬 Bioskop dibuka 🔓');thLoadList();thUI();
+  const enter=!!TH.pendingEnter;TH.pendingEnter=false;if(TH.retry){const r=TH.retry;TH.retry=null;thClose();r();}else if(enter)thDoEnterCinema();else if(thInCinema()){/* sudah di dalam: panel film siap */}}
+ else{$('thErr').textContent='❌ Kode salah, coba lagi';$('thCode').select();}}
+$('thGo').onclick=()=>thTry();$('thCode').addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')thTry();if(e.key==='Escape')thClose();});
+$('thLockBtn').onclick=()=>{if(TH.scrLock)thScrLock(false);TH.unlocked=false;TH.pendingEnter=false;try{sessionStorage.removeItem('thUnlock');}catch(_){}$('thStop').onclick();thSetIdle(['🔒 Masukkan kode kunci di 🔐 Konsol','Mode POV: jalan ke sini, tekan T / tombol 🎬']);thKickFromCinema();thUI();};
+$('thX').onclick=()=>thClose();
+const _scW=new THREE.Vector3();
+function thScreenCam(){const sc=BIOS.screen;if(!sc)return;sc.updateWorldMatrix(true,false);sc.getWorldPosition(_scW);const H=12.8,Wd=7.2,dist=13,m=1.05,asp=camera.aspect||1;
+ const fv=Math.max(2*Math.atan(H/2*m/dist),2*Math.atan(Wd/2*m/(dist*asp)))*180/Math.PI;
+ camera.position.set(_scW.x,_scW.y,_scW.z+dist);camera.up.set(0,1,0);camera.lookAt(_scW);controls.target.copy(_scW);
+ if(Math.abs(camera.fov-fv)>.01||camera.near>.3){camera.fov=fv;camera.near=.3;camera.updateProjectionMatrix();}}
+$('thScrLock').onclick=()=>thScrLock();
+try{sessionStorage.removeItem('thUnlock');}catch(_){} // 🔒 kode WAJIB tiap kali masuk Bioskop (gak disimpan antar reload)
+{const pad=$('thPad'),code=$('thCode');
+ if(pad&&code){pad.addEventListener('click',e=>{const b=e.target.closest('button[data-n]');if(!b)return;e.preventDefault();const n=b.dataset.n;
+  if(n==='del'){code.value=code.value.slice(0,-1);$('thErr').textContent='';return;}
+  if(n==='ok'){thTry();return;}
+  if(code.value.length>=16)return;code.value+=n;$('thErr').textContent='';});
+  // tetap izinkan paste/keyboard desktop: hapus readonly saat focus keyboard nyata
+  code.addEventListener('focus',()=>{if(!document.body.classList.contains('touch'))code.removeAttribute('readonly');});
+ }}
+function thIdleTex(lines){const c=document.createElement('canvas');c.width=720;c.height=1280;const g=c.getContext('2d');
+ const gr=g.createLinearGradient(0,0,0,1280);gr.addColorStop(0,'#1b1226');gr.addColorStop(1,'#3a1530');g.fillStyle=gr;g.fillRect(0,0,720,1280);
+ g.strokeStyle='rgba(255,210,228,.35)';g.lineWidth=6;g.strokeRect(24,24,672,1232);g.textAlign='center';
+ g.fillStyle='#ffd2e4';g.font='bold 110px "Segoe UI",system-ui,sans-serif';g.fillText('🎬',360,420);g.font='bold 76px "Segoe UI",system-ui,sans-serif';g.fillText('Bioskop',360,540);g.fillText('Han & Maya',360,630);
+ g.font='bold 36px "Segoe UI",system-ui,sans-serif';g.fillStyle='#fff';let y=800;(lines||[]).forEach(t=>{const w=t.split(' ');let ln='';w.forEach(x=>{const tt=ln?ln+' '+x:x;if(g.measureText(tt).width>600){g.fillText(ln,360,y);y+=52;ln=x;}else ln=tt;});g.fillText(ln,360,y);y+=70;});
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;}
+function thSetIdle(lines){if(TH.idle)TH.idle.dispose();TH.idle=thIdleTex(lines);if(!TH.playing){BIOS.screen.material.map=TH.idle;BIOS.screen.material.needsUpdate=true;}}
+thSetIdle(['🔒 Masukkan kode kunci di 🔐 Konsol','Mode POV: jalan ke sini, tekan T / tombol 🎬']);
+// gerbang 18+ (sekali per sesi, sama kayak web kantor)
+function thAge(next){try{if(sessionStorage.getItem('ageOk')==='1')TH.ageOk=true;}catch(_){}if(TH.ageOk){next&&next();return;}
+ $('ageGate').classList.add('on');$('ageYes').onclick=()=>{TH.ageOk=true;try{sessionStorage.setItem('ageOk','1');}catch(_){}$('ageGate').classList.remove('on');next&&next();};
+ $('ageNo').onclick=()=>{$('ageGate').classList.remove('on');thToast('🚫 Bioskop khusus 18+');};}
+function thOpen(){if(!TH.unlocked){thGatePrompt();return;}if(!thInCinema()){thGoCinema();return;}thAge(()=>{TH.open=true;$('thPanel').classList.add('on');povKeysClear();thUI();thActUI();});}
+function thClose(){TH.open=false;TH.pendingEnter=false;$('thPanel').classList.remove('on');const c=$('thCode');if(c)c.blur();}
+function thToggle(){TH.open?thClose():thOpen();}
+const _thGate=thGatePrompt;thGatePrompt=function(m){thAge(()=>_thGate(m));};
+function thDoEnterCinema(){ // tanpa teleport: Han jalan sendiri lewat lorong
+ TH.openOnArrive=true;const h=CH.han;if(thInCinema()){thOpen();return;}
+ if(POV.on){thClose();thToast('🔓 Kebuka! Jalan ke ujung kanan teras, masuk lorong ➡️ bioskop',4200);return;}
+ thClose();thHanSit(true);view('bioskop');thToast('🔓 Kebuka! Han jalan lewat lorong ke bioskop 🎬',3200);}
+function thGoCinema(){if(!TH.unlocked){thGatePrompt('🔒 Masukkan kode kunci dulu sebelum masuk Bioskop');return;}thDoEnterCinema();}
+function thAccess(){if(!TH.unlocked){thGatePrompt('🔒 Masukkan kode kunci dulu sebelum masuk Bioskop');return;}if(!thInCinema()){thGoCinema();return;}thToggle();}
+function thGuard(retry){if(TH.unlocked)return true;TH.retry=retry;thGatePrompt('🔒 Masukkan kode kunci dulu sebelum masuk Bioskop');return false;}
+function thKickFromCinema(){thEnd(true);const h=CH.han;if(!h||!thInCinema())return;if(POV.on)exitPov();
+ setTimeout(()=>{const p=nearFree(8.9,5.55,CH.han.rad);if(p)goTo(CH.han,p[0],p[1],()=>{});},60);thToast('🔒 Bioskop dikunci — Han keluar ke lorong');}
+function thScrLock(on){on=on??!TH.scrLock;if(on&&!TH.unlocked){thGatePrompt();return;}
+ if(on&&!TH.scrLock){TH.scrSave={p:camera.position.clone(),t:controls.target.clone(),fov:camera.fov,ce:controls.enabled};controls.enabled=false;}
+ else if(!on&&TH.scrLock){const v=TH.scrSave;camera.fov=v?v.fov:50;camera.near=.1;camera.updateProjectionMatrix();if(v&&!POV.on){camera.position.copy(v.p);controls.target.copy(v.t);controls.enabled=v.ce;camera.lookAt(controls.target);}TH.scrSave=null;}
+ TH.scrLock=on;const b=$('thScrLock');if(b){b.classList.toggle('on',on);b.textContent=on?'🎯 Kamera terkunci ke layar · klik = lepas':'🎯 Kunci kamera ke layar';}}
+// ---- nonton bareng: Panggil Maya / Ophelia / Keira, tukar partner, Han duduk, ciuman, kasur, kunci kamera ke pasangan, reset kamera, selesai ----
+const TH_NAMES={maya:'Maya',ophelia:'Ophelia',keira:'Keira'};
+const thChairs=()=>TH.bed?[BIOS.bedSeats[1],BIOS.bedSeats[0],BIOS.bedSeats[2],BIOS.seats.C1]:[BIOS.seats.C3,BIOS.seats.C2,BIOS.seats.C4,BIOS.seats.C1];
+function thSitTo(c,sp){if(!c||!sp)return;if(c.seat===sp&&c.state==='seated')return;if(POV.on&&c.id==='han')return;c.date=true;goSpot(c,sp,1e9);}
+function thHanSit(quiet){const h=CH.han;if(!h)return;if(POV.on){exitPov();}h.date=true;thSitTo(h,thChairs()[0]);if(!quiet)thToast('💺 Han duduk di kursi tengah');}
+function thSeatAll(){const ch=thChairs();TH.date.forEach((id,i)=>thSitTo(CH[id],ch[i+1]));}
+function thCall(id){if(!thGuard(()=>thCall(id)))return;const c=CH[id];if(!c)return;
+ if(!TH.date.includes(id)){if(TH.date.length>=3)TH.date.pop();TH.date.unshift(id);}else{TH.date=[id,...TH.date.filter(x=>x!==id)];}
+ if(!CH.han.date)thHanSit(true);thSeatAll();say(c,id==='maya'?'Siap, aku temenin nonton ya 🍿':'Otw ke bioskop, babe 💕');thToast('💗 '+TH_NAMES[id]+' dipanggil ke bioskop');thActUI();}
+function thSwap(){if(TH.date.length<2){thToast('🔄 Panggil minimal 2 partner dulu');return;}TH.date.push(TH.date.shift());thSeatAll();thToast('🔄 Partner utama sekarang: '+TH_NAMES[TH.date[0]]);thActUI();}
+function thKiss(){const id=TH.date[0],c=CH[id],h=CH.han;if(!c){thToast('💋 Panggil partner dulu');return;}
+ if(id==='maya'){thToast('🍿 Maya cuma nemenin nonton — tukar partner dulu');return;}
+ if(c.state!=='seated'||h.state!=='seated'){thToast('💋 Tunggu dua-duanya duduk dulu');return;}TH.kiss=performance.now()+3600;say(c,'😘💋');thToast('💋 Ciuman sama '+TH_NAMES[id]);}
+function thBedToggle(){if(!thGuard(()=>thBedToggle()))return;TH.bed=!TH.bed;if(CH.han.date||TH.date.length){thHanSit(true);thSeatAll();}thToast(TH.bed?'🛏️ Pindah nonton di kasur':'💺 Balik ke kursi');thActUI();}
+function thCouple(){TH.coupleCam=!TH.coupleCam;if(TH.coupleCam){if(TH.scrLock)thScrLock(false);if(POV.on)exitPov();}thToast(TH.coupleCam?'🔒 Kamera dikunci ke pasangan':'🔓 Kamera bebas');thActUI();}
+function thCamReset(){if(TH.scrLock)thScrLock(false);TH.coupleCam=false;if(!POV.on)view('bioskop');thActUI();thToast('🎥 Kamera direset');}
+function thEnd(quiet){[...TH.date,'han'].forEach(id=>{const c=CH[id];if(c&&c.date){c.date=false;c.busyUntil=0;}});TH.date=[];TH.bed=false;TH.coupleCam=false;TH.kiss=0;if(!quiet)thToast('🚶 Selesai — semua balik ke kegiatan masing-masing');thActUI();}
+const TH_ACTS=[['maya','💗 Panggil Maya',()=>thCall('maya')],['ophelia','💗 Panggil Ophelia',()=>thCall('ophelia')],['keira','💗 Panggil Keira',()=>thCall('keira')],
+ ['swap','🔄 Tukar partner',thSwap],['sit','💺 Han duduk',()=>thHanSit()],['kiss','💋 Ciuman',thKiss],['bed','🛏️ Nonton di kasur',thBedToggle],
+ ['couple','🔒 Kunci ke pasangan',thCouple],['cam','🎥 Reset kamera',thCamReset],['end','🚶 Selesai',()=>thEnd()]];
+function thActUI(){const box=$('thAct');if(!box)return;if(!box.childElementCount){TH_ACTS.forEach(([id,l,f])=>{const b=document.createElement('button');b.className='thb';b.dataset.act=id;b.textContent=l;b.onclick=f;box.appendChild(b);});}
+ box.querySelectorAll('button').forEach(b=>{const id=b.dataset.act;b.classList.toggle('on',(id==='bed'&&TH.bed)||(id==='couple'&&TH.coupleCam)||(TH.date[0]===id));if(id==='bed')b.textContent=TH.bed?'💺 Balik ke kursi':'🛏️ Nonton di kasur';});
+ const st=$('thActSt');if(st)st.textContent=TH.date.length?'Partner: '+TH.date.map((d,i)=>(i?'':'⭐ ')+TH_NAMES[d]).join(', '):'Belum ada yang nemenin — panggil Maya';}
+// lean waktu ciuman: badan + kepala condong ke pasangan
+const _thQ=new THREE.Quaternion(),_thQ2=new THREE.Quaternion(),_thA=new THREE.Vector3(),_thUp=new THREE.Vector3(0,1,0);
+function thLean(c,tx,tz,amt){const p=c.root.position;_thA.set(tx-p.x,0,tz-p.z);if(_thA.lengthSq()<1e-4)return;_thA.normalize();_thA.crossVectors(_thUp,_thA).normalize();
+ [['Spine',.55],['Spine1',.35],['Neck',.25],['Head',.2]].forEach(([n,k])=>{const b=c.bones&&c.bones[n];if(!b||!b.parent)return;b.parent.getWorldQuaternion(_thQ2);_thQ.setFromAxisAngle(_thA,amt*k);
+  const inv=_thQ2.clone().invert();b.quaternion.premultiply(inv.multiply(_thQ).multiply(_thQ2));});}
+function thTick(dt){const t=performance.now()/1000;
+ BIOS.rgb.forEach(o=>o.m.color.setHSL((t*.08+o.ph)%1,.9,.6));if(BIOS.light)BIOS.light.color.setHSL((t*.08)%1,.8,.6);
+ if(BIOS.beam)BIOS.beam.visible=TH.playing;
+ const clip=!POV.on&&wallMode!=='full'&&wallMode!=='roof';BIOS.wallMats.forEach(m=>{const want=clip?1:0;if(m.clippingPlanes.length!==want){m.clippingPlanes=clip?[CLIP]:[];m.needsUpdate=true;}});
+ BIOS.roof.visible=POV.on||wallMode==='roof';
+ const inC=thInCinema();if(TH.wasIn&&!inC&&TH.unlocked&&!CH.han.date){TH.unlocked=false;TH.pendingEnter=false;thClose();$('thStop').onclick();thSetIdle(['🔒 Masukkan kode kunci di 🔐 Konsol','Mode POV: jalan ke sini, tekan T / tombol 🎬']);thUI();thToast('🔒 Keluar bioskop — kunci lagi otomatis');}
+ if(!TH.wasIn&&inC&&TH.openOnArrive){TH.openOnArrive=false;setTimeout(thOpen,300);}TH.wasIn=inC;
+ const mp=$('mobPlay');if(mp)mp.hidden=!(inC&&TH.unlocked);
+ if(TH.kiss&&performance.now()<TH.kiss){const a=CH.han,b=CH[TH.date[0]];if(a&&b){const k=Math.min(1,(TH.kiss-performance.now())/600,(performance.now()-(TH.kiss-3600))/600)*.32;thLean(a,b.root.position.x,b.root.position.z,k);thLean(b,a.root.position.x,a.root.position.z,k);}}else TH.kiss=0;
+ if(TH.scrLock)thScreenCam();
+ else if(TH.coupleCam&&!POV.on){const a=CH.han,b=CH[TH.date[0]]||a;if(a){const mx=(a.root.position.x+b.root.position.x)/2,mz=(a.root.position.z+b.root.position.z)/2;controls.target.lerp(new THREE.Vector3(mx,.9,mz),Math.min(1,dt*3));
+  const want=new THREE.Vector3(mx,2.4,mz-3.2);camera.position.lerp(want,Math.min(1,dt*1.5));}}}
+$('mobPlay').onclick=()=>thAccess();$('bBios').onclick=()=>thAccess();
+addEventListener('keydown',e=>{if(e.target&&e.target.id==='thCode')return;
+ if(e.code==='Escape'&&TH.open){thClose();e.stopImmediatePropagation();e.preventDefault();return;}
+ if(e.code==='KeyT'&&!e.repeat&&POV.on){thAccess();e.preventDefault();}
+ else if(e.code==='Space'&&TH.open&&TH.unlocked){$('thPlay').onclick();e.preventDefault();}},true);
+thUI();thActUI();
+
+// --- sambungan ke Rumah: pintu bioskop ikut status kunci, tombol karakter yang belum ada di rumah disembunyiin ---
+function thDoorSync(){const want=!!TH.unlocked;if(want===BIOS.doorOpen)return;
+ if(!want){for(const c of CHL){const p=c.root.position;if(inCin(p.x,p.z)||(Math.abs(p.x-12)<1.1&&Math.abs(p.z-5.55)<1.1))return;}}
+ BIOS.doorOpen=want;BIOS.door.visible=!want;BIOS.door.userData.noNav=want;buildNav();}
+function thActSync(){if(!TH.open)return;document.querySelectorAll('#thAct button').forEach(b=>{const id=b.dataset.act;if(TH_NAMES[id])b.hidden=!CH[id];});}
+
 const clock=new THREE.Clock();let chatT=performance.now()+8000,clkT=0;
 let SIMPAUSE=false;
 function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
@@ -906,13 +1205,13 @@ function loop(){const dt=Math.min(clock.getDelta(),.1),now=performance.now();
  if(!SIMPAUSE)updCat(dt,now);updEnv(dt);if(now>clkT){clkT=now+1000;updClock();}
  if(MARK.material.opacity>0)MARK.material.opacity=Math.max(0,MARK.material.opacity-dt*.6);
  if(now>chatT&&CHL.length){chatT=now+R(11000,19000);const c=pick(CHL.filter(c=>c.id!=='han'));if(c&&c.state!=='walk')say(c,lineFor(c.id,c.spot));}
- updBeach(now/1000);if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
+ thTick(dt);thDoorSync();thActSync();updBeach(now/1000);if(POV.on)povCam(dt);else controls.update();updateWalls();renderer.render(scene,camera);labelR.render(scene,camera);requestAnimationFrame(loop);}
 
 updEnv(0,true);updClock();
 view('all',true);
 loop();
 setTimeout(()=>{$('load').style.opacity=0;setTimeout(()=>$('load').remove(),500);},150);
-window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,POV,enterPov,exitPov,stepPov,povMove,povCam,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;}};
+window.__R={CH,CHL,SP,WALLS,camera,controls,scene,THREE,view,selectChar,setNight,setEnvMode,tap,CAT,ENV_C,CLOUDS,goSpot,witaHour,POV,enterPov,exitPov,stepPov,povMove,povCam,ready:false,errors:[],NAV,clrAt,walkable,nearFree,agentsFor,findPath,sitDown,standUp,goTo,updChar,updCat,think,play,freeSpot,los,pause:v=>{SIMPAUSE=v;},TH,BIOS,thDoorSync,thAccess,thOpen,inCin};
 CATP.then(()=>{window.__R.catReady=true;});
 let done=0;
 Promise.all(DEFS.map(d=>loadChar(d).then(c=>{done++;status(`Memuat penghuni rumah ${done}/4…`,1500);return c;}).catch(e=>{console.warn('gagal muat',d.file,e);window.__R.errors.push(d.id+': '+e);}))).then(()=>{window.__R.ready=true;status('🏡 Selamat datang di rumah!',2500);
